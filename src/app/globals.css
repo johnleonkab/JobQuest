@@ -1,0 +1,230 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 255, 251, 252;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 45, 8, 24;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: #fffbfc;
+  font-family: var(--font-inter), sans-serif;
+}
+
+@layer base {
+  * {
+    @apply selection:bg-primary/20 selection:text-primary;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Print styles for CV Preview */
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+  
+  html, body {
+    width: 210mm !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    overflow: visible !important;
+  }
+  
+  /* Hide everything except the print content */
+  body > *:not(#cv-preview-print) {
+    display: none !important;
+    visibility: hidden !important;
+  }
+  
+  #cv-preview-print,
+  #cv-preview-print * {
+    visibility: visible !important;
+  }
+  
+  /* Preserve flex layouts for tags and other flex containers */
+  #cv-preview-print .flex,
+  #cv-preview-print [class*="flex"] {
+    display: flex !important;
+  }
+  
+  #cv-preview-print .flex-wrap {
+    flex-wrap: wrap !important;
+  }
+  
+  /* Ensure inline elements stay inline */
+  #cv-preview-print span,
+  #cv-preview-print a {
+    display: inline-block !important;
+  }
+  
+  /* But keep block elements as blocks */
+  #cv-preview-print div:not(.flex):not([class*="flex"]) {
+    display: block !important;
+  }
+  
+  #cv-preview-print p,
+  #cv-preview-print h1,
+  #cv-preview-print h2,
+  #cv-preview-print h3 {
+    display: block !important;
+  }
+  
+  #cv-preview-print {
+    position: relative !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 210mm !important;
+    min-height: 297mm !important;
+    max-width: 210mm !important;
+    margin: 0 !important;
+    padding: 20mm !important;
+    box-sizing: border-box !important;
+    box-shadow: none !important;
+    background: white !important;
+    page-break-after: always;
+    transform: none !important;
+  }
+  
+  .no-print,
+  .no-print * {
+    display: none !important;
+    visibility: hidden !important;
+  }
+  
+  /* Ensure images print correctly */
+  #cv-preview-print img {
+    max-width: 100% !important;
+    height: auto !important;
+    page-break-inside: avoid;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  /* Prevent page breaks inside sections */
+  #cv-preview-print h2,
+  #cv-preview-print h3 {
+    page-break-after: avoid;
+    page-break-inside: avoid;
+  }
+  
+  /* Better spacing for print */
+  #cv-preview-print > div {
+    page-break-inside: avoid;
+  }
+  
+  /* Hide material icons text in print if needed */
+  #cv-preview-print .material-symbols-outlined {
+    font-family: 'Material Symbols Outlined' !important;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #fff1f2;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #fbcfe8;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #f472b6;
+}
+
+/* Kanban scrollbar */
+.kanban-scroll::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.kanban-scroll::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.kanban-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.kanban-scroll::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.mask-bottom {
+  mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+}
+
+/* Toast animations */
+@keyframes slide-in-from-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-out-to-right {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.animate-in {
+  animation: slide-in-from-right 0.3s ease-out;
+}
+
+.animate-out {
+  animation: slide-out-to-right 0.3s ease-in;
+}
+
+/* Level Up Notification Animation */
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
