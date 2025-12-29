@@ -7,6 +7,7 @@ import OnboardingModal from "@/components/OnboardingModal";
 import { ToastProvider } from "@/contexts/ToastContext";
 import { CSRFProvider } from "@/components/CSRFProvider";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import PWAInstallPrompt from "@/components/PWAInstallPrompt";
 
 export default function ProtectedLayout({
   children,
@@ -37,6 +38,7 @@ export default function ProtectedLayout({
               />
               <OnboardingModal />
               {children}
+              <PWAInstallPrompt />
             </main>
           </div>
         </ToastProvider>

@@ -22,6 +22,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Configure Turbopack (empty config to use webpack for PWA)
+  turbopack: undefined,
 };
 
 export default nextConfig;

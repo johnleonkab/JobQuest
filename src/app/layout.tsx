@@ -5,6 +5,8 @@ import CookieConsent from "@/components/CookieConsent";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import Analytics from "@/components/Analytics";
 import SkipToContent from "@/components/SkipToContent";
+import PWAInstallPrompt from "@/components/PWAInstallPrompt";
+import PWAServiceWorker from "@/components/PWAServiceWorker";
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -78,6 +80,12 @@ export default function RootLayout({
   return (
     <html lang="es">
       <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#ec4899" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="JobQuest" />
+        <link rel="apple-touch-icon" href="/icons/icon-180x180.png" />
         <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
           rel="stylesheet"
@@ -108,6 +116,7 @@ export default function RootLayout({
           <Analytics />
           {children}
           <CookieConsent />
+          <PWAServiceWorker />
           {/* Google Tag Manager noscript fallback */}
           {process.env.NEXT_PUBLIC_GTM_ID && (
             <noscript>
