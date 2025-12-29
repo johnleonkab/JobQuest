@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import type { JobOffer, JobOfferStatus } from "@/types/job-offers";
 
 interface JobOffersListViewProps {
@@ -111,14 +112,17 @@ export default function JobOffersListView({
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
                     {offer.company_logo_url && offer.company_logo_url.startsWith('http') ? (
-                      <img
+                      <Image
                         src={offer.company_logo_url}
                         alt={offer.company_name}
+                        width={40}
+                        height={40}
                         className="w-10 h-10 rounded-lg object-cover"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
                           target.style.display = 'none';
                         }}
+                        unoptimized
                       />
                     ) : (
                       <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">

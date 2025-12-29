@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { getAllLevels } from "@/config/gamification/levels";
 import { getAllBadges } from "@/config/gamification/badges";
+import { BadgeSkeleton, CardSkeleton } from "@/components/LoadingSkeleton";
 import LevelCard from "@/components/gamification/LevelCard";
 import BadgeCard from "@/components/gamification/BadgeCard";
 import { calculateUserLevel } from "@/lib/gamification/utils";
@@ -56,8 +57,19 @@ export default function GamificationPage() {
 
   if (loading) {
     return (
-      <div className="flex h-full items-center justify-center">
-        <div className="text-slate-500">Cargando...</div>
+      <div className="flex-1 overflow-y-auto p-8">
+        <div className="mx-auto max-w-4xl">
+          <div className="mb-8">
+            <div className="h-8 bg-slate-200 rounded w-48 mb-4 animate-pulse"></div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <CardSkeleton count={4} />
+          </div>
+          <div className="mb-8">
+            <div className="h-6 bg-slate-200 rounded w-32 mb-4 animate-pulse"></div>
+            <BadgeSkeleton count={12} />
+          </div>
+        </div>
       </div>
     );
   }

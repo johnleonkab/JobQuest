@@ -13,6 +13,7 @@ import { useToast } from "@/contexts/ToastContext";
 import { useGamification } from "@/hooks/useGamification";
 import type { InterviewFormData } from "@/types/interviews";
 import type { ContactFormData } from "@/types/contacts";
+import { KanbanSkeleton } from "@/components/LoadingSkeleton";
 
 export default function JobOpeningsPage() {
   const [offers, setOffers] = useState<JobOffer[]>([]);
@@ -379,14 +380,16 @@ export default function JobOpeningsPage() {
 
   if (loading) {
     return (
-      <div className="flex-1 overflow-y-auto p-8">
-        <div className="flex items-center justify-center h-full">
-          <div className="text-center">
-            <span className="material-symbols-outlined text-4xl animate-spin text-primary mb-4">
-              hourglass_empty
-            </span>
-            <p className="text-gray-500">Cargando ofertas...</p>
+      <div className="flex-1 overflow-y-auto p-6 md:p-8">
+        <div className="max-w-[1600px] mx-auto space-y-8">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+              <div className="h-10 bg-slate-200 rounded w-64 mb-2 animate-pulse"></div>
+              <div className="h-5 bg-slate-200 rounded w-96 animate-pulse"></div>
+            </div>
+            <div className="h-10 bg-slate-200 rounded w-40 animate-pulse"></div>
           </div>
+          <KanbanSkeleton columns={7} />
         </div>
       </div>
     );
@@ -408,25 +411,25 @@ export default function JobOpeningsPage() {
 
   return (
     <div className="flex-1 overflow-y-auto overflow-x-hidden kanban-scroll">
-      <div className="max-w-[1600px] mx-auto p-6 md:p-8 space-y-8">
+      <div className="max-w-[1600px] mx-auto p-4 sm:p-6 md:p-8 space-y-6 sm:space-y-8">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tight mb-2">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-gray-900 tracking-tight mb-2">
               Gestión de Ofertas
             </h1>
-            <p className="text-gray-500 text-base">
+            <p className="text-gray-500 text-sm sm:text-base">
               Rastrea tus postulaciones y sube de nivel.
             </p>
           </div>
           <button
             onClick={() => handleAdd()}
-            className="flex items-center justify-center gap-2 h-11 px-6 bg-primary hover:bg-pink-600 text-white rounded-xl font-bold transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40 group"
+            className="flex items-center justify-center gap-2 h-11 px-4 sm:px-6 bg-primary hover:bg-pink-600 text-white rounded-xl font-bold transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40 group w-full sm:w-auto min-h-[44px]"
           >
             <span className="material-symbols-outlined text-xl group-hover:scale-110 transition-transform">
               add
             </span>
-            <span>Nueva Oferta</span>
+            <span className="text-sm sm:text-base">Nueva Oferta</span>
           </button>
         </div>
 

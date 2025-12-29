@@ -123,7 +123,7 @@ export default function JobOffersKanban({
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 items-start pb-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6 items-start pb-10 overflow-x-auto md:overflow-x-visible">
         {COLUMNS.map((column) => {
           const columnOffers = getOffersByStatus(column.status);
           return (

@@ -12,9 +12,25 @@ export default function Footer() {
           </div>
           <span className="text-sm font-bold text-slate-900">JobQuest</span>
         </div>
-        <p className="text-sm text-slate-500">
-          © 2023 JobQuest Inc. Todos los derechos reservados.
-        </p>
+        <div className="flex flex-col items-center sm:items-start gap-2">
+          <p className="text-sm text-slate-500">
+            © {new Date().getFullYear()} JobQuest Inc. Todos los derechos reservados.
+          </p>
+          <div className="flex gap-4 text-xs text-slate-400">
+            <Link
+              href="/terms"
+              className="hover:text-primary transition-colors"
+            >
+              Términos de Servicio
+            </Link>
+            <Link
+              href="/privacy"
+              className="hover:text-primary transition-colors"
+            >
+              Política de Privacidad
+            </Link>
+          </div>
+        </div>
         <div className="flex gap-4">
           <Link
             href="#"

@@ -231,10 +231,74 @@ Para usar rate limiting con Redis en producción, necesitas configurar Upstash R
 
 **Nota:** Si no configuras estas variables, el sistema usará un store en memoria (solo para desarrollo). En producción, se recomienda usar Upstash Redis.
 
+## Variables de Entorno para Email Notifications (Recomendado)
+
+### RESEND_API_KEY
+- **Descripción:** API Key de Resend para envío de emails
+- **Ejemplo:** `re_xxxxxxxxxxxxx`
+- **Requerido:** Sí (para producción)
+- **Cómo obtenerlo:**
+  1. Crea una cuenta en [Resend](https://resend.com)
+  2. Ve a API Keys en el dashboard
+  3. Crea un nuevo API Key
+  4. Copia la clave (comienza con `re_`)
+- **Uso:** Autenticación para enviar emails transaccionales
+
+### RESEND_FROM_EMAIL
+- **Descripción:** Email desde el cual se envían los emails (debe estar verificado en Resend)
+- **Ejemplo:** `noreply@tudominio.com` o `JobQuest <noreply@tudominio.com>`
+- **Requerido:** No (por defecto usa `onboarding@resend.dev` para testing)
+- **Uso:** Email remitente para todas las notificaciones
+- **Nota:** Para producción, debes verificar un dominio en Resend y usar un email de ese dominio
+
+### CRON_SECRET
+- **Descripción:** Secret para autenticar llamadas de cron jobs
+- **Ejemplo:** `tu-secret-super-seguro-aqui`
+- **Requerido:** No (solo si usas cron jobs externos, no Vercel)
+- **Uso:** Proteger endpoints de weekly digest e interview reminders
+
+**Nota:** 
+- En desarrollo sin `RESEND_API_KEY`: los emails se loguearán en la consola
+- En producción: **DEBES** configurar `RESEND_API_KEY` para que los emails se envíen
+- Resend ofrece 3,000 emails gratis al mes, perfecto para empezar
+
+## Variables de Entorno para Analytics (Opcional)
+
+### NEXT_PUBLIC_GTM_ID
+- **Descripción:** Google Tag Manager Container ID
+- **Ejemplo:** `GTM-MXDJ2NQV`
+- **Requerido:** No
+- **Cómo obtenerlo:**
+  1. Crea una cuenta en [Google Tag Manager](https://tagmanager.google.com)
+  2. Crea un nuevo contenedor para tu sitio web
+  3. Copia el Container ID (formato: `GTM-XXXXXXX`)
+- **Uso:** Tracking de eventos y conversiones via GTM. GTM permite gestionar múltiples herramientas (GA4, Facebook Pixel, etc.) desde un solo lugar
+- **Recomendado:** Sí, es más flexible que Google Analytics directo
+
+### NEXT_PUBLIC_GA_ID
+- **Descripción:** Google Analytics 4 Measurement ID (solo si NO usas GTM)
+- **Ejemplo:** `G-XXXXXXXXXX`
+- **Requerido:** No (solo si no usas GTM)
+- **Uso:** Tracking directo de Google Analytics (fallback si GTM no está configurado)
+
+### NEXT_PUBLIC_PLAUSIBLE_DOMAIN
+- **Descripción:** Dominio para Plausible Analytics (privacy-friendly)
+- **Ejemplo:** `jobquest.app`
+- **Requerido:** No
+- **Uso:** Analytics alternativo que respeta la privacidad
+
+### NEXT_PUBLIC_SENTRY_DSN
+- **Descripción:** Sentry DSN para error tracking
+- **Ejemplo:** `https://xxxxx@xxxxx.ingest.sentry.io/xxxxx`
+- **Requerido:** No
+- **Uso:** Tracking de errores en producción
+
 ## 📚 Recursos Adicionales
 
 - [Documentación de Supabase](https://supabase.com/docs)
 - [Documentación de Next.js sobre Variables de Entorno](https://nextjs.org/docs/basic-features/environment-variables)
 - [Guía de OAuth de Supabase](https://supabase.com/docs/guides/auth/social-login)
 - [Documentación de Upstash Redis](https://docs.upstash.com/redis)
+- [Resend - Email API](https://resend.com/docs)
+- [SendGrid - Email API](https://docs.sendgrid.com/)
 

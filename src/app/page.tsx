@@ -13,7 +13,7 @@ export default function Home() {
       <div className="absolute top-40 -left-20 w-72 h-72 bg-purple-100 rounded-full blur-3xl -z-10" />
 
       <Header />
-      <main className="flex-1">
+      <main id="main-content" className="flex-1" tabIndex={-1}>
         <Hero />
         <Features />
         <DashboardPreview />

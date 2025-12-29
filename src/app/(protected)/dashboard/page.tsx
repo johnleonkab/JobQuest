@@ -104,13 +104,32 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="flex-1 overflow-y-auto p-8">
-        <div className="flex items-center justify-center h-full">
-          <div className="text-center">
-            <span className="material-symbols-outlined text-4xl animate-spin text-primary mb-4">
-              hourglass_empty
-            </span>
-            <p className="text-gray-500">Cargando dashboard...</p>
+      <div className="flex-1 overflow-y-auto p-6 md:p-8">
+        <div className="max-w-7xl mx-auto space-y-6">
+          <div className="mb-8">
+            <div className="h-10 bg-slate-200 rounded w-48 mb-2 animate-pulse"></div>
+            <div className="h-5 bg-slate-200 rounded w-64 animate-pulse"></div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="bg-white rounded-xl border border-slate-200 p-6 animate-pulse">
+                <div className="h-4 bg-slate-200 rounded w-1/2 mb-4"></div>
+                <div className="h-8 bg-slate-200 rounded w-3/4 mb-2"></div>
+                <div className="h-3 bg-slate-200 rounded w-full"></div>
+              </div>
+            ))}
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {Array.from({ length: 2 }).map((_, i) => (
+              <div key={i} className="bg-white rounded-xl border border-slate-200 p-6 animate-pulse">
+                <div className="h-6 bg-slate-200 rounded w-1/3 mb-4"></div>
+                <div className="space-y-3">
+                  {Array.from({ length: 3 }).map((_, j) => (
+                    <div key={j} className="h-16 bg-slate-200 rounded"></div>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -128,8 +147,8 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex-1 overflow-y-auto p-6 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8">
+      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tight mb-2">

@@ -218,8 +218,8 @@ export default function ExperienceModal({
       aria-modal="true"
     >
       <div className="fixed inset-0 bg-gray-900/30 backdrop-blur-sm" onClick={onClose} />
-      <div className="flex min-h-full items-center justify-center p-4">
-        <div className="relative transform overflow-hidden rounded-3xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-2xl border border-gray-200">
+      <div className="flex min-h-full items-center justify-center p-0 sm:p-4">
+        <div className="relative transform overflow-hidden rounded-none sm:rounded-3xl bg-white text-left shadow-2xl transition-all w-full h-full sm:h-auto sm:my-8 sm:w-full sm:max-w-2xl border-0 sm:border border-gray-200 flex flex-col max-h-screen sm:max-h-[90vh]">
           <div className="bg-white/50 px-6 py-5 border-b border-gray-100 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
@@ -474,18 +474,18 @@ export default function ExperienceModal({
                 </p>
               </div>
             </div>
-            <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-end gap-3 rounded-b-3xl -mx-6 -mb-6">
+            <div className="px-4 sm:px-6 py-4 bg-gray-50 border-t border-gray-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 rounded-none sm:rounded-b-3xl -mx-4 sm:-mx-6 -mb-0 sm:-mb-6 sticky bottom-0">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-5 py-2.5 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-200 transition-colors"
+                className="w-full sm:w-auto px-5 py-3 sm:py-2.5 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-200 transition-colors min-h-[44px]"
               >
                 Cancelar
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white bg-primary hover:bg-pink-600 shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all transform hover:-translate-y-0.5 disabled:opacity-50"
+                className="w-full sm:w-auto px-6 py-3 sm:py-2.5 rounded-xl text-sm font-semibold text-white bg-primary hover:bg-pink-600 shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all transform hover:-translate-y-0.5 disabled:opacity-50 min-h-[44px]"
               >
                 {loading ? "Guardando..." : "Guardar Experiencia"}
               </button>

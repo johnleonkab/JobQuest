@@ -11,6 +11,7 @@ import CertificationsSection from "@/components/cv/CertificationsSection";
 import LanguagesSection from "@/components/cv/LanguagesSection";
 import VolunteeringSection from "@/components/cv/VolunteeringSection";
 import ProjectsSection from "@/components/cv/ProjectsSection";
+import { CVSectionSkeleton } from "@/components/LoadingSkeleton";
 
 export default function CVBuilderPage() {
   const [cvData, setCvData] = useState<CVData>({
@@ -148,25 +149,46 @@ export default function CVBuilderPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-full">
-        <div className="text-gray-500">Cargando...</div>
+      <div className="flex-1 overflow-y-auto p-8 scroll-smooth">
+        <div className="max-w-5xl mx-auto h-full flex flex-col gap-8 pb-12">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <div className="h-8 bg-slate-200 rounded w-64 mb-2 animate-pulse"></div>
+              <div className="h-5 bg-slate-200 rounded w-96 animate-pulse"></div>
+            </div>
+            <div className="flex gap-3">
+              <div className="h-10 bg-slate-200 rounded w-32 animate-pulse"></div>
+              <div className="h-10 bg-slate-200 rounded w-40 animate-pulse"></div>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-6">
+            <CVSectionSkeleton />
+            <CVSectionSkeleton />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <CVSectionSkeleton />
+              <CVSectionSkeleton />
+            </div>
+            <CVSectionSkeleton />
+            <CVSectionSkeleton />
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="flex-1 overflow-y-auto p-8 scroll-smooth">
-      <div className="max-w-5xl mx-auto h-full flex flex-col gap-8 pb-12">
+    <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 scroll-smooth">
+      <div className="max-w-5xl mx-auto h-full flex flex-col gap-6 sm:gap-8 pb-8 sm:pb-12">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-slate-900 mb-1">
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-1">
               Mi Perfil Profesional
             </h2>
-            <p className="text-gray-500">
+            <p className="text-sm sm:text-base text-gray-500">
               Gestiona tu experiencia y habilidades para destacar.
             </p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
             <button
               onClick={() => setShowAIInsightsModal(true)}
               className="bg-white hover:bg-purple-50 text-purple-600 border border-purple-200 px-5 py-2.5 rounded-xl font-medium text-sm transition-all shadow-sm flex items-center gap-2 group"

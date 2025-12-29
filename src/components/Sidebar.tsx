@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { signOut } from "@/lib/auth/actions";
 import { useEffect, useState } from "react";
+import Tooltip from "@/components/Tooltip";
 
 interface UserProfile {
   id: string;
@@ -47,9 +49,20 @@ export default function Sidebar() {
         const gamificationData = await gamificationResponse.json();
         setGamification(gamificationData);
       }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
+      } catch (error) {
+        const { logger } = await import("@/lib/utils/logger");
+        logger.error("Error fetching sidebar data", error);
+        
+        // Track error
+        if (typeof window !== "undefined") {
+          import("@/lib/error-tracking").then(({ errorTracker }) => {
+            errorTracker.captureException(
+              error instanceof Error ? error : new Error(String(error)),
+              { component: "Sidebar" }
+            );
+          });
+        }
+      } finally {
       setLoading(false);
     }
   };
@@ -78,11 +91,13 @@ export default function Sidebar() {
     { href: "/job-openings", label: "Job Openings", icon: "work" },
     { href: "/cv-builder", label: "Mi Perfil Profesional", icon: "description" },
     { href: "/gamification", label: "Logros", icon: "emoji_events" },
+    { href: "/help", label: "Ayuda", icon: "help" },
+    { href: "/privacy-settings", label: "Privacidad", icon: "privacy_tip" },
   ];
 
 
   return (
-    <aside className="flex h-screen w-64 flex-col border-r border-border-light bg-white">
+    <aside className="flex h-screen w-64 flex-col border-r border-border-light bg-white lg:relative lg:translate-x-0">
       {/* Logo */}
       <div className="flex h-16 items-center gap-2 border-b border-border-light px-6">
         <div className="flex size-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-purple-500 text-white shadow-md shadow-primary/20">
@@ -112,10 +127,13 @@ export default function Sidebar() {
           >
             <div className="relative">
               {user.avatar_url ? (
-                <img
+                <Image
                   src={user.avatar_url}
                   alt={user.full_name || "User"}
+                  width={48}
+                  height={48}
                   className="size-12 rounded-full object-cover"
+                  unoptimized
                 />
               ) : (
                 <div className="flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
@@ -125,9 +143,14 @@ export default function Sidebar() {
                 </div>
               )}
               {gamification?.level && (
-                <div className="absolute -bottom-1 -right-1 flex size-6 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
-                  {gamification.level.order}
-                </div>
+                <Tooltip
+                  content={`Nivel ${gamification.level.order} - ${gamification.xp.toLocaleString()} XP`}
+                  position="right"
+                >
+                  <div className="absolute -bottom-1 -right-1 flex size-6 items-center justify-center rounded-full bg-primary text-xs font-bold text-white cursor-help">
+                    {gamification.level.order}
+                  </div>
+                </Tooltip>
               )}
             </div>
             <div className="flex-1 min-w-0">
@@ -150,23 +173,32 @@ export default function Sidebar() {
       <div className="border-b border-border-light p-4">
         {gamification ? (
           <>
-            <div className="mb-2 flex items-center justify-between text-xs">
-              <span className="font-medium text-slate-600">
-                Nivel {gamification.level.order}
-              </span>
-              <span className="text-slate-500">
-                {gamification.xp.toLocaleString()}{" "}
-                {gamification.nextLevel
-                  ? `/ ${gamification.nextLevel.requiredXp.toLocaleString()} XP`
-                  : "XP"}
-              </span>
-            </div>
-            <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
-              <div
-                className="h-full rounded-full bg-gradient-to-r from-primary to-purple-400 transition-all duration-500"
-                style={{ width: `${gamification.progress}%` }}
-              />
-            </div>
+            <Tooltip
+              content={
+                gamification.nextLevel
+                  ? `Progreso: ${gamification.progress.toFixed(0)}% hacia el Nivel ${gamification.level.order + 1}. Necesitas ${(gamification.nextLevel.requiredXp - gamification.xp).toLocaleString()} XP más.`
+                  : `¡Has alcanzado el nivel máximo! ${gamification.xp.toLocaleString()} XP totales.`
+              }
+              position="top"
+            >
+              <div className="mb-2 flex items-center justify-between text-xs">
+                <span className="font-medium text-slate-600">
+                  Nivel {gamification.level.order}
+                </span>
+                <span className="text-slate-500">
+                  {gamification.xp.toLocaleString()}{" "}
+                  {gamification.nextLevel
+                    ? `/ ${gamification.nextLevel.requiredXp.toLocaleString()} XP`
+                    : "XP"}
+                </span>
+              </div>
+              <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100 cursor-help">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-primary to-purple-400 transition-all duration-500"
+                  style={{ width: `${gamification.progress}%` }}
+                />
+              </div>
+            </Tooltip>
           </>
         ) : (
           <div className="space-y-2">
@@ -177,20 +209,22 @@ export default function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-1 p-4">
+      <nav className="flex-1 space-y-1 p-4" aria-label="Navegación principal">
         {navItems.map((item) => {
           const isActive = pathname === item.href || pathname?.startsWith(item.href + "/");
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 min-h-[44px] ${
                 isActive
                   ? "bg-primary/10 text-primary"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900 active:bg-slate-100"
               }`}
+              aria-current={isActive ? "page" : undefined}
+              aria-label={item.label}
             >
-              <span className="material-symbols-outlined text-xl">
+              <span className="material-symbols-outlined text-xl" aria-hidden="true">
                 {item.icon}
               </span>
               <span>{item.label}</span>
@@ -203,9 +237,10 @@ export default function Sidebar() {
       <div className="border-t border-border-light p-4">
         <button
           onClick={handleSignOut}
-          className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900"
+          className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 active:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 min-h-[44px]"
+          aria-label="Cerrar sesión"
         >
-          <span className="material-symbols-outlined text-xl">logout</span>
+          <span className="material-symbols-outlined text-xl" aria-hidden="true">logout</span>
           <span>Cerrar Sesión</span>
         </button>
       </div>

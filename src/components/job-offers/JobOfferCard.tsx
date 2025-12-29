@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import type { JobOffer } from "@/types/job-offers";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -30,7 +31,7 @@ export default function JobOfferCard({
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition,
+    transition: isDragging ? transition : "all 0.2s ease-in-out",
     opacity: isDragging ? 0.5 : 1,
   };
 
@@ -95,21 +96,24 @@ export default function JobOfferCard({
       {...attributes}
       {...listeners}
       onClick={() => onView && onView(offer)}
-      className={`bg-white p-4 rounded-xl border border-gray-200 hover:border-primary/40 cursor-pointer group transition-all hover:translate-y-[-2px] shadow-sm hover:shadow-md ${
+      className={`bg-white p-4 rounded-xl border border-gray-200 hover:border-primary/40 cursor-pointer group transition-all duration-200 ease-in-out hover:translate-y-[-2px] shadow-sm hover:shadow-md fade-in ${
         offer.status === "offer" ? "bg-gradient-to-br from-white to-emerald-50/50 border-emerald-300/30" : ""
       }`}
     >
       <div className="flex justify-between items-start mb-3">
         <div className="bg-gray-50 p-1.5 rounded-lg size-10 flex items-center justify-center border border-gray-100">
           {offer.company_logo_url && offer.company_logo_url.startsWith('http') ? (
-            <img
+            <Image
               alt={`${offer.company_name} Logo`}
-              className="size-6"
+              width={24}
+              height={24}
+              className="size-6 object-contain"
               src={offer.company_logo_url}
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 target.style.display = 'none';
               }}
+              unoptimized
             />
           ) : (
             <span className="text-gray-400 font-bold text-sm">

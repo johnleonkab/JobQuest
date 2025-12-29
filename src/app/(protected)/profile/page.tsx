@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useToast } from "@/contexts/ToastContext";
 import { useGamification } from "@/hooks/useGamification";
+import { ProfileSkeleton } from "@/components/LoadingSkeleton";
 
 interface ProfileData {
   id: string;
@@ -60,6 +61,20 @@ export default function ProfilePage() {
     }
     fetchProfile();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="flex-1 overflow-y-auto p-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-slate-900 mb-2">Mi Perfil</h1>
+            <p className="text-slate-600">Gestiona tu información personal</p>
+          </div>
+          <ProfileSkeleton />
+        </div>
+      </div>
+    );
+  }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -147,12 +162,12 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="p-8">
-      <h1 className="mb-6 text-3xl font-bold text-slate-900">Mi Perfil</h1>
+    <div className="p-4 sm:p-6 md:p-8">
+      <h1 className="mb-4 sm:mb-6 text-2xl sm:text-3xl font-bold text-slate-900">Mi Perfil</h1>
 
-      <form onSubmit={handleSubmit} className="max-w-2xl space-y-6">
+      <form onSubmit={handleSubmit} className="max-w-2xl space-y-4 sm:space-y-6">
         {/* Avatar Section */}
-        <div className="flex items-center gap-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
           <div className="relative">
             {avatarPreview ? (
               <img
@@ -199,7 +214,7 @@ export default function ProfilePage() {
         </div>
 
         {/* Name Fields */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label
               htmlFor="firstName"
@@ -326,7 +341,7 @@ export default function ProfilePage() {
           <button
             type="submit"
             disabled={submitting}
-            className="rounded-lg bg-primary px-6 py-2 font-bold text-white transition-colors hover:bg-primary-hover disabled:opacity-50"
+            className="w-full rounded-lg bg-primary px-6 py-3 font-bold text-white transition-colors hover:bg-primary-hover disabled:opacity-50 min-h-[44px]"
           >
             {submitting ? "Guardando..." : "Guardar Cambios"}
           </button>

@@ -2,7 +2,11 @@
 
 ## 🎯 The Problem
 
-After Google login, Supabase redirects to `localhost:3000` instead of your Vercel domain. This happens because Supabase's **Site URL** is configured to localhost.
+After Google login, Supabase redirects to `localhost:3000` instead of your Vercel domain, OR you see a 404 error with URLs like:
+- `https://your-app.vercel.app/auth/v1/authorize` (404 - this is a Supabase route, not your app)
+- `redirect_to=https://your-app.vercel.app//auth/callback` (double slash)
+
+This happens because Supabase's **Site URL** is configured to localhost.
 
 ## ✅ Solution: Update Supabase Configuration
 
@@ -21,25 +25,29 @@ After Google login, Supabase redirects to `localhost:3000` instead of your Verce
    ```
    http://localhost:3000
    ```
-   To your production domain:
+   To your production domain (NO trailing slash):
    ```
-   https://your-app.vercel.app
+   https://job-quest-bice.vercel.app
    ```
-   (Replace `your-app.vercel.app` with your actual Vercel domain)
+   ⚠️ **IMPORTANT:** 
+   - Use `https://` (not `http://`)
+   - NO trailing slash at the end
+   - Use your actual Vercel domain
 
 3. **Click Save**
 
-⚠️ **Why this matters:** Supabase uses the Site URL as the default redirect destination after authentication. If it's set to localhost, it will always redirect there, even in production.
+⚠️ **Why this matters:** Supabase uses the Site URL as the default redirect destination after authentication. If it's set to localhost, it will always redirect there, even in production. This is why you're seeing the 404 error - Supabase is trying to redirect to localhost but your app is on Vercel.
 
 ### Step 3: Update Redirect URLs
 
 In the same page, find the **Redirect URLs** section:
 
-1. **Add your production URL:**
+1. **Add your production URL (NO double slashes):**
    ```
-   https://your-app.vercel.app/auth/callback
-   https://your-app.vercel.app/**
+   https://job-quest-bice.vercel.app/auth/callback
+   https://job-quest-bice.vercel.app/**
    ```
+   ⚠️ **IMPORTANT:** Make sure there's NO double slash (`//`). It should be `/auth/callback` not `//auth/callback`
 
 2. **Keep localhost for development (optional):**
    ```
@@ -68,10 +76,24 @@ The code in `src/lib/auth/actions.ts` now automatically detects the URL from the
 
 ## 🐛 Still Not Working?
 
+### If you see 404 on `/auth/v1/authorize`:
+
+This means Supabase is trying to redirect to a Supabase route on your Vercel domain. This happens when:
+- Site URL in Supabase is still set to localhost
+- Or the redirect URL is malformed
+
+**Fix:**
+1. Double-check Site URL in Supabase is `https://job-quest-bice.vercel.app` (no trailing slash)
+2. Make sure Redirect URLs don't have double slashes
+3. Clear browser cache and try again
+
+### Other troubleshooting:
+
 1. **Clear browser cache** or use incognito mode
 2. **Check Supabase logs** in Authentication → Logs
 3. **Verify the redirect URL** in the OAuth flow matches your Vercel domain
-4. **Test the callback URL** directly: `https://your-app.vercel.app/auth/callback`
+4. **Test the callback URL** directly: `https://job-quest-bice.vercel.app/auth/callback`
+5. **Check Vercel environment variables** - make sure `NEXT_PUBLIC_APP_URL` is set to `https://job-quest-bice.vercel.app` (no trailing slash)
 
 ## 📸 Where to Find It
 

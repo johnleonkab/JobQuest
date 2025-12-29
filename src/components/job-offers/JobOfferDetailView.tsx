@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import type { JobOffer, SelectedCVSections } from "@/types/job-offers";
 import type { CVData } from "@/types/cv";
 import type { Interview, InterviewFormData } from "@/types/interviews";
@@ -60,7 +61,8 @@ export default function JobOfferDetailView({
         setContacts(Array.isArray(data) ? data : []);
       }
     } catch (error) {
-      console.error("Error fetching contacts:", error);
+      const { logger } = await import("@/lib/utils/logger");
+      logger.error("Error fetching contacts", error);
     }
   };
 
@@ -523,14 +525,17 @@ export default function JobOfferDetailView({
               <div className="flex gap-5">
                 <div className="bg-white p-2 rounded-2xl size-20 md:size-24 flex items-center justify-center shrink-0 border border-slate-100 shadow-sm">
                   {offer.company_logo_url && offer.company_logo_url.startsWith('http') ? (
-                    <img
+                    <Image
                       alt={`${offer.company_name} Logo`}
+                      width={96}
+                      height={96}
                       className="w-full h-full object-contain"
                       src={offer.company_logo_url}
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.src = `https://placehold.co/200x200/fce7f3/db2777?text=${offer.company_name.charAt(0).toUpperCase()}`;
                       }}
+                      unoptimized
                     />
                   ) : (
                     <span className="text-4xl font-bold text-primary">

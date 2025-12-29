@@ -4,7 +4,8 @@ import { createClient } from '@/lib/supabase/server';
 import { getXpForEvent } from '@/lib/gamification/utils';
 import { getEvent } from '@/config/gamification/events';
 import { calculateUserLevel, checkUserBadges } from '@/lib/gamification/utils';
-import { getAllBadges } from '@/config/gamification/badges';
+import { getAllBadges, getBadge } from '@/config/gamification/badges';
+import { sendEmail, generateAchievementEmail } from '@/lib/email';
 
 /**
  * Registra un evento de gamificación y otorga XP al usuario
@@ -54,6 +55,37 @@ export async function recordEvent(eventId: string) {
       const newLevel = levelInfo.currentLevel.order;
 
       if (newLevel > oldLevel) {
+        // Level up occurred - send email notification
+        try {
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user?.email) {
+            const { data: profileData } = await supabase
+              .from('profiles')
+              .select('full_name, first_name, xp')
+              .eq('id', user.id)
+              .single();
+
+            const userName = profileData?.full_name || profileData?.first_name || user.email.split('@')[0];
+            const nextLevelInfo = calculateUserLevel(profileData?.xp || 0);
+            
+            const emailHtml = generateAchievementEmail(userName, {
+              type: 'level_up',
+              level: newLevel,
+              nextLevelXp: nextLevelInfo.nextLevel?.requiredXp,
+              currentXp: profileData?.xp || 0,
+            });
+
+            await sendEmail({
+              to: user.email,
+              subject: `🎉 ¡Subiste al Nivel ${newLevel}! - JobQuest`,
+              html: emailHtml,
+            });
+          }
+        } catch (error) {
+          // Don't block the level up if email fails
+          console.error('Error sending level up email:', error);
+        }
+
         // Level up occurred - this will be handled by the frontend with animation
         return {
           success: true,
@@ -108,6 +140,13 @@ async function checkAndAwardBadges(userId: string) {
 
   const earnedBadgeIds = new Set(earnedBadges?.map((b) => b.badge_id) || []);
 
+  // Get user profile and email for notifications
+  const { data: profileData } = await supabase
+    .from('profiles')
+    .select('email, full_name, first_name')
+    .eq('id', userId)
+    .single();
+
   // Check all badges
   const allBadges = getAllBadges();
   const newBadges: string[] = [];
@@ -134,6 +173,30 @@ async function checkAndAwardBadges(userId: string) {
 
       if (!badgeError) {
         newBadges.push(badge.id);
+        
+        // Send email notification for new badge
+        if (profileData?.email) {
+          try {
+            const userName = profileData.full_name || profileData.first_name || profileData.email.split('@')[0];
+            const badgeData = getBadge(badge.id);
+            
+            const emailHtml = generateAchievementEmail(userName, {
+              type: 'badge_earned',
+              badgeName: badgeData?.name || badge.id,
+              badgeDescription: badgeData?.description,
+              badgeIcon: badgeData?.icon,
+            });
+
+            await sendEmail({
+              to: profileData.email,
+              subject: `🏆 ¡Nuevo Badge Desbloqueado: ${badgeData?.name || badge.id}! - JobQuest`,
+              html: emailHtml,
+            });
+          } catch (error) {
+            // Don't block the badge award if email fails
+            console.error('Error sending badge email:', error);
+          }
+        }
       }
     }
   }

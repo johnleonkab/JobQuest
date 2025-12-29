@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import type { JobOffer, SelectedCVSections } from "@/types/job-offers";
 import type { CVData, CVExperience, CVEducation, CVCertification, CVLanguage, CVVolunteering, CVProject } from "@/types/cv";
 import { useGamification } from "@/hooks/useGamification";
@@ -124,10 +125,13 @@ export default function CVPreviewModal({
       <div className="flex items-start gap-6 mb-8 pb-6 border-b-2 border-primary">
         {profileData?.avatar_url && (
           <div className="shrink-0">
-            <img
+            <Image
               src={profileData.avatar_url}
               alt={fullName}
+              width={96}
+              height={96}
               className="w-24 h-24 rounded-full object-cover border-4 border-primary/20"
+              unoptimized
             />
           </div>
         )}
