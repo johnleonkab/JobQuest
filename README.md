@@ -1,152 +1,152 @@
 # JobQuest 🎯
 
-**Plataforma integral de gestión de carrera profesional con gamificación, construcción de CV personalizado y seguimiento de ofertas de trabajo.**
+**Comprehensive career management platform with gamification, personalized CV building, and job offer tracking.**
 
-## 📋 Tabla de Contenidos
+## 📋 Table of Contents
 
-- [Visión General](#visión-general)
-- [Objetivo](#objetivo)
-- [Características Principales](#características-principales)
-- [Módulos](#módulos)
-- [Stack Tecnológico](#stack-tecnológico)
-- [Arquitectura](#arquitectura)
-- [Configuración](#configuración)
-- [Estructura del Proyecto](#estructura-del-proyecto)
-- [Seguridad](#seguridad)
-- [Desarrollo](#desarrollo)
-
----
-
-## 🎯 Visión General
-
-JobQuest es una plataforma web moderna diseñada para ayudar a profesionales a gestionar su carrera de manera integral. Combina herramientas prácticas de gestión de CV y seguimiento de ofertas laborales con elementos de gamificación que motivan y recompensan el progreso del usuario.
+- [Overview](#overview)
+- [Objective](#objective)
+- [Key Features](#key-features)
+- [Modules](#modules)
+- [Tech Stack](#tech-stack)
+- [Architecture](#architecture)
+- [Configuration](#configuration)
+- [Project Structure](#project-structure)
+- [Security](#security)
+- [Development](#development)
 
 ---
 
-## 🎯 Objetivo
+## 🎯 Overview
 
-El objetivo principal de JobQuest es proporcionar una solución completa para profesionales que buscan trabajo, permitiéndoles:
-
-1. **Construir CVs personalizados** adaptados a cada oferta de trabajo
-2. **Gestionar ofertas laborales** de manera organizada con un sistema Kanban
-3. **Obtener insights de IA** sobre su CV y mejoras sugeridas
-4. **Mantener la motivación** a través de un sistema de gamificación con XP, niveles y badges
-5. **Seguir el progreso** de sus aplicaciones con entrevistas, contactos y notas
+JobQuest is a modern web platform designed to help professionals manage their careers comprehensively. It combines practical CV management and job offer tracking tools with gamification elements that motivate and reward user progress.
 
 ---
 
-## ✨ Características Principales
+## 🎯 Objective
 
-### 🎮 Gamificación
-- Sistema de puntos de experiencia (XP) por acciones realizadas
-- Niveles progresivos con recompensas
-- Sistema de badges (insignias) con más de 50 logros diferentes
-- Notificaciones en tiempo real de progreso
-- Dashboard con estadísticas de gamificación
+The main objective of JobQuest is to provide a complete solution for job-seeking professionals, enabling them to:
 
-### 📝 Constructor de CV
-- Múltiples secciones: Experiencia, Educación, Certificaciones, Idiomas, Voluntariado, Proyectos
-- Edición intuitiva con modales
-- Mejora automática de textos con IA
-- Análisis de CV con insights de IA
-- Chat interactivo con IA para consultas sobre el CV
-- Exportación a PDF personalizada por oferta
+1. **Build personalized CVs** tailored to each job offer
+2. **Manage job offers** in an organized way with a Kanban system
+3. **Get AI insights** about their CV and suggested improvements
+4. **Stay motivated** through a gamification system with XP, levels, and badges
+5. **Track progress** of their applications with interviews, contacts, and notes
 
-### 💼 Gestión de Ofertas de Trabajo
-- Vista Kanban con drag & drop
-- Vista de lista con filtros avanzados
-- Estados personalizables: Guardada, Contactada, Aplicada, Entrevista, Oferta, Descartada, Conseguida
-- Detalle completo de cada oferta
-- Selección de secciones de CV por oferta
-- Generación de CV personalizado por oferta
-- Extracción automática de logos de empresas
-- Gestión de entrevistas con calendario
-- Gestión de contactos por oferta
+---
 
-### 🤖 Inteligencia Artificial
-- Análisis completo del CV con Gemini AI
-- Recomendaciones de mejora por sección
-- Chat interactivo sobre el CV
-- Sugerencias automáticas de secciones de CV para ofertas
-- Mejora de textos con corrección ortográfica y sugerencias
+## ✨ Key Features
+
+### 🎮 Gamification
+- Experience points (XP) system for actions performed
+- Progressive levels with rewards
+- Badge system with over 50 different achievements
+- Real-time progress notifications
+- Dashboard with gamification statistics
+
+### 📝 CV Builder
+- Multiple sections: Experience, Education, Certifications, Languages, Volunteering, Projects
+- Intuitive editing with modals
+- Automatic text improvement with AI
+- CV analysis with AI insights
+- Interactive chat with AI for CV queries
+- Customized PDF export per offer
+
+### 💼 Job Offer Management
+- Kanban view with drag & drop
+- List view with advanced filters
+- Customizable statuses: Saved, Contacted, Applied, Interview, Offer, Rejected, Accepted
+- Complete detail view for each offer
+- CV section selection per offer
+- Customized CV generation per offer
+- Automatic company logo extraction
+- Interview management with calendar
+- Contact management per offer
+
+### 🤖 Artificial Intelligence
+- Complete CV analysis with Gemini AI
+- Improvement recommendations per section
+- Interactive chat about the CV
+- Automatic CV section suggestions for offers
+- Text improvement with spelling correction and suggestions
 
 ### 📊 Dashboard
-- Vista general del progreso
-- Nivel actual y puntos
-- Próximos badges
-- Entrevistas de la semana
-- Ofertas pendientes de aplicar
-- Contactos a revisar
-- Notas importantes
+- Overview of progress
+- Current level and points
+- Upcoming badges
+- This week's interviews
+- Pending job offers to apply
+- Contacts to review
+- Important notes
 
 ---
 
-## 🧩 Módulos
+## 🧩 Modules
 
-### 1. Módulo de Autenticación y Perfil (`/profile`)
-- Autenticación con Google OAuth vía Supabase
-- Gestión de perfil de usuario
-- Onboarding inicial
-- Avatar personalizado
-- Información personal y profesional
+### 1. Authentication and Profile Module (`/profile`)
+- Google OAuth authentication via Supabase
+- User profile management
+- Initial onboarding
+- Custom avatar
+- Personal and professional information
 
-**Archivos principales:**
+**Main files:**
 - `src/app/(protected)/profile/page.tsx`
 - `src/app/api/profile/route.ts`
 - `src/app/api/user/route.ts`
 - `src/components/OnboardingModal.tsx`
 
-### 2. Módulo de Gamificación (`/gamification`)
-- Sistema de XP y niveles
-- Sistema de badges
-- Eventos y recompensas
-- Progreso y estadísticas
+### 2. Gamification Module (`/gamification`)
+- XP and levels system
+- Badge system
+- Events and rewards
+- Progress and statistics
 
-**Archivos principales:**
+**Main files:**
 - `src/app/(protected)/gamification/page.tsx`
 - `src/app/api/gamification/route.ts`
 - `src/config/gamification/`
 - `src/hooks/useGamification.ts`
 - `supabase_gamification.sql`
 
-**Eventos principales:**
-- `profile.updated` - Actualización de perfil
-- `cv.*` - Eventos de CV (añadir, actualizar secciones)
-- `job_offer.*` - Eventos de ofertas de trabajo
-- `ai.*` - Eventos de uso de IA
-- Y muchos más...
+**Main events:**
+- `profile.updated` - Profile update
+- `cv.*` - CV events (add, update sections)
+- `job_offer.*` - Job offer events
+- `ai.*` - AI usage events
+- And many more...
 
-### 3. Módulo Constructor de CV (`/cv-builder`)
-- Gestión de todas las secciones del CV
-- Modales de edición por sección
-- Mejora con IA por sección
-- Vista previa del CV
+### 3. CV Builder Module (`/cv-builder`)
+- Management of all CV sections
+- Editing modals per section
+- AI improvement per section
+- CV preview
 
-**Archivos principales:**
+**Main files:**
 - `src/app/(protected)/cv-builder/page.tsx`
-- `src/components/cv/` (todos los componentes de secciones)
-- `src/app/api/cv/*/route.ts` (endpoints por sección)
+- `src/components/cv/` (all section components)
+- `src/app/api/cv/*/route.ts` (endpoints per section)
 - `supabase_cv_builder.sql`
 
-**Secciones:**
-- Experiencia Laboral
-- Educación
-- Certificaciones
-- Idiomas
-- Voluntariado
-- Proyectos
+**Sections:**
+- Work Experience
+- Education
+- Certifications
+- Languages
+- Volunteering
+- Projects
 
-### 4. Módulo de Ofertas de Trabajo (`/job-openings`)
-- Vista Kanban con drag & drop
-- Vista de lista con filtros
-- Modal de creación/edición
-- Vista detallada de oferta
-- Gestión de entrevistas
-- Gestión de contactos
-- Selección de secciones de CV
-- Generación de CV personalizado
+### 4. Job Offers Module (`/job-openings`)
+- Kanban view with drag & drop
+- List view with filters
+- Create/edit modal
+- Detailed offer view
+- Interview management
+- Contact management
+- CV section selection
+- Customized CV generation
 
-**Archivos principales:**
+**Main files:**
 - `src/app/(protected)/job-openings/page.tsx`
 - `src/components/job-offers/`
 - `src/app/api/job-offers/route.ts`
@@ -156,13 +156,13 @@ El objetivo principal de JobQuest es proporcionar una solución completa para pr
 - `supabase_interviews.sql`
 - `supabase_job_offer_contacts.sql`
 
-### 5. Módulo de IA (`/cv-builder` - AI Insights)
-- Análisis completo del CV
-- Chat interactivo
-- Mejora de textos por sección
-- Sugerencias automáticas
+### 5. AI Module (`/cv-builder` - AI Insights)
+- Complete CV analysis
+- Interactive chat
+- Text improvement per section
+- Automatic suggestions
 
-**Archivos principales:**
+**Main files:**
 - `src/components/cv/AIInsightsModal.tsx`
 - `src/hooks/useAIInsights.ts`
 - `src/hooks/useAISectionImprover.ts`
@@ -171,158 +171,158 @@ El objetivo principal de JobQuest es proporcionar una solución completa para pr
 - `src/app/api/ai/insights/route.ts`
 - `supabase_ai_insights.sql`
 
-### 6. Módulo Dashboard (`/dashboard`)
-- Vista general del estado
-- Estadísticas de gamificación
-- Ofertas pendientes
-- Entrevistas próximas
-- Contactos a revisar
-- Notas importantes
+### 6. Dashboard Module (`/dashboard`)
+- Overview of status
+- Gamification statistics
+- Pending offers
+- Upcoming interviews
+- Contacts to review
+- Important notes
 
-**Archivos principales:**
+**Main files:**
 - `src/app/(protected)/dashboard/page.tsx`
 - `src/app/api/dashboard/route.ts`
 
-### 7. Módulo de Extracción de Logos (`/job-openings`)
-- Extracción automática de logos de empresas
-- Integración con logo.dev API
-- Fallback a website de empresa
+### 7. Logo Extraction Module (`/job-openings`)
+- Automatic company logo extraction
+- Integration with logo.dev API
+- Fallback to company website
 
-**Archivos principales:**
+**Main files:**
 - `src/lib/logo-extraction.ts`
 - `src/app/api/logo-extraction/route.ts`
 
 ---
 
-## 🛠 Stack Tecnológico
+## 🛠 Tech Stack
 
 ### Frontend
-- **Next.js 16** - Framework React con App Router
-- **TypeScript** - Tipado estático
-- **Tailwind CSS** - Estilos utility-first
-- **React Hooks** - Gestión de estado
-- **Material Symbols** - Iconografía
+- **Next.js 16** - React framework with App Router
+- **TypeScript** - Static typing
+- **Tailwind CSS** - Utility-first styling
+- **React Hooks** - State management
+- **Material Symbols** - Iconography
 
 ### Backend
-- **Next.js API Routes** - Endpoints del servidor
-- **Supabase** - Backend como servicio
-  - PostgreSQL - Base de datos
-  - Row Level Security (RLS) - Seguridad a nivel de fila
-  - Storage - Almacenamiento de archivos (avatars)
-  - Auth - Autenticación OAuth
+- **Next.js API Routes** - Server endpoints
+- **Supabase** - Backend as a service
+  - PostgreSQL - Database
+  - Row Level Security (RLS) - Row-level security
+  - Storage - File storage (avatars)
+  - Auth - OAuth authentication
 
-### Base de Datos
-- **PostgreSQL** (vía Supabase)
-- **Triggers y Funciones** - Lógica de negocio en BD
-- **RLS Policies** - Seguridad a nivel de fila
+### Database
+- **PostgreSQL** (via Supabase)
+- **Triggers and Functions** - Business logic in DB
+- **RLS Policies** - Row-level security
 
-### Servicios Externos
-- **Google Gemini AI** - Análisis y mejora de CV
-- **Logo.dev API** - Extracción de logos de empresas
-- **Upstash Redis** - Rate limiting y cache
+### External Services
+- **Google Gemini AI** - CV analysis and improvement
+- **Logo.dev API** - Company logo extraction
+- **Upstash Redis** - Rate limiting and cache
 
-### Herramientas de Desarrollo
-- **Docker & Docker Compose** - Contenedorización
-- **ESLint** - Linting de código
-- **Turbopack** - Bundler rápido
+### Development Tools
+- **Docker & Docker Compose** - Containerization
+- **ESLint** - Code linting
+- **Turbopack** - Fast bundler
 
-### Seguridad
-- **CSRF Protection** - Protección contra CSRF
-- **Rate Limiting** - Limitación de requests
-- **Input Validation** - Validación de entradas
-- **XSS Protection** - Sanitización con DOMPurify
-- **UUID Validation** - Validación de IDs
-- **Error Handling** - Manejo seguro de errores
+### Security
+- **CSRF Protection** - CSRF attack protection
+- **Rate Limiting** - Request limiting
+- **Input Validation** - Input validation
+- **XSS Protection** - Sanitization with DOMPurify
+- **UUID Validation** - ID validation
+- **Error Handling** - Secure error handling
 
 ---
 
-## 🏗 Arquitectura
+## 🏗 Architecture
 
-### Estructura de Carpetas
+### Folder Structure
 
 ```
 JobQuest/
 ├── src/
 │   ├── app/                          # Next.js App Router
-│   │   ├── (protected)/              # Rutas protegidas
-│   │   │   ├── dashboard/           # Dashboard principal
-│   │   │   ├── profile/             # Perfil de usuario
-│   │   │   ├── cv-builder/          # Constructor de CV
-│   │   │   ├── job-openings/        # Ofertas de trabajo
-│   │   │   ├── gamification/       # Gamificación
-│   │   │   └── layout.tsx           # Layout protegido
+│   │   ├── (protected)/              # Protected routes
+│   │   │   ├── dashboard/           # Main dashboard
+│   │   │   ├── profile/             # User profile
+│   │   │   ├── cv-builder/          # CV builder
+│   │   │   ├── job-openings/        # Job offers
+│   │   │   ├── gamification/        # Gamification
+│   │   │   └── layout.tsx           # Protected layout
 │   │   ├── api/                     # API Routes
-│   │   │   ├── user/                # Usuario
-│   │   │   ├── profile/             # Perfil
-│   │   │   ├── gamification/        # Gamificación
-│   │   │   ├── cv/                  # CV (todas las secciones)
-│   │   │   ├── job-offers/          # Ofertas
-│   │   │   ├── interviews/          # Entrevistas
-│   │   │   ├── contacts/            # Contactos
-│   │   │   ├── ai/                  # IA
+│   │   │   ├── user/                # User
+│   │   │   ├── profile/             # Profile
+│   │   │   ├── gamification/        # Gamification
+│   │   │   ├── cv/                  # CV (all sections)
+│   │   │   ├── job-offers/          # Offers
+│   │   │   ├── interviews/          # Interviews
+│   │   │   ├── contacts/            # Contacts
+│   │   │   ├── ai/                  # AI
 │   │   │   ├── logo-extraction/     # Logos
 │   │   │   └── dashboard/           # Dashboard
-│   │   ├── auth/                    # Autenticación
-│   │   └── layout.tsx               # Layout raíz
-│   ├── components/                  # Componentes React
-│   │   ├── cv/                      # Componentes de CV
-│   │   ├── job-offers/              # Componentes de ofertas
-│   │   ├── Sidebar.tsx              # Barra lateral
-│   │   ├── OnboardingModal.tsx      # Modal de onboarding
-│   │   └── CSRFProvider.tsx         # Provider CSRF
-│   ├── contexts/                    # Contextos React
-│   │   └── ToastContext.tsx         # Sistema de notificaciones
+│   │   ├── auth/                    # Authentication
+│   │   └── layout.tsx               # Root layout
+│   ├── components/                  # React components
+│   │   ├── cv/                      # CV components
+│   │   ├── job-offers/              # Job offer components
+│   │   ├── Sidebar.tsx              # Sidebar
+│   │   ├── OnboardingModal.tsx      # Onboarding modal
+│   │   └── CSRFProvider.tsx         # CSRF provider
+│   ├── contexts/                    # React contexts
+│   │   └── ToastContext.tsx         # Notification system
 │   ├── hooks/                       # Custom Hooks
-│   │   ├── useGamification.ts       # Hook de gamificación
-│   │   ├── useAIInsights.ts         # Hook de IA insights
-│   │   └── useAISectionImprover.ts  # Hook de mejora con IA
-│   ├── lib/                         # Utilidades y servicios
-│   │   ├── supabase/                # Cliente Supabase
-│   │   ├── ai/                      # Servicio de IA
-│   │   ├── auth/                    # Acciones de autenticación
-│   │   ├── logo-extraction.ts       # Extracción de logos
-│   │   └── utils/                   # Utilidades
+│   │   ├── useGamification.ts       # Gamification hook
+│   │   ├── useAIInsights.ts         # AI insights hook
+│   │   └── useAISectionImprover.ts  # AI improvement hook
+│   ├── lib/                         # Utilities and services
+│   │   ├── supabase/                # Supabase client
+│   │   ├── ai/                      # AI service
+│   │   ├── auth/                    # Authentication actions
+│   │   ├── logo-extraction.ts       # Logo extraction
+│   │   └── utils/                   # Utilities
 │   │       ├── csrf.ts              # CSRF
 │   │       ├── rate-limit.ts        # Rate limiting
-│   │       ├── error-handler.ts     # Manejo de errores
-│   │       ├── uuid-validator.ts    # Validación UUID
-│   │       ├── input-validator.ts   # Validación de inputs
-│   │       └── request-validator.ts # Validación de requests
-│   ├── config/                      # Configuraciones
-│   │   ├── gamification/            # Config de gamificación
-│   │   └── ai/                      # Prompts de IA
-│   ├── middleware.ts                # Middleware de Next.js
-│   └── middleware/                  # Middlewares personalizados
-│       ├── csrf.ts                  # Middleware CSRF
-│       └── rate-limit.ts            # Middleware rate limit
-├── supabase_*.sql                   # Scripts SQL de Supabase
+│   │       ├── error-handler.ts     # Error handling
+│   │       ├── uuid-validator.ts    # UUID validation
+│   │       ├── input-validator.ts   # Input validation
+│   │       └── request-validator.ts # Request validation
+│   ├── config/                      # Configurations
+│   │   ├── gamification/            # Gamification config
+│   │   └── ai/                      # AI prompts
+│   ├── middleware.ts                # Next.js middleware
+│   └── middleware/                  # Custom middlewares
+│       ├── csrf.ts                  # CSRF middleware
+│       └── rate-limit.ts            # Rate limit middleware
+├── supabase_*.sql                   # Supabase SQL scripts
 ├── docker-compose.yml                # Docker Compose
 ├── Dockerfile                        # Dockerfile
-├── package.json                      # Dependencias
-└── README.md                         # Este archivo
+├── package.json                      # Dependencies
+└── README.md                         # This file
 ```
 
-### Flujo de Autenticación
+### Authentication Flow
 
-1. Usuario inicia sesión con Google OAuth
-2. Supabase maneja la autenticación
-3. Middleware verifica la sesión en cada request
-4. Rutas protegidas requieren autenticación
-5. API routes validan usuario con Supabase
+1. User signs in with Google OAuth
+2. Supabase handles authentication
+3. Middleware verifies session on each request
+4. Protected routes require authentication
+5. API routes validate user with Supabase
 
-### Flujo de Datos
+### Data Flow
 
 ```
-Cliente (React)
+Client (React)
     ↓
 Next.js API Routes
     ↓
 Supabase Client (Server)
     ↓
-PostgreSQL (con RLS)
+PostgreSQL (with RLS)
 ```
 
-### Seguridad
+### Security
 
 1. **Middleware Layer**
    - CSRF protection
@@ -338,16 +338,16 @@ PostgreSQL (con RLS)
 
 3. **Database Layer**
    - Row Level Security (RLS)
-   - Policies por tabla
-   - Triggers para lógica de negocio
+   - Policies per table
+   - Triggers for business logic
 
 ---
 
-## ⚙️ Configuración
+## ⚙️ Configuration
 
-### Variables de Entorno
+### Environment Variables
 
-Crea un archivo `.env.local` con las siguientes variables:
+Create a `.env.local` file with the following variables:
 
 ```env
 # Supabase
@@ -362,39 +362,39 @@ GEMINI_MODEL=gemini-2.5-flash
 # Logo.dev
 LOGO_DEV_API_KEY=your_logo_dev_api_key
 
-# Upstash Redis (para rate limiting)
+# Upstash Redis (for rate limiting)
 UPSTASH_REDIS_REST_URL=your_upstash_redis_url
 UPSTASH_REDIS_REST_TOKEN=your_upstash_redis_token
 ```
 
-Ver `CONFIGURACION_VARIABLES_ENTORNO.md` para más detalles.
+See `CONFIGURACION_VARIABLES_ENTORNO.md` for more details.
 
-### Base de Datos
+### Database
 
-Ejecuta los siguientes scripts SQL en Supabase (en orden):
+Execute the following SQL scripts in Supabase (in order):
 
-1. `supabase_setup.sql` - Configuración inicial
-2. `supabase_gamification.sql` - Módulo de gamificación
-3. `supabase_cv_builder.sql` - Constructor de CV
-4. `supabase_job_offers.sql` - Ofertas de trabajo
-5. `supabase_interviews.sql` - Entrevistas
-6. `supabase_job_offer_contacts.sql` - Contactos
-7. `supabase_ai_insights.sql` - Insights de IA
-8. `supabase_job_offers_website_migration.sql` - Migración de website
+1. `supabase_setup.sql` - Initial setup
+2. `supabase_gamification.sql` - Gamification module
+3. `supabase_cv_builder.sql` - CV builder
+4. `supabase_job_offers.sql` - Job offers
+5. `supabase_interviews.sql` - Interviews
+6. `supabase_job_offer_contacts.sql` - Contacts
+7. `supabase_ai_insights.sql` - AI insights
+8. `supabase_job_offers_website_migration.sql` - Website migration
 
-### Instalación
+### Installation
 
 ```bash
-# Instalar dependencias
+# Install dependencies
 npm install
 
-# Ejecutar en desarrollo
+# Run in development
 npm run dev
 
-# Build para producción
+# Build for production
 npm run build
 
-# Ejecutar en producción
+# Run in production
 npm start
 
 # Linting
@@ -404,85 +404,85 @@ npm run lint
 ### Docker
 
 ```bash
-# Construir imagen
+# Build image
 docker-compose build
 
-# Ejecutar contenedor
+# Run container
 docker-compose up
 
-# Ejecutar en background
+# Run in background
 docker-compose up -d
 ```
 
 ---
 
-## 🔒 Seguridad
+## 🔒 Security
 
-### Medidas Implementadas
+### Implemented Measures
 
 1. **CSRF Protection**
-   - Tokens CSRF en cookies
-   - Validación en middleware
-   - Headers requeridos en mutaciones
+   - CSRF tokens in cookies
+   - Validation in middleware
+   - Required headers for mutations
 
 2. **Rate Limiting**
-   - Upstash Redis para rate limiting
-   - Límites por tipo de endpoint
-   - Fallback a memoria en desarrollo
+   - Upstash Redis for rate limiting
+   - Limits per endpoint type
+   - Memory fallback in development
 
 3. **Input Validation**
-   - Validación de tipos
-   - Validación de longitud
-   - Validación de UUIDs
-   - Validación de URLs y emails
-   - Validación de enums
+   - Type validation
+   - Length validation
+   - UUID validation
+   - URL and email validation
+   - Enum validation
 
 4. **XSS Protection**
-   - DOMPurify para sanitización
-   - Validación de HTML antes de renderizar
+   - DOMPurify for sanitization
+   - HTML validation before rendering
 
 5. **Error Handling**
-   - Mensajes genéricos en producción
-   - Logging seguro
-   - No exposición de información sensible
+   - Generic messages in production
+   - Secure logging
+   - No exposure of sensitive information
 
 6. **Row Level Security (RLS)**
-   - Políticas por tabla
-   - Usuarios solo acceden a sus datos
-   - Validación de ownership en API
+   - Policies per table
+   - Users only access their data
+   - Ownership validation in API
 
 7. **File Upload Security**
-   - Validación de tipos MIME
-   - Validación de tamaño
-   - Nombres de archivo aleatorios
+   - MIME type validation
+   - Size validation
+   - Random file names
 
 ---
 
-## 🚀 Desarrollo
+## 🚀 Development
 
-### Estructura de Componentes
+### Component Structure
 
-Los componentes siguen una estructura modular:
+Components follow a modular structure:
 
-- **Páginas**: `src/app/(protected)/*/page.tsx`
-- **Componentes**: `src/components/*/`
+- **Pages**: `src/app/(protected)/*/page.tsx`
+- **Components**: `src/components/*/`
 - **Hooks**: `src/hooks/*.ts`
 - **API Routes**: `src/app/api/*/route.ts`
 
-### Agregar Nueva Sección de CV
+### Adding a New CV Section
 
-1. Crear tabla en Supabase
-2. Crear API route en `src/app/api/cv/[section]/route.ts`
-3. Crear componente en `src/components/cv/[Section]Section.tsx`
-4. Crear modal en `src/components/cv/[Section]Modal.tsx`
-5. Agregar a `src/app/(protected)/cv-builder/page.tsx`
-6. Agregar eventos de gamificación
+1. Create table in Supabase
+2. Create API route in `src/app/api/cv/[section]/route.ts`
+3. Create component in `src/components/cv/[Section]Section.tsx`
+4. Create modal in `src/components/cv/[Section]Modal.tsx`
+5. Add to `src/app/(protected)/cv-builder/page.tsx`
+6. Add gamification events
 
-### Agregar Nuevo Evento de Gamificación
+### Adding a New Gamification Event
 
-1. Agregar evento en `src/config/gamification/events.ts`
-2. Agregar recompensa de XP
-3. Llamar `recordEvent` en el lugar apropiado
+1. Add event in `src/config/gamification/events.ts`
+2. Add XP reward
+3. Call `recordEvent` in the appropriate place
 
 ### Testing
 
@@ -491,25 +491,25 @@ Los componentes siguen una estructura modular:
 
 ---
 
-## 📚 Recursos Adicionales
+## 📚 Additional Resources
 
-- [Documentación de Next.js](https://nextjs.org/docs)
-- [Documentación de Supabase](https://supabase.com/docs)
-- [Documentación de Gemini AI](https://ai.google.dev/docs)
-- [Documentación de Upstash](https://docs.upstash.com/)
-
----
-
-## 📝 Licencia
-
-Este proyecto es privado y de uso personal.
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Supabase Documentation](https://supabase.com/docs)
+- [Gemini AI Documentation](https://ai.google.dev/docs)
+- [Upstash Documentation](https://docs.upstash.com/)
 
 ---
 
-## 👤 Autor
+## 📝 License
 
-Desarrollado como proyecto personal para gestión de carrera profesional.
+This project is private and for personal use.
 
 ---
 
-**Última actualización**: Diciembre 2024
+## 👤 Author
+
+Developed as a personal project for career management.
+
+---
+
+**Last updated**: December 2024
