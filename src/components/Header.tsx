@@ -34,20 +34,6 @@ export default function Header() {
             Precios
           </Link>
         </nav>
-        <div className="flex items-center gap-4">
-          <Link
-            href="/login"
-            className="hidden sm:block text-sm font-medium text-slate-600 hover:text-slate-900"
-          >
-            Login
-          </Link>
-          <Link
-            href="#register"
-            className="inline-flex h-10 items-center justify-center rounded-full bg-primary px-5 py-2 text-sm font-bold text-white transition-all hover:bg-primary-hover hover:shadow-glow focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-          >
-            Crear Cuenta
-          </Link>
-        </div>
       </div>
     </header>
   );
