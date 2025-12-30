@@ -21,6 +21,15 @@ export const metadata: Metadata = {
   },
   description: "Convierte tu búsqueda de empleo en una aventura épica. Organiza tus postulaciones, gana puntos por cada entrevista y sube de nivel hasta conseguir el trabajo de tus sueños.",
   keywords: ["búsqueda de empleo", "CV", "curriculum vitae", "gamificación", "job search", "career", "trabajo"],
+  icons: {
+    icon: [
+      { url: "/icons/icon-96x96.png", sizes: "96x96", type: "image/png" },
+      { url: "/icons/icon-192x192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: [
+      { url: "/icons/icon-180x180.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
   authors: [{ name: "JobQuest" }],
   creator: "JobQuest",
   publisher: "JobQuest",
@@ -80,12 +89,15 @@ export default function RootLayout({
   return (
     <html lang="es">
       <head>
+        <link rel="icon" type="image/png" href="/icons/icon-96x96.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-96x96.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192x192.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.png" />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#ec4899" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="JobQuest" />
-        <link rel="apple-touch-icon" href="/icons/icon-180x180.png" />
         <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
           rel="stylesheet"
