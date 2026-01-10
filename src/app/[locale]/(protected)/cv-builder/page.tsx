@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useGamification } from "@/hooks/useGamification";
+import { useTranslations } from "next-intl";
 import type { CVData } from "@/types/cv";
 import SectionSelectorModal from "@/components/cv/SectionSelectorModal";
 import AIInsightsModal from "@/components/cv/AIInsightsModal";
@@ -33,6 +34,7 @@ export default function CVBuilderPage() {
     headline?: string;
   } | null>(null);
   const { recordEvent } = useGamification();
+  const t = useTranslations('CVBuilder');
 
   useEffect(() => {
     fetchCVData();
@@ -109,7 +111,7 @@ export default function CVBuilderPage() {
 
   const handleSectionAdded = async (sectionType: string) => {
     await fetchCVData();
-    
+
     // Registrar evento de gamificación
     const eventMap: Record<string, string> = {
       education: "cv.education_added",
@@ -130,7 +132,7 @@ export default function CVBuilderPage() {
 
   const handleSectionUpdated = async (sectionType: string) => {
     await fetchCVData();
-    
+
     // Registrar evento de gamificación para actualizaciones
     const eventMap: Record<string, string> = {
       education: "cv.education_updated",
@@ -179,13 +181,13 @@ export default function CVBuilderPage() {
   return (
     <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 scroll-smooth">
       <div className="max-w-5xl mx-auto h-full flex flex-col gap-6 sm:gap-8 pb-8 sm:pb-12">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-1">
-              Mi Perfil Profesional
+              {t('title')}
             </h2>
             <p className="text-sm sm:text-base text-gray-500">
-              Gestiona tu experiencia y habilidades para destacar.
+              {t('subtitle')}
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
@@ -196,14 +198,14 @@ export default function CVBuilderPage() {
               <span className="material-symbols-outlined text-[20px] group-hover:animate-pulse">
                 smart_toy
               </span>
-              Revisión IA
+              {t('aiReview')}
             </button>
             <button
               onClick={() => handleAddSection(null)}
               className="bg-primary hover:bg-pink-600 text-white px-5 py-2.5 rounded-xl font-medium text-sm transition-all shadow-lg shadow-primary/20 flex items-center gap-2"
             >
               <span className="material-symbols-outlined text-[20px]">add_circle</span>
-              Añadir Sección
+              {t('addSection')}
             </button>
           </div>
         </div>

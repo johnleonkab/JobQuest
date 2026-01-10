@@ -93,3 +93,4 @@ CREATE TRIGGER on_user_event_inserted
   AFTER INSERT ON user_events
   FOR EACH ROW EXECUTE FUNCTION public.update_user_xp_and_level();
 
+

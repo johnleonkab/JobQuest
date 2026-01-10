@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { CVVolunteering } from "@/types/cv";
 import VolunteeringModal from "./modals/VolunteeringModal";
+import { useTranslations } from "next-intl";
 
 interface VolunteeringSectionProps {
   volunteering: CVVolunteering[];
@@ -15,13 +16,15 @@ export default function VolunteeringSection({
   onAdd,
   onUpdate,
 }: VolunteeringSectionProps) {
+  const t = useTranslations('CVBuilder.sections.volunteering');
+  const tCommon = useTranslations('CVBuilder.common');
   const [editingId, setEditingId] = useState<string | null>(null);
 
   // Asegurar que volunteering sea siempre un array
   const safeVolunteering = Array.isArray(volunteering) ? volunteering : [];
 
   const formatDate = (date: string | null) => {
-    if (!date) return "Presente";
+    if (!date) return tCommon('present');
     return new Date(date).toLocaleDateString("es-ES", {
       year: "numeric",
       month: "short",
@@ -30,7 +33,7 @@ export default function VolunteeringSection({
 
   const formatDateRange = (start: string, end: string | null, isOngoing: boolean) => {
     if (isOngoing || !end) {
-      return `${formatDate(start)} - Presente`;
+      return `${formatDate(start)} - ${tCommon('present')}`;
     }
     return `${formatDate(start)} - ${formatDate(end)}`;
   };
@@ -43,7 +46,7 @@ export default function VolunteeringSection({
             <div className="size-10 rounded-xl bg-teal-50 flex items-center justify-center text-teal-600">
               <span className="material-symbols-outlined">volunteer_activism</span>
             </div>
-            <h3 className="text-lg font-bold text-slate-900">Voluntariado</h3>
+            <h3 className="text-lg font-bold text-slate-900">{t('title')}</h3>
           </div>
           <button
             onClick={onAdd}
@@ -55,7 +58,7 @@ export default function VolunteeringSection({
         <div className="space-y-4">
           {safeVolunteering.length === 0 ? (
             <p className="text-sm text-gray-400 text-center py-4">
-              No hay voluntariados. Haz clic en el botón + para agregar uno.
+              {t('empty')}
             </p>
           ) : (
             safeVolunteering.map((vol) => (
@@ -78,7 +81,7 @@ export default function VolunteeringSection({
                     onClick={() => setEditingId(vol.id)}
                     className="mt-2 text-xs text-primary hover:underline"
                   >
-                    Editar
+                    {tCommon('edit')}
                   </button>
                 </div>
               </div>

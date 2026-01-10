@@ -1,60 +1,60 @@
-# 🤖 Guía de Uso: AI Insights con Gemini
+# 🤖 Usage Guide: AI Insights with Gemini
 
-Esta guía explica cómo usar el sistema de AI Insights integrado con Google Gemini.
+This guide explains how to use the AI Insights system integrated with Google Gemini.
 
-## 📋 Configuración Inicial
+## 📋 Initial Configuration
 
-### 1. Variables de Entorno
+### 1. Environment Variables
 
-Añade las siguientes variables a tu archivo `.env.local`:
+Add the following variables to your `.env.local` file:
 
 ```env
 # Gemini AI Configuration
-GEMINI_API_KEY=tu-clave-de-gemini-aqui
-GEMINI_MODEL=gemini-1.5-flash  # Opcional: gemini-1.5-pro para análisis más complejos
+GEMINI_API_KEY=your-gemini-key-here
+GEMINI_MODEL=gemini-1.5-flash  # Optional: gemini-1.5-pro for more complex analysis
 ```
 
-**Cómo obtener la API Key:**
-1. Ve a [Google AI Studio](https://makersuite.google.com/app/apikey)
-2. Inicia sesión con tu cuenta de Google
-3. Haz clic en "Create API Key"
-4. Copia la clave generada
+**How to obtain the API Key:**
+1. Go to [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Sign in with your Google account
+3. Click on "Create API Key"
+4. Copy the generated key
 
-### 2. Modelos Disponibles
+### 2. Available Models
 
-- **`gemini-1.5-flash`** (por defecto): Más rápido y económico, ideal para la mayoría de casos
-- **`gemini-1.5-pro`**: Más potente, mejor calidad para análisis complejos
-- **`gemini-pro`**: Versión anterior (no recomendado)
+- **`gemini-1.5-flash`** (default): Faster and cheaper, ideal for most cases
+- **`gemini-1.5-pro`**: More powerful, better quality for complex analysis
+- **`gemini-pro`**: Previous version (not recommended)
 
-## 🏗️ Arquitectura
+## 🏗️ Architecture
 
-El sistema está diseñado con **separación de responsabilidades**:
+The system is designed with **separation of concerns**:
 
 ```
 src/
 ├── config/ai/
-│   └── prompts.ts          # Prompts del sistema (desacoplados)
+│   └── prompts.ts          # System prompts (decoupled)
 ├── lib/ai/
-│   └── gemini.ts          # Servicio de Gemini (desacoplado)
+│   └── gemini.ts          # Gemini service (decoupled)
 ├── hooks/
-│   └── useAIInsights.ts   # Hook para usar desde componentes
+│   └── useAIInsights.ts   # Hook for using from components
 └── app/api/ai/
     └── insights/
-        └── route.ts       # API route para generar insights
+        └── route.ts       # API route for generating insights
 ```
 
-### Separación de Prompts y Servicio
+### Separation of Prompts and Service
 
-Los **prompts del sistema** están completamente desacoplados del servicio de Gemini. Esto permite:
-- ✅ Modificar prompts sin tocar el servicio
-- ✅ Reutilizar el servicio con diferentes prompts
-- ✅ Fácil mantenimiento y testing
-- ✅ Cambiar de proveedor de AI sin modificar prompts
+The **system prompts** are completely decoupled from the Gemini service. This allows:
+- ✅ Modifying prompts without touching the service
+- ✅ Reusing the service with different prompts
+- ✅ Easy maintenance and testing
+- ✅ Changing AI providers without modifying prompts
 
-## 🎯 Prompts Disponibles
+## 🎯 Available Prompts
 
-### 1. Análisis de CV (`cv_analysis`)
-Analiza un CV completo y proporciona sugerencias de mejora.
+### 1. CV Analysis (`cv_analysis`)
+Analyzes a full CV and provides improvement suggestions.
 
 ```typescript
 import { useAIInsights } from "@/hooks/useAIInsights";
@@ -63,57 +63,57 @@ const { generateInsights } = useAIInsights();
 
 const response = await generateInsights({
   promptId: "cv_analysis",
-  userMessage: "Analiza mi CV y dame sugerencias de mejora",
-  cvData: myCVData, // Opcional
+  userMessage: "Analyze my CV and give me improvement suggestions",
+  cvData: myCVData, // Optional
 });
 ```
 
-### 2. Optimización de Sección (`section_optimization`)
-Optimiza una sección específica del CV.
+### 2. Section Optimization (`section_optimization`)
+Optimizes a specific section of the CV.
 
 ```typescript
 const response = await generateInsights({
   promptId: "section_optimization",
-  userMessage: "Optimiza mi sección de experiencia laboral",
+  userMessage: "Optimize my work experience section",
   cvData: { experience: myExperiences },
 });
 ```
 
-### 3. Análisis de Brecha de Habilidades (`skills_gap_analysis`)
-Analiza las habilidades del usuario y sugiere áreas de desarrollo.
+### 3. Skills Gap Analysis (`skills_gap_analysis`)
+Analyzes user skills and suggests development areas.
 
 ```typescript
 const response = await generateInsights({
   promptId: "skills_gap_analysis",
-  userMessage: "¿Qué habilidades necesito desarrollar para ser desarrollador senior?",
+  userMessage: "What skills do I need to develop to become a senior developer?",
   cvData: myCVData,
 });
 ```
 
-### 4. Descripción de Experiencia (`experience_description`)
-Ayuda a escribir descripciones impactantes de experiencia laboral.
+### 4. Experience Description (`experience_description`)
+Helps write impactful work experience descriptions.
 
 ```typescript
 const response = await generateInsights({
   promptId: "experience_description",
-  userMessage: "Ayúdame a mejorar esta descripción: [tu descripción]",
+  userMessage: "Help me improve this description: [your description]",
 });
 ```
 
-### 5. Completitud de Perfil (`profile_completeness`)
-Analiza qué falta en el perfil del usuario.
+### 5. Profile Completeness (`profile_completeness`)
+Analyzes what is missing in the user profile.
 
 ```typescript
 const response = await generateInsights({
   promptId: "profile_completeness",
-  userMessage: "¿Qué información falta en mi perfil?",
+  userMessage: "What information is missing from my profile?",
   cvData: myCVData,
 });
 ```
 
-## 💻 Uso en Componentes React
+## 💻 Usage in React Components
 
-### Ejemplo Básico
+### Basic Example
 
 ```tsx
 "use client";
@@ -131,7 +131,7 @@ export default function CVAnalysisComponent() {
     try {
       const response = await generateInsights({
         promptId: "cv_analysis",
-        userMessage: "Analiza mi CV y dame sugerencias de mejora",
+        userMessage: "Analyze my CV and give me improvement suggestions",
         cvData: cvData || undefined,
       });
       setInsights(response.text);
@@ -143,7 +143,7 @@ export default function CVAnalysisComponent() {
   return (
     <div>
       <button onClick={handleAnalyze} disabled={loading}>
-        {loading ? "Analizando..." : "Analizar CV"}
+        {loading ? "Analyzing..." : "Analyze CV"}
       </button>
       {error && <p className="text-red-500">{error}</p>}
       {insights && (
@@ -157,7 +157,7 @@ export default function CVAnalysisComponent() {
 }
 ```
 
-### Ejemplo con Formulario
+### Example with Form
 
 ```tsx
 "use client";
@@ -184,12 +184,12 @@ export default function AIInsightsForm() {
       setResult(response.text);
       showToast({
         type: "success",
-        message: "Insights generados correctamente",
+        message: "Insights generated successfully",
       });
     } catch (error) {
       showToast({
         type: "error",
-        message: "Error al generar insights",
+        message: "Error generating insights",
       });
     }
   };
@@ -201,17 +201,17 @@ export default function AIInsightsForm() {
         onChange={(e) => setPromptId(e.target.value)}
         className="w-full p-2 border rounded"
       >
-        <option value="cv_analysis">Análisis de CV</option>
-        <option value="section_optimization">Optimización de Sección</option>
-        <option value="skills_gap_analysis">Análisis de Brecha de Habilidades</option>
-        <option value="experience_description">Descripción de Experiencia</option>
-        <option value="profile_completeness">Completitud de Perfil</option>
+        <option value="cv_analysis">CV Analysis</option>
+        <option value="section_optimization">Section Optimization</option>
+        <option value="skills_gap_analysis">Skills Gap Analysis</option>
+        <option value="experience_description">Experience Description</option>
+        <option value="profile_completeness">Profile Completeness</option>
       </select>
       
       <textarea
         value={userMessage}
         onChange={(e) => setUserMessage(e.target.value)}
-        placeholder="Escribe tu pregunta o solicitud..."
+        placeholder="Type your question or request..."
         className="w-full p-2 border rounded"
         rows={4}
       />
@@ -221,12 +221,12 @@ export default function AIInsightsForm() {
         disabled={loading || !userMessage}
         className="px-4 py-2 bg-primary text-white rounded disabled:opacity-50"
       >
-        {loading ? "Generando..." : "Generar Insights"}
+        {loading ? "Generating..." : "Generate Insights"}
       </button>
       
       {result && (
         <div className="mt-4 p-4 bg-gray-50 rounded">
-          <h3 className="font-bold mb-2">Resultado:</h3>
+          <h3 className="font-bold mb-2">Result:</h3>
           <div className="whitespace-pre-wrap">{result}</div>
         </div>
       )}
@@ -235,20 +235,20 @@ export default function AIInsightsForm() {
 }
 ```
 
-## 🔧 Personalización de Prompts
+## 🔧 Prompt Customization
 
-Puedes agregar nuevos prompts en `src/config/ai/prompts.ts`:
+You can add new prompts in `src/config/ai/prompts.ts`:
 
 ```typescript
 export const MY_CUSTOM_PROMPT: SystemPrompt = {
   id: 'my_custom_prompt',
-  name: 'Mi Prompt Personalizado',
-  description: 'Descripción del prompt',
-  content: `Eres un experto en...
+  name: 'My Custom Prompt',
+  description: 'Prompt description',
+  content: `You are an expert in...
   
-  Tu tarea es...
+  Your task is...
   
-  Formato de respuesta:
+  Response format:
   1. ...
   2. ...
   `,
@@ -257,66 +257,65 @@ export const MY_CUSTOM_PROMPT: SystemPrompt = {
 };
 ```
 
-Luego úsalo en tu componente:
+Then use it in your component:
 
 ```typescript
 const response = await generateInsights({
   promptId: "my_custom_prompt",
-  userMessage: "Tu mensaje aquí",
+  userMessage: "Your message here",
 });
 ```
 
-## 🔒 Seguridad
+## 🔒 Security
 
-- ✅ La API Key de Gemini **nunca** se expone al frontend
-- ✅ Todas las llamadas pasan por el servidor (API route)
-- ✅ Se verifica autenticación del usuario antes de generar insights
-- ✅ Los prompts del sistema están validados
+- ✅ Gemini API Key is **never** exposed to the frontend
+- ✅ All calls pass through the server (API route)
+- ✅ User authentication is verified before generating insights
+- ✅ System prompts are validated
 
-## 📊 Información de Uso
+## 📊 Usage Information
 
-La respuesta incluye información de uso de tokens:
+The response includes token usage information:
 
 ```typescript
 {
-  text: "Respuesta generada...",
+  text: "Generated response...",
   usage: {
     promptTokens: 150,
     candidatesTokens: 200,
     totalTokens: 350,
   },
   promptId: "cv_analysis",
-  promptName: "Análisis de CV",
+  promptName: "CV Analysis",
 }
 ```
 
-## 🐛 Manejo de Errores
+## 🐛 Error Handling
 
-El hook maneja errores automáticamente:
+The hook handles errors automatically:
 
 ```typescript
 const { generateInsights, loading, error } = useAIInsights();
 
-// error será null si no hay errores
-// error contendrá el mensaje de error si algo falla
+// error will be null if there are no errors
+// error will contain the error message if something fails
 ```
 
-Errores comunes:
-- **"GEMINI_API_KEY no está configurada"**: Añade la variable de entorno
-- **"Error al comunicarse con Gemini API"**: Verifica tu API key y conexión
-- **"No autorizado"**: El usuario no está autenticado
+Common errors:
+- **"GEMINI_API_KEY is not configured"**: Add the environment variable
+- **"Error communicating with Gemini API"**: Check your API key and connection
+- **"Unauthorized"**: User is not authenticated
 
-## 🚀 Próximos Pasos
+## 🚀 Next Steps
 
-1. Integrar AI Insights en la página de CV Builder
-2. Crear componentes específicos para cada tipo de insight
-3. Añadir más prompts según necesidades
-4. Implementar caché de respuestas para optimizar costos
-5. Añadir historial de insights generados
+1. Integrate AI Insights into the CV Builder page
+2. Create specific components for each insight type
+3. Add more prompts as needed
+4. Implement response caching to optimize costs
+5. Add history of generated insights
 
-## 📚 Recursos
+## 📚 Resources
 
-- [Documentación de Gemini API](https://ai.google.dev/docs)
+- [Gemini API Documentation](https://ai.google.dev/docs)
 - [Google AI Studio](https://makersuite.google.com/)
-- [Precios de Gemini](https://ai.google.dev/pricing)
-
+- [Gemini Pricing](https://ai.google.dev/pricing)

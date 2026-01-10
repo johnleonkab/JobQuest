@@ -5,6 +5,7 @@ import type { CVCertification } from "@/types/cv";
 import { useToast } from "@/contexts/ToastContext";
 import { useAISectionImprover } from "@/hooks/useAISectionImprover";
 import { useGamification } from "@/hooks/useGamification";
+import { useTranslations } from "next-intl";
 
 interface CertificationModalProps {
   certificationId?: string;
@@ -21,6 +22,9 @@ export default function CertificationModal({
   const { showToast } = useToast();
   const { improveSection, loading: aiLoading } = useAISectionImprover();
   const { recordEvent } = useGamification();
+  const tForm = useTranslations('CVBuilder.forms.certification');
+  const tCommon = useTranslations('CVBuilder.forms.common');
+  const tAI = useTranslations('CVBuilder.forms.ai');
   const [showAISuggestions, setShowAISuggestions] = useState(false);
   const [aiSuggestions, setAISuggestions] = useState<{
     description: string;
@@ -78,8 +82,8 @@ export default function CertificationModal({
       showToast({
         type: "success",
         message: certificationId
-          ? "Certificación actualizada correctamente"
-          : "Certificación agregada correctamente",
+          ? tForm('toastSuccessUpdate')
+          : tForm('toastSuccessAdd'),
       });
 
       onSuccess();
@@ -87,7 +91,7 @@ export default function CertificationModal({
       console.error("Error saving certification:", error);
       showToast({
         type: "error",
-        message: "Error al guardar la certificación",
+        message: tForm('toastErrorSave'),
       });
     } finally {
       setLoading(false);
@@ -115,7 +119,7 @@ export default function CertificationModal({
     if (!formData.description || formData.description.trim().length === 0) {
       showToast({
         type: "error",
-        message: "Escribe una descripción primero para poder mejorarla con IA",
+        message: tAI('toastErrorDesc'),
       });
       return;
     }
@@ -139,19 +143,19 @@ export default function CertificationModal({
         setShowAISuggestions(true);
         showToast({
           type: "success",
-          message: "Mejoras generadas con IA. Revisa y acepta o rechaza los cambios.",
+          message: tAI('toastSuccess'),
         });
       } else {
         showToast({
           type: "error",
-          message: "No se pudieron generar mejoras. Intenta de nuevo.",
+          message: tAI('toastFail'),
         });
       }
     } catch (error) {
       console.error("Error improving with AI:", error);
       showToast({
         type: "error",
-        message: "Error al mejorar con IA. Intenta de nuevo.",
+        message: tAI('toastErrorAI'),
       });
     }
   };
@@ -165,13 +169,13 @@ export default function CertificationModal({
       });
       setShowAISuggestions(false);
       setAISuggestions(null);
-      
+
       // Record gamification event
       await recordEvent("ai.section_improved");
-      
+
       showToast({
         type: "success",
-        message: "Mejoras aplicadas correctamente",
+        message: tAI('toastApply'),
       });
     }
   };
@@ -182,7 +186,7 @@ export default function CertificationModal({
   };
 
   // El botón está disponible si hay datos básicos rellenos (emisor y nombre) y hay descripción
-  const canImproveWithAI = 
+  const canImproveWithAI =
     (formData.issuer.trim().length > 0 && formData.name.trim().length > 0) &&
     (formData.description && formData.description.trim().length > 0);
 
@@ -198,10 +202,10 @@ export default function CertificationModal({
               </div>
               <div>
                 <h3 className="text-lg font-bold text-slate-900 leading-tight">
-                  Certificación
+                  {certificationId ? tForm('titleEdit') : tForm('titleNew')}
                 </h3>
                 <p className="text-xs text-gray-500">
-                  {certificationId ? "Edita" : "Añade"} tu certificación
+                  {tForm('subtitle')}
                 </p>
               </div>
             </div>
@@ -216,7 +220,7 @@ export default function CertificationModal({
             <div className="space-y-5">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                  Entidad emisora *
+                  {tForm('issuer')} {tCommon('required')}
                 </label>
                 <input
                   required
@@ -229,7 +233,7 @@ export default function CertificationModal({
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                  Nombre de la certificación *
+                  {tForm('name')} {tCommon('required')}
                 </label>
                 <input
                   required
@@ -243,7 +247,7 @@ export default function CertificationModal({
               <div>
                 <div className="flex items-center justify-between mb-1.5">
                   <label className="block text-sm font-semibold text-gray-700">
-                    Descripción
+                    {tCommon('description')}
                   </label>
                   {canImproveWithAI && (
                     <button
@@ -255,7 +259,7 @@ export default function CertificationModal({
                       <span className="material-symbols-outlined text-[16px]">
                         {aiLoading ? "hourglass_empty" : "auto_awesome"}
                       </span>
-                      {aiLoading ? "Mejorando..." : "Mejorar con IA"}
+                      {aiLoading ? tAI('improving') : tAI('improve')}
                     </button>
                   )}
                 </div>
@@ -267,7 +271,7 @@ export default function CertificationModal({
                           auto_awesome
                         </span>
                         <span className="text-xs font-semibold text-purple-700">
-                          Sugerencias de IA
+                          {tAI('suggestionsTitle')}
                         </span>
                       </div>
                       <button
@@ -281,7 +285,7 @@ export default function CertificationModal({
                     <div className="space-y-2">
                       <div>
                         <p className="text-xs font-medium text-purple-700 mb-1">
-                          Descripción mejorada:
+                          {tAI('improvedDesc')}
                         </p>
                         <p className="text-xs text-gray-700 bg-white p-2 rounded border border-purple-100">
                           {aiSuggestions.description}
@@ -290,7 +294,7 @@ export default function CertificationModal({
                       {aiSuggestions.tags.length > 0 && (
                         <div>
                           <p className="text-xs font-medium text-purple-700 mb-1">
-                            Tags sugeridos:
+                            {tAI('suggestedTags')}
                           </p>
                           <div className="flex flex-wrap gap-1.5">
                             {aiSuggestions.tags.map((tag, idx) => (
@@ -311,14 +315,14 @@ export default function CertificationModal({
                         onClick={handleAcceptAISuggestions}
                         className="flex-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-purple-600 hover:bg-purple-700 text-white transition-colors"
                       >
-                        Aceptar cambios
+                        {tAI('accept')}
                       </button>
                       <button
                         type="button"
                         onClick={handleRejectAISuggestions}
                         className="px-3 py-1.5 rounded-lg text-xs font-semibold text-purple-600 hover:bg-purple-100 transition-colors"
                       >
-                        Rechazar
+                        {tAI('reject')}
                       </button>
                     </div>
                   </div>
@@ -334,7 +338,7 @@ export default function CertificationModal({
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                  Hitos (tags)
+                  {tCommon('skills')}
                 </label>
                 <div className="w-full rounded-xl border border-gray-200 bg-gray-50 p-2 focus-within:ring-1 focus-within:ring-primary focus-within:border-primary transition-all flex flex-wrap gap-2 min-h-[50px] items-center">
                   {formData.skills.map((skill) => (
@@ -365,7 +369,7 @@ export default function CertificationModal({
                       }
                     }}
                     className="flex-1 bg-transparent border-none p-1 focus:ring-0 text-sm placeholder-gray-400 text-gray-900 min-w-[120px]"
-                    placeholder="Escribe y presiona Enter..."
+                    placeholder={tCommon('skillsPlaceholder')}
                   />
                 </div>
               </div>
@@ -373,11 +377,11 @@ export default function CertificationModal({
           </form>
           <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-end gap-3 rounded-b-3xl">
             <button
-              type="button"
+              name="cancel"
               onClick={onClose}
               className="px-5 py-2.5 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-200 transition-colors"
             >
-              Cancelar
+              {tCommon('cancel')}
             </button>
             <button
               type="submit"
@@ -385,7 +389,7 @@ export default function CertificationModal({
               disabled={loading}
               className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white bg-primary hover:bg-pink-600 shadow-lg shadow-primary/25 transition-all disabled:opacity-50"
             >
-              {loading ? "Guardando..." : "Guardar Certificación"}
+              {loading ? tCommon('saving') : tForm('saveBtn')}
             </button>
           </div>
         </div>

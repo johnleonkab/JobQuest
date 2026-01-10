@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useToast } from "@/contexts/ToastContext";
 import { useGamification } from "@/hooks/useGamification";
 import { ProfileSkeleton } from "@/components/LoadingSkeleton";
+import { useTranslations } from "next-intl";
 
 interface ProfileData {
   id: string;
@@ -23,6 +24,7 @@ export default function ProfilePage() {
   const [submitting, setSubmitting] = useState(false);
   const { showToast } = useToast();
   const { recordEvent } = useGamification();
+  const t = useTranslations('CVBuilder.profile');
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -67,8 +69,8 @@ export default function ProfilePage() {
       <div className="flex-1 overflow-y-auto p-8">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-slate-900 mb-2">Mi Perfil</h1>
-            <p className="text-slate-600">Gestiona tu información personal</p>
+            <h1 className="text-3xl font-bold text-slate-900 mb-2">{t('title')}</h1>
+            <p className="text-slate-600">{t('subtitle')}</p>
           </div>
           <ProfileSkeleton />
         </div>
@@ -100,7 +102,7 @@ export default function ProfilePage() {
       formDataToSend.append("linkedin_url", formData.linkedinUrl);
       formDataToSend.append("gender", formData.gender);
       formDataToSend.append("birth_date", formData.birthDate);
-      
+
       if (avatarFile) {
         formDataToSend.append("avatar", avatarFile);
       }
@@ -115,7 +117,7 @@ export default function ProfilePage() {
         setProfile(updated);
         showToast({
           type: "success",
-          message: "Perfil actualizado correctamente",
+          message: t('success'),
         });
         // Registrar evento de gamificación
         await recordEvent("profile.updated");
@@ -123,7 +125,7 @@ export default function ProfilePage() {
         console.error("Error updating profile");
         showToast({
           type: "error",
-          message: "Error al actualizar el perfil",
+          message: t('error'),
         });
       }
     } catch (error) {
@@ -156,14 +158,14 @@ export default function ProfilePage() {
   if (loading) {
     return (
       <div className="flex h-full items-center justify-center">
-        <div className="text-slate-500">Cargando...</div>
+        <div className="text-slate-500">{t('loading')}</div>
       </div>
     );
   }
 
   return (
     <div className="p-4 sm:p-6 md:p-8">
-      <h1 className="mb-4 sm:mb-6 text-2xl sm:text-3xl font-bold text-slate-900">Mi Perfil</h1>
+      <h1 className="mb-4 sm:mb-6 text-2xl sm:text-3xl font-bold text-slate-900">{t('title')}</h1>
 
       <form onSubmit={handleSubmit} className="max-w-2xl space-y-4 sm:space-y-6">
         {/* Avatar Section */}
@@ -189,7 +191,7 @@ export default function ProfilePage() {
                 <span className="material-symbols-outlined text-lg">
                   photo_camera
                 </span>
-                Cambiar foto
+                {t('changePhoto')}
               </span>
               <input
                 type="file"
@@ -207,7 +209,7 @@ export default function ProfilePage() {
                 <span className="material-symbols-outlined text-lg">
                   delete
                 </span>
-                Eliminar foto
+                {t('deletePhoto')}
               </button>
             )}
           </div>
@@ -220,7 +222,7 @@ export default function ProfilePage() {
               htmlFor="firstName"
               className="block text-sm font-medium text-slate-700 mb-1"
             >
-              Nombre *
+              {t('firstName')}
             </label>
             <input
               id="firstName"
@@ -238,7 +240,7 @@ export default function ProfilePage() {
               htmlFor="lastName"
               className="block text-sm font-medium text-slate-700 mb-1"
             >
-              Apellidos *
+              {t('lastName')}
             </label>
             <input
               id="lastName"
@@ -259,7 +261,7 @@ export default function ProfilePage() {
             htmlFor="headline"
             className="block text-sm font-medium text-slate-700 mb-1"
           >
-            Título
+            {t('headline')}
           </label>
           <input
             id="headline"
@@ -268,7 +270,7 @@ export default function ProfilePage() {
             onChange={(e) =>
               setFormData({ ...formData, headline: e.target.value })
             }
-            placeholder="Ej: Desarrollador Full Stack"
+            placeholder={t('headlinePlaceholder')}
             className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder:text-slate-500 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
           />
         </div>
@@ -279,7 +281,7 @@ export default function ProfilePage() {
             htmlFor="linkedinUrl"
             className="block text-sm font-medium text-slate-700 mb-1"
           >
-            URL de LinkedIn
+            {t('linkedinUrl')}
           </label>
           <input
             id="linkedinUrl"
@@ -288,7 +290,7 @@ export default function ProfilePage() {
             onChange={(e) =>
               setFormData({ ...formData, linkedinUrl: e.target.value })
             }
-            placeholder="https://linkedin.com/in/tu-perfil"
+            placeholder={t('linkedinPlaceholder')}
             className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder:text-slate-500 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
           />
         </div>
@@ -299,7 +301,7 @@ export default function ProfilePage() {
             htmlFor="gender"
             className="block text-sm font-medium text-slate-700 mb-1"
           >
-            Género
+            {t('gender')}
           </label>
           <select
             id="gender"
@@ -309,11 +311,11 @@ export default function ProfilePage() {
             }
             className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
           >
-            <option value="">Selecciona...</option>
-            <option value="male">Masculino</option>
-            <option value="female">Femenino</option>
-            <option value="other">Otro</option>
-            <option value="prefer_not_to_say">Prefiero no decir</option>
+            <option value="">{t('select')}</option>
+            <option value="male">{t('male')}</option>
+            <option value="female">{t('female')}</option>
+            <option value="other">{t('other')}</option>
+            <option value="prefer_not_to_say">{t('preferNotToSay')}</option>
           </select>
         </div>
 
@@ -323,7 +325,7 @@ export default function ProfilePage() {
             htmlFor="birthDate"
             className="block text-sm font-medium text-slate-700 mb-1"
           >
-            Fecha de nacimiento
+            {t('birthDate')}
           </label>
           <input
             id="birthDate"
@@ -343,7 +345,7 @@ export default function ProfilePage() {
             disabled={submitting}
             className="w-full rounded-lg bg-primary px-6 py-3 font-bold text-white transition-colors hover:bg-primary-hover disabled:opacity-50 min-h-[44px]"
           >
-            {submitting ? "Guardando..." : "Guardar Cambios"}
+            {submitting ? t('saving') : t('saveBtn')}
           </button>
         </div>
       </form>

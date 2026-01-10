@@ -5,6 +5,7 @@ import type { CVEducation } from "@/types/cv";
 import { useToast } from "@/contexts/ToastContext";
 import { useAISectionImprover } from "@/hooks/useAISectionImprover";
 import { useGamification } from "@/hooks/useGamification";
+import { useTranslations } from "next-intl";
 
 interface EducationModalProps {
   educationId?: string;
@@ -21,6 +22,9 @@ export default function EducationModal({
   const { showToast } = useToast();
   const { improveSection, loading: aiLoading } = useAISectionImprover();
   const { recordEvent } = useGamification();
+  const tForm = useTranslations('CVBuilder.forms.education');
+  const tCommon = useTranslations('CVBuilder.forms.common');
+  const tAI = useTranslations('CVBuilder.forms.ai');
   const [showAISuggestions, setShowAISuggestions] = useState(false);
   const [aiSuggestions, setAISuggestions] = useState<{
     description: string;
@@ -84,8 +88,8 @@ export default function EducationModal({
       showToast({
         type: "success",
         message: educationId
-          ? "Formación actualizada correctamente"
-          : "Formación agregada correctamente",
+          ? tForm('toastSuccessUpdate')
+          : tForm('toastSuccessAdd'),
       });
 
       onSuccess();
@@ -93,7 +97,7 @@ export default function EducationModal({
       console.error("Error saving education:", error);
       showToast({
         type: "error",
-        message: "Error al guardar la formación",
+        message: tForm('toastErrorSave'),
       });
     } finally {
       setLoading(false);
@@ -121,7 +125,7 @@ export default function EducationModal({
     if (!formData.notes || formData.notes.trim().length === 0) {
       showToast({
         type: "error",
-        message: "Escribe notas primero para poder mejorarlas con IA",
+        message: tAI('toastErrorDesc'),
       });
       return;
     }
@@ -147,19 +151,19 @@ export default function EducationModal({
         setShowAISuggestions(true);
         showToast({
           type: "success",
-          message: "Mejoras generadas con IA. Revisa y acepta o rechaza los cambios.",
+          message: tAI('toastSuccess'),
         });
       } else {
         showToast({
           type: "error",
-          message: "No se pudieron generar mejoras. Intenta de nuevo.",
+          message: tAI('toastFail'),
         });
       }
     } catch (error) {
       console.error("Error improving with AI:", error);
       showToast({
         type: "error",
-        message: "Error al mejorar con IA. Intenta de nuevo.",
+        message: tForm('toastErrorAI'),
       });
     }
   };
@@ -173,13 +177,13 @@ export default function EducationModal({
       });
       setShowAISuggestions(false);
       setAISuggestions(null);
-      
+
       // Record gamification event
       await recordEvent("ai.section_improved");
-      
+
       showToast({
         type: "success",
-        message: "Mejoras aplicadas correctamente",
+        message: tAI('toastApply'),
       });
     }
   };
@@ -190,7 +194,7 @@ export default function EducationModal({
   };
 
   // El botón está disponible si hay datos básicos rellenos (institución y título) y hay notas
-  const canImproveWithAI = 
+  const canImproveWithAI =
     (formData.institution.trim().length > 0 && formData.title.trim().length > 0) &&
     (formData.notes && formData.notes.trim().length > 0);
 
@@ -206,10 +210,10 @@ export default function EducationModal({
               </div>
               <div>
                 <h3 className="text-lg font-bold text-slate-900 leading-tight">
-                  Estudios y Formación
+                  {educationId ? tForm('titleEdit') : tForm('titleNew')}
                 </h3>
                 <p className="text-xs text-gray-500">
-                  {educationId ? "Edita" : "Añade"} tu formación académica
+                  {tForm('subtitle')}
                 </p>
               </div>
             </div>
@@ -224,7 +228,7 @@ export default function EducationModal({
             <div className="space-y-5">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                  Centro u organización *
+                  {tForm('institution')} {tCommon('required')}
                 </label>
                 <input
                   required
@@ -233,12 +237,12 @@ export default function EducationModal({
                     setFormData({ ...formData, institution: e.target.value })
                   }
                   className="block w-full rounded-xl border-gray-200 bg-gray-50 text-gray-900 focus:border-primary focus:ring-primary shadow-sm sm:text-sm py-3 px-4 transition-all"
-                  placeholder="Ej. Universidad Politécnica"
+                  placeholder={tForm('placeholderInstitution')}
                 />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                  Título o nombre de la formación *
+                  {tForm('title')} {tCommon('required')}
                 </label>
                 <input
                   required
@@ -247,13 +251,13 @@ export default function EducationModal({
                     setFormData({ ...formData, title: e.target.value })
                   }
                   className="block w-full rounded-xl border-gray-200 bg-gray-50 text-gray-900 focus:border-primary focus:ring-primary shadow-sm sm:text-sm py-3 px-4 transition-all"
-                  placeholder="Ej. Grado en Diseño Multimedia"
+                  placeholder={tForm('placeholderTitle')}
                 />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                    Fecha de inicio *
+                    {tCommon('startDate')} {tCommon('required')}
                   </label>
                   <input
                     type="date"
@@ -268,7 +272,7 @@ export default function EducationModal({
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
                     <label className="block text-sm font-semibold text-gray-700">
-                      Fecha de final
+                      {tCommon('endDate')}
                     </label>
                     <div className="flex items-center gap-2">
                       <input
@@ -280,7 +284,7 @@ export default function EducationModal({
                         className="rounded border-gray-300 text-primary focus:ring-primary h-4 w-4"
                       />
                       <label className="text-xs text-gray-500 font-medium cursor-pointer">
-                        En curso
+                        {tForm('ongoing')}
                       </label>
                     </div>
                   </div>
@@ -298,7 +302,7 @@ export default function EducationModal({
               <div>
                 <div className="flex items-center justify-between mb-1.5">
                   <label className="block text-sm font-semibold text-gray-700">
-                    Notas adicionales
+                    {tForm('notes')}
                   </label>
                   {canImproveWithAI && (
                     <button
@@ -310,7 +314,7 @@ export default function EducationModal({
                       <span className="material-symbols-outlined text-[16px]">
                         {aiLoading ? "hourglass_empty" : "auto_awesome"}
                       </span>
-                      {aiLoading ? "Mejorando..." : "Mejorar con IA"}
+                      {aiLoading ? tAI('improving') : tAI('improve')}
                     </button>
                   )}
                 </div>
@@ -322,7 +326,7 @@ export default function EducationModal({
                           auto_awesome
                         </span>
                         <span className="text-xs font-semibold text-purple-700">
-                          Sugerencias de IA
+                          {tAI('suggestionsTitle')}
                         </span>
                       </div>
                       <button
@@ -336,7 +340,7 @@ export default function EducationModal({
                     <div className="space-y-2">
                       <div>
                         <p className="text-xs font-medium text-purple-700 mb-1">
-                          Notas mejoradas:
+                          {tForm('improvedNotes')}
                         </p>
                         <p className="text-xs text-gray-700 bg-white p-2 rounded border border-purple-100">
                           {aiSuggestions.description}
@@ -345,7 +349,7 @@ export default function EducationModal({
                       {aiSuggestions.tags.length > 0 && (
                         <div>
                           <p className="text-xs font-medium text-purple-700 mb-1">
-                            Tags sugeridos:
+                            {tAI('suggestedTags')}
                           </p>
                           <div className="flex flex-wrap gap-1.5">
                             {aiSuggestions.tags.map((tag, idx) => (
@@ -366,14 +370,14 @@ export default function EducationModal({
                         onClick={handleAcceptAISuggestions}
                         className="flex-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-purple-600 hover:bg-purple-700 text-white transition-colors"
                       >
-                        Aceptar cambios
+                        {tAI('accept')}
                       </button>
                       <button
                         type="button"
                         onClick={handleRejectAISuggestions}
                         className="px-3 py-1.5 rounded-lg text-xs font-semibold text-purple-600 hover:bg-purple-100 transition-colors"
                       >
-                        Rechazar
+                        {tAI('reject')}
                       </button>
                     </div>
                   </div>
@@ -389,7 +393,7 @@ export default function EducationModal({
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                  Hitos o aptitudes (tags)
+                  {tCommon('skills')}
                 </label>
                 <div className="w-full rounded-xl border border-gray-200 bg-gray-50 p-2 focus-within:ring-1 focus-within:ring-primary focus-within:border-primary transition-all flex flex-wrap gap-2 min-h-[50px] items-center">
                   {formData.skills.map((skill) => (
@@ -420,19 +424,22 @@ export default function EducationModal({
                       }
                     }}
                     className="flex-1 bg-transparent border-none p-1 focus:ring-0 text-sm placeholder-gray-400 text-gray-900 min-w-[120px]"
-                    placeholder="Escribe y presiona Enter..."
+                    placeholder={tCommon('skillsPlaceholder')}
                   />
                 </div>
+                <p className="mt-1.5 text-xs text-gray-400">
+                  {tCommon('skillsHint')}
+                </p>
               </div>
             </div>
           </form>
           <div className="px-4 sm:px-6 py-4 bg-gray-50 border-t border-gray-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 rounded-none sm:rounded-b-3xl -mx-4 sm:-mx-6 -mb-0 sm:-mb-6 sticky bottom-0">
             <button
-              type="button"
+              name="cancel"
               onClick={onClose}
               className="w-full sm:w-auto px-5 py-3 sm:py-2.5 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-200 transition-colors min-h-[44px]"
             >
-              Cancelar
+              {tCommon('cancel')}
             </button>
             <button
               type="submit"
@@ -440,7 +447,7 @@ export default function EducationModal({
               disabled={loading}
               className="w-full sm:w-auto px-6 py-3 sm:py-2.5 rounded-xl text-sm font-semibold text-white bg-primary hover:bg-pink-600 shadow-lg shadow-primary/25 transition-all disabled:opacity-50 min-h-[44px]"
             >
-              {loading ? "Guardando..." : "Guardar Formación"}
+              {loading ? tCommon('saving') : tForm('saveBtn')}
             </button>
           </div>
         </div>

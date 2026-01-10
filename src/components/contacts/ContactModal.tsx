@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import type { ContactFormData, ContactChannel, ContactChannelType } from "@/types/contacts";
 import { useToast } from "@/contexts/ToastContext";
+import { useTranslations } from "next-intl";
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -18,14 +19,6 @@ interface ContactModalProps {
     notes?: string;
   } | null;
 }
-
-const CHANNEL_TYPES: { value: ContactChannelType; label: string; icon: string }[] = [
-  { value: "email", label: "Email", icon: "email" },
-  { value: "linkedin", label: "LinkedIn", icon: "link" },
-  { value: "phone", label: "Teléfono", icon: "phone" },
-  { value: "whatsapp", label: "WhatsApp", icon: "chat" },
-  { value: "other", label: "Otro", icon: "more_horiz" },
-];
 
 export default function ContactModal({
   isOpen,
@@ -43,6 +36,15 @@ export default function ContactModal({
   });
   const [loading, setLoading] = useState(false);
   const { showToast } = useToast();
+  const t = useTranslations('contacts');
+
+  const CHANNEL_TYPES: { value: ContactChannelType; label: string; icon: string }[] = [
+    { value: "email", label: t('channelTypes.email'), icon: "email" },
+    { value: "linkedin", label: t('channelTypes.linkedin'), icon: "link" },
+    { value: "phone", label: t('channelTypes.phone'), icon: "phone" },
+    { value: "whatsapp", label: t('channelTypes.whatsapp'), icon: "chat" },
+    { value: "other", label: t('channelTypes.other'), icon: "more_horiz" },
+  ];
 
   useEffect(() => {
     if (isOpen) {
@@ -101,7 +103,7 @@ export default function ContactModal({
     if (!formData.name.trim()) {
       showToast({
         type: "error",
-        message: "El nombre es requerido",
+        message: t('toasts.nameRequired'),
       });
       return;
     }
@@ -123,14 +125,14 @@ export default function ContactModal({
 
       showToast({
         type: "success",
-        message: contact ? "Contacto actualizado correctamente" : "Contacto añadido correctamente",
+        message: contact ? t('toasts.successUpdate') : t('toasts.successAdd'),
       });
       onClose();
     } catch (error) {
       console.error("Error saving contact:", error);
       showToast({
         type: "error",
-        message: "Error al guardar el contacto",
+        message: t('toasts.errorSave'),
       });
     } finally {
       setLoading(false);
@@ -143,7 +145,7 @@ export default function ContactModal({
         {/* Header */}
         <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
           <h2 className="text-xl font-bold text-gray-900">
-            {contact ? "Editar Contacto" : "Añadir Persona de Contacto"}
+            {contact ? t('titleEdit') : t('titleAdd')}
           </h2>
           <button
             onClick={onClose}
@@ -158,42 +160,42 @@ export default function ContactModal({
             {/* Name */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                Nombre *
+                {t('labels.name')}
               </label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 className="block w-full rounded-xl border-gray-200 bg-gray-50 text-gray-900 focus:border-primary focus:ring-primary shadow-sm sm:text-sm py-3 px-4 transition-all"
-                placeholder="Ej. Juan Pérez"
+                placeholder={t('placeholders.name')}
               />
             </div>
 
             {/* Email */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                Email
+                {t('labels.email')}
               </label>
               <input
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 className="block w-full rounded-xl border-gray-200 bg-gray-50 text-gray-900 focus:border-primary focus:ring-primary shadow-sm sm:text-sm py-3 px-4 transition-all"
-                placeholder="ejemplo@empresa.com"
+                placeholder={t('placeholders.email')}
               />
             </div>
 
             {/* Role */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                Rol
+                {t('labels.role')}
               </label>
               <input
                 type="text"
                 value={formData.role}
                 onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                 className="block w-full rounded-xl border-gray-200 bg-gray-50 text-gray-900 focus:border-primary focus:ring-primary shadow-sm sm:text-sm py-3 px-4 transition-all"
-                placeholder="Ej. Recruiter, HR Manager, Hiring Manager..."
+                placeholder={t('placeholders.role')}
               />
             </div>
 
@@ -201,7 +203,7 @@ export default function ContactModal({
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="block text-sm font-semibold text-gray-700">
-                  Canales de Contacto
+                  {t('labels.channels')}
                 </label>
                 <button
                   type="button"
@@ -209,12 +211,12 @@ export default function ContactModal({
                   className="flex items-center gap-1 px-3 py-1.5 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-colors text-sm font-medium"
                 >
                   <span className="material-symbols-outlined text-lg">add</span>
-                  Añadir Canal
+                  {t('labels.addChannel')}
                 </button>
               </div>
               {formData.contact_channels.length === 0 ? (
                 <p className="text-sm text-gray-500 italic">
-                  No hay canales de contacto añadidos
+                  {t('labels.noChannels')}
                 </p>
               ) : (
                 <div className="space-y-3">
@@ -245,21 +247,21 @@ export default function ContactModal({
                         className="flex-1 rounded-lg border-gray-200 bg-white text-gray-900 focus:border-primary focus:ring-primary shadow-sm sm:text-sm py-2 px-3 transition-all"
                         placeholder={
                           channel.type === "email"
-                            ? "email@ejemplo.com"
+                            ? "email@example.com"
                             : channel.type === "linkedin"
-                            ? "linkedin.com/in/perfil"
-                            : channel.type === "phone"
-                            ? "+34 600 000 000"
-                            : channel.type === "whatsapp"
-                            ? "+34 600 000 000"
-                            : "Valor del canal"
+                              ? "linkedin.com/in/profile"
+                              : channel.type === "phone"
+                                ? "+1234567890"
+                                : channel.type === "whatsapp"
+                                  ? "+1234567890"
+                                  : t('placeholders.channelValue')
                         }
                       />
                       <button
                         type="button"
                         onClick={() => handleRemoveChannel(index)}
                         className="p-2 hover:bg-red-50 rounded-lg transition-colors text-gray-500 hover:text-red-600"
-                        title="Eliminar canal"
+                        title="Delete channel"
                       >
                         <span className="material-symbols-outlined text-lg">delete</span>
                       </button>
@@ -272,14 +274,14 @@ export default function ContactModal({
             {/* Notes */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                Notas
+                {t('labels.notes')}
               </label>
               <textarea
                 value={formData.notes}
                 onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                 rows={3}
                 className="block w-full rounded-xl border-gray-200 bg-gray-50 text-gray-900 focus:border-primary focus:ring-primary shadow-sm sm:text-sm py-3 px-4 transition-all resize-none"
-                placeholder="Notas adicionales sobre este contacto..."
+                placeholder={t('placeholders.notes')}
               />
             </div>
           </div>
@@ -292,18 +294,19 @@ export default function ContactModal({
             disabled={loading}
             className="px-4 py-2 rounded-xl border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Cancelar
+            {t('buttons.cancel')}
           </button>
           <button
             onClick={handleSave}
             disabled={loading}
             className="px-6 py-2 rounded-xl bg-primary text-white hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
           >
-            {loading ? "Guardando..." : contact ? "Actualizar" : "Añadir Contacto"}
+            {loading ? t('buttons.saving') : contact ? t('buttons.update') : t('buttons.save')}
           </button>
         </div>
       </div>
     </div>
   );
 }
+
 

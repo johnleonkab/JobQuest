@@ -7,6 +7,7 @@ import { BadgeSkeleton, CardSkeleton } from "@/components/LoadingSkeleton";
 import LevelCard from "@/components/gamification/LevelCard";
 import BadgeCard from "@/components/gamification/BadgeCard";
 import { calculateUserLevel } from "@/lib/gamification/utils";
+import { useTranslations } from "next-intl";
 
 interface GamificationProgress {
   xp: number;
@@ -37,6 +38,7 @@ export default function GamificationPage() {
   const [activeTab, setActiveTab] = useState<"levels" | "badges">("levels");
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState<GamificationProgress | null>(null);
+  const t = useTranslations('gamification');
 
   useEffect(() => {
     async function fetchProgress() {
@@ -77,7 +79,7 @@ export default function GamificationPage() {
   if (!progress) {
     return (
       <div className="flex h-full items-center justify-center">
-        <div className="text-slate-500">Error al cargar el progreso</div>
+        <div className="text-slate-500">{t('errorLoading')}</div>
       </div>
     );
   }
@@ -94,29 +96,27 @@ export default function GamificationPage() {
           <div className="inline-flex p-1.5 bg-white border border-slate-200 rounded-2xl shadow-sm">
             <button
               onClick={() => setActiveTab("levels")}
-              className={`flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-sm transition-all ${
-                activeTab === "levels"
-                  ? "bg-primary text-white shadow-md shadow-primary/25"
-                  : "text-gray-500 hover:bg-slate-50 hover:text-slate-900"
-              }`}
+              className={`flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-sm transition-all ${activeTab === "levels"
+                ? "bg-primary text-white shadow-md shadow-primary/25"
+                : "text-gray-500 hover:bg-slate-50 hover:text-slate-900"
+                }`}
             >
               <span className="material-symbols-outlined text-[20px]">
                 stairs
               </span>
-              <span>Niveles de Carrera</span>
+              <span>{t('tabs.levels')}</span>
             </button>
             <button
               onClick={() => setActiveTab("badges")}
-              className={`flex items-center gap-2 px-6 py-2.5 rounded-xl font-medium text-sm transition-all ${
-                activeTab === "badges"
-                  ? "bg-primary text-white shadow-md shadow-primary/25"
-                  : "text-gray-500 hover:bg-slate-50 hover:text-slate-900"
-              }`}
+              className={`flex items-center gap-2 px-6 py-2.5 rounded-xl font-medium text-sm transition-all ${activeTab === "badges"
+                ? "bg-primary text-white shadow-md shadow-primary/25"
+                : "text-gray-500 hover:bg-slate-50 hover:text-slate-900"
+                }`}
             >
               <span className="material-symbols-outlined text-[20px]">
                 military_tech
               </span>
-              <span>Mis Logros y Medallas</span>
+              <span>{t('tabs.badges')}</span>
             </button>
           </div>
         </div>
@@ -124,12 +124,12 @@ export default function GamificationPage() {
         {activeTab === "levels" ? (
           <LevelsTab progress={progress} allLevels={allLevels} />
         ) : (
-            <BadgesTab
-              progress={progress}
-              allBadges={allBadges}
-              earnedBadgesSet={earnedBadgesSet}
-              earnedBadgesData={progress.earnedBadgesData}
-            />
+          <BadgesTab
+            progress={progress}
+            allBadges={allBadges}
+            earnedBadgesSet={earnedBadgesSet}
+            earnedBadgesData={progress.earnedBadgesData}
+          />
         )}
       </div>
     </div>
@@ -144,16 +144,17 @@ function LevelsTab({
   allLevels: any[];
 }) {
   const currentLevelOrder = progress.level.order;
+  const t = useTranslations('gamification.levels');
 
   return (
     <>
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-slate-900 mb-1">
-            Niveles de Carrera
+            {t('title')}
           </h2>
           <p className="text-gray-500">
-            Desbloquea beneficios avanzando en tu búsqueda de empleo.
+            {t('subtitle')}
           </p>
         </div>
         <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-xl border border-gray-100 shadow-sm">
@@ -161,7 +162,7 @@ function LevelsTab({
             <span className="material-symbols-outlined text-lg">bolt</span>
           </div>
           <div>
-            <p className="text-xs text-gray-500 font-medium">XP Total</p>
+            <p className="text-xs text-gray-500 font-medium">{t('totalXP')}</p>
             <p className="text-sm font-bold text-slate-900">
               {progress.xp.toLocaleString()} XP
             </p>
@@ -202,15 +203,16 @@ function BadgesTab({
 }) {
   const earnedCount = progress.earnedBadges.length;
   const lockedCount = allBadges.length - earnedCount;
+  const t = useTranslations('gamification.badges');
 
   return (
     <>
       <div className="mb-8">
         <h2 className="text-2xl font-bold text-slate-900 mb-1">
-          Mis Logros y Medallas
+          {t('title')}
         </h2>
         <p className="text-gray-500 mb-6">
-          Colecciona medallas completando misiones y mejorando tu perfil.
+          {t('subtitle')}
         </p>
         <div className="flex gap-4">
           <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-xl border border-gray-100 shadow-sm">
@@ -218,7 +220,7 @@ function BadgesTab({
               emoji_events
             </span>
             <div>
-              <p className="text-xs text-gray-500 font-medium">Obtenidos</p>
+              <p className="text-xs text-gray-500 font-medium">{t('earned')}</p>
               <p className="text-sm font-bold text-slate-900">{earnedCount}</p>
             </div>
           </div>
@@ -227,7 +229,7 @@ function BadgesTab({
               lock
             </span>
             <div>
-              <p className="text-xs text-gray-500 font-medium">Bloqueados</p>
+              <p className="text-xs text-gray-500 font-medium">{t('locked')}</p>
               <p className="text-sm font-bold text-slate-900">{lockedCount}</p>
             </div>
           </div>

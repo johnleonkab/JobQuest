@@ -236,3 +236,4 @@ function compareCVSnapshots(oldSnapshot: any, newSnapshot: any): boolean {
   return false; // No ha cambiado
 }
 
+

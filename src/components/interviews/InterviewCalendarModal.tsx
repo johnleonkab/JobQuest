@@ -1,8 +1,7 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import type { InterviewFormData, InterviewType } from "@/types/interviews";
 import { useToast } from "@/contexts/ToastContext";
+import { useTranslations, useLocale } from "next-intl";
 
 interface InterviewCalendarModalProps {
   isOpen: boolean;
@@ -30,6 +29,8 @@ export default function InterviewCalendarModal({
   const [interviewType, setInterviewType] = useState<InterviewType>("video");
   const [loading, setLoading] = useState(false);
   const { showToast } = useToast();
+  const t = useTranslations('interviews');
+  const locale = useLocale();
 
   useEffect(() => {
     if (isOpen) {
@@ -52,7 +53,7 @@ export default function InterviewCalendarModal({
     if (!title.trim()) {
       showToast({
         type: "error",
-        message: "El título es requerido",
+        message: t('toasts.titleRequired'),
       });
       return;
     }
@@ -75,14 +76,14 @@ export default function InterviewCalendarModal({
 
       showToast({
         type: "success",
-        message: "Entrevista programada correctamente",
+        message: t('toasts.success'),
       });
       onClose();
     } catch (error) {
       console.error("Error saving interview:", error);
       showToast({
         type: "error",
-        message: "Error al programar la entrevista",
+        message: t('toasts.error'),
       });
     } finally {
       setLoading(false);
@@ -169,28 +170,35 @@ export default function InterviewCalendarModal({
 
   const monthDays = getDaysInMonth(selectedDate);
   const weekDays = getWeekDays(selectedDate);
-  const monthNames = [
-    "Enero",
-    "Febrero",
-    "Marzo",
-    "Abril",
-    "Mayo",
-    "Junio",
-    "Julio",
-    "Agosto",
-    "Septiembre",
-    "Octubre",
-    "Noviembre",
-    "Diciembre",
-  ];
-  const dayNames = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
+
+  // Generate dynamic names based on locale
+  const monthNames = Array.from({ length: 12 }, (_, i) => {
+    const d = new Date(2024, i, 1);
+    const m = d.toLocaleString(locale, { month: 'long' });
+    return m.charAt(0).toUpperCase() + m.slice(1);
+  });
+
+  const dayNames = Array.from({ length: 7 }, (_, i) => {
+    // Date(2024, 0, 1) is Monday Jan 1 2024. Wait!
+    // new Date(2024, 0, 1) is Monday?
+    // Jan 1 2024 is Monday.
+    // But `getWeekDays` logic: `day === 0 ? -6 : 1`. This assumes Monday start?
+    // `new Date().getDay()`: 0 is Sunday, 1 is Monday.
+    // `dayNames` at line 186 was ["Lun", "Mar", ..., "Dom"]. Saturday is 6, Sunday is 0.
+    // If my array index 0 maps to Monday (Lun), then yes.
+    // So I need to generate names for Mon, Tue, Wed, Thu, Fri, Sat, Sun.
+    // Mon is Jan 1 2024.
+    const d = new Date(2024, 0, 1 + i);
+    const day = d.toLocaleString(locale, { weekday: 'short' });
+    return day.replace('.', '').charAt(0).toUpperCase() + day.replace('.', '').slice(1);
+  });
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
         <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-gray-900">Programar Entrevista</h2>
+          <h2 className="text-xl font-bold text-gray-900">{t('title')}</h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-lg hover:bg-gray-100"
@@ -207,23 +215,21 @@ export default function InterviewCalendarModal({
               <div className="flex items-center gap-2 mb-4">
                 <button
                   onClick={() => setViewMode("month")}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    viewMode === "month"
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${viewMode === "month"
                       ? "bg-primary text-white"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
+                    }`}
                 >
-                  Mes
+                  {t('month')}
                 </button>
                 <button
                   onClick={() => setViewMode("week")}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    viewMode === "week"
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${viewMode === "week"
                       ? "bg-primary text-white"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
+                    }`}
                 >
-                  Semana
+                  {t('week')}
                 </button>
               </div>
 
@@ -240,7 +246,7 @@ export default function InterviewCalendarModal({
                   <h3 className="text-lg font-semibold text-gray-900">
                     {viewMode === "month"
                       ? `${monthNames[selectedDate.getMonth()]} ${selectedDate.getFullYear()}`
-                      : `Semana del ${weekDays[0].getDate()} ${monthNames[weekDays[0].getMonth()]}`}
+                      : `${t('week')} ${t('month').toLowerCase()} ${weekDays[0].getDate()} ${monthNames[weekDays[0].getMonth()]}`}
                   </h3>
                   <button
                     onClick={() => (viewMode === "month" ? navigateMonth("next") : navigateWeek("next"))}
@@ -274,13 +280,12 @@ export default function InterviewCalendarModal({
                           <button
                             key={date.toISOString()}
                             onClick={() => handleDateClick(date)}
-                            className={`aspect-square rounded-lg text-sm font-medium transition-all ${
-                              isSelected(date)
+                            className={`aspect-square rounded-lg text-sm font-medium transition-all ${isSelected(date)
                                 ? "bg-primary text-white"
                                 : isToday(date)
-                                ? "bg-primary/10 text-primary border-2 border-primary"
-                                : "hover:bg-gray-100 text-gray-700"
-                            }`}
+                                  ? "bg-primary/10 text-primary border-2 border-primary"
+                                  : "hover:bg-gray-100 text-gray-700"
+                              }`}
                           >
                             {date.getDate()}
                           </button>
@@ -308,13 +313,12 @@ export default function InterviewCalendarModal({
                         <button
                           key={date.toISOString()}
                           onClick={() => handleDateClick(date)}
-                          className={`p-3 rounded-lg text-sm font-medium transition-all ${
-                            isSelected(date)
+                          className={`p-3 rounded-lg text-sm font-medium transition-all ${isSelected(date)
                               ? "bg-primary text-white"
                               : isToday(date)
-                              ? "bg-primary/10 text-primary border-2 border-primary"
-                              : "hover:bg-gray-100 text-gray-700 border border-gray-200"
-                          }`}
+                                ? "bg-primary/10 text-primary border-2 border-primary"
+                                : "hover:bg-gray-100 text-gray-700 border border-gray-200"
+                            }`}
                         >
                           <div className="text-xs text-gray-500 mb-1">
                             {dayNames[date.getDay() === 0 ? 6 : date.getDay() - 1]}
@@ -330,7 +334,7 @@ export default function InterviewCalendarModal({
               {/* Time Selection */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Hora
+                  {t('time')}
                 </label>
                 <input
                   type="time"
@@ -345,56 +349,56 @@ export default function InterviewCalendarModal({
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Título *
+                  {t('form.title')}
                 </label>
                 <input
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   className="block w-full rounded-xl border-gray-200 bg-gray-50 text-gray-900 focus:border-primary focus:ring-primary shadow-sm sm:text-sm py-3 px-4 transition-all"
-                  placeholder="Ej. Entrevista Senior UX Designer Google"
+                  placeholder={t('form.titlePlaceholder')}
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Tipo de Entrevista
+                  {t('form.type')}
                 </label>
                 <select
                   value={interviewType}
                   onChange={(e) => setInterviewType(e.target.value as InterviewType)}
                   className="block w-full rounded-xl border-gray-200 bg-gray-50 text-gray-900 focus:border-primary focus:ring-primary shadow-sm sm:text-sm py-3 px-4 transition-all"
                 >
-                  <option value="phone">Teléfono</option>
-                  <option value="video">Videollamada</option>
-                  <option value="in-person">Presencial</option>
-                  <option value="other">Otro</option>
+                  <option value="phone">{t('form.types.phone')}</option>
+                  <option value="video">{t('form.types.video')}</option>
+                  <option value="in-person">{t('form.types.inPerson')}</option>
+                  <option value="other">{t('form.types.other')}</option>
                 </select>
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Ubicación / Enlace
+                  {t('form.location')}
                 </label>
                 <input
                   type="text"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
                   className="block w-full rounded-xl border-gray-200 bg-gray-50 text-gray-900 focus:border-primary focus:ring-primary shadow-sm sm:text-sm py-3 px-4 transition-all"
-                  placeholder="Ej. Zoom, Google Meet, Oficina..."
+                  placeholder={t('form.locationPlaceholder')}
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Notas
+                  {t('form.notes')}
                 </label>
                 <textarea
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   rows={4}
                   className="block w-full rounded-xl border-gray-200 bg-gray-50 text-gray-900 focus:border-primary focus:ring-primary shadow-sm sm:text-sm py-3 px-4 transition-all resize-none"
-                  placeholder="Notas adicionales sobre la entrevista..."
+                  placeholder={t('form.notesPlaceholder')}
                 />
               </div>
             </div>
@@ -408,18 +412,19 @@ export default function InterviewCalendarModal({
             disabled={loading}
             className="px-4 py-2 rounded-xl border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Omitir
+            {t('form.skip')}
           </button>
           <button
             onClick={handleSave}
             disabled={loading}
             className="px-6 py-2 rounded-xl bg-primary text-white hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
           >
-            {loading ? "Guardando..." : "Programar Entrevista"}
+            {loading ? t('form.saving') : t('form.schedule')}
           </button>
         </div>
       </div>
     </div>
   );
 }
+
 

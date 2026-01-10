@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { CVEducation } from "@/types/cv";
 import EducationModal from "./modals/EducationModal";
+import { useTranslations } from "next-intl";
 
 interface EducationSectionProps {
   education: CVEducation[];
@@ -15,13 +16,15 @@ export default function EducationSection({
   onAdd,
   onUpdate,
 }: EducationSectionProps) {
+  const t = useTranslations('CVBuilder.sections.education');
+  const tCommon = useTranslations('CVBuilder.common');
   const [editingId, setEditingId] = useState<string | null>(null);
 
   // Asegurar que education sea siempre un array
   const safeEducation = Array.isArray(education) ? education : [];
 
   const formatDate = (date: string | null) => {
-    if (!date) return "Presente";
+    if (!date) return tCommon('present');
     return new Date(date).toLocaleDateString("es-ES", {
       year: "numeric",
       month: "short",
@@ -30,7 +33,7 @@ export default function EducationSection({
 
   const formatDateRange = (start: string, end: string | null, isOngoing: boolean) => {
     if (isOngoing || !end) {
-      return `${formatDate(start)} - Presente`;
+      return `${formatDate(start)} - ${tCommon('present')}`;
     }
     return `${formatDate(start)} - ${formatDate(end)}`;
   };
@@ -52,7 +55,7 @@ export default function EducationSection({
             <div className="size-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-500">
               <span className="material-symbols-outlined">school</span>
             </div>
-            <h3 className="text-lg font-bold text-slate-900">Formación Académica</h3>
+            <h3 className="text-lg font-bold text-slate-900">{t('title')}</h3>
           </div>
           <button
             onClick={onAdd}
@@ -64,15 +67,14 @@ export default function EducationSection({
         <div className="space-y-4">
           {safeEducation.length === 0 ? (
             <p className="text-sm text-gray-400 text-center py-4">
-              No hay formación académica. Haz clic en el botón + para agregar una.
+              {t('empty')}
             </p>
           ) : (
             safeEducation.map((edu, idx) => (
               <div
                 key={edu.id}
-                className={`flex gap-4 items-start ${
-                  idx > 0 ? "pt-4 border-t border-gray-50" : ""
-                }`}
+                className={`flex gap-4 items-start ${idx > 0 ? "pt-4 border-t border-gray-50" : ""
+                  }`}
               >
                 <div className="size-12 rounded-lg bg-gray-50 flex-shrink-0 flex items-center justify-center border border-gray-100">
                   <span className="text-lg font-bold text-gray-400">
@@ -106,7 +108,7 @@ export default function EducationSection({
                     onClick={() => setEditingId(edu.id)}
                     className="mt-2 text-xs text-primary hover:underline"
                   >
-                    Editar
+                    {tCommon('edit')}
                   </button>
                 </div>
               </div>

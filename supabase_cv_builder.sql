@@ -270,3 +270,4 @@ CREATE POLICY "Users can delete their own project images"
     auth.uid()::text = (storage.foldername(name))[1]
   );
 
+

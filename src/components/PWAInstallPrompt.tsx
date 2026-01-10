@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useToast } from "@/contexts/ToastContext";
+import { useTranslations } from "next-intl";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -14,9 +15,10 @@ export default function PWAInstallPrompt() {
   const [showIOSPrompt, setShowIOSPrompt] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
-  
+
   // useToast está disponible porque este componente solo se renderiza dentro de ToastProvider
   const { showToast } = useToast();
+  const t = useTranslations('PWA');
 
   useEffect(() => {
     // Detectar si es iOS
@@ -26,7 +28,7 @@ export default function PWAInstallPrompt() {
     // Detectar si la app ya está instalada
     const isStandalone = window.matchMedia("(display-mode: standalone)").matches;
     const isInWebAppiOS = (window.navigator as any).standalone === true;
-    
+
     if (isStandalone || isInWebAppiOS) {
       setIsInstalled(true);
       return;
@@ -36,11 +38,11 @@ export default function PWAInstallPrompt() {
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
-      
+
       // Mostrar prompt después de que el usuario haya interactuado
       const hasInteracted = sessionStorage.getItem("pwa-user-interacted") === "true";
       const dismissedBefore = localStorage.getItem("pwa-install-dismissed") === "true";
-      
+
       if (!dismissedBefore) {
         // Esperar un poco antes de mostrar el prompt
         setTimeout(() => {
@@ -59,7 +61,7 @@ export default function PWAInstallPrompt() {
       if (showToast) {
         showToast({
           type: "success",
-          message: "¡JobQuest instalado correctamente!",
+          message: t('success'),
         });
       }
     };
@@ -81,7 +83,7 @@ export default function PWAInstallPrompt() {
     if (iOS) {
       const hasInteracted = sessionStorage.getItem("pwa-user-interacted") === "true";
       const dismissedBefore = localStorage.getItem("pwa-ios-install-dismissed") === "true";
-      
+
       if (!dismissedBefore && hasInteracted) {
         setTimeout(() => {
           setShowIOSPrompt(true);
@@ -96,7 +98,7 @@ export default function PWAInstallPrompt() {
             }, 3000);
           }
         }, 1000);
-        
+
         // Limpiar después de 30 segundos si no hay interacción
         setTimeout(() => clearInterval(checkInteraction), 30000);
       }
@@ -109,7 +111,7 @@ export default function PWAInstallPrompt() {
         window.removeEventListener(event, markInteraction);
       });
     };
-  }, [showToast]);
+  }, [showToast, t]);
 
   const handleInstallAndroid = async () => {
     if (!deferredPrompt) return;
@@ -117,14 +119,14 @@ export default function PWAInstallPrompt() {
     try {
       await deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
-      
+
       if (outcome === "accepted" && showToast) {
         showToast({
           type: "success",
-          message: "Instalando JobQuest...",
+          message: t('installing'),
         });
       }
-      
+
       setDeferredPrompt(null);
       setShowAndroidPrompt(false);
     } catch (error) {
@@ -158,15 +160,15 @@ export default function PWAInstallPrompt() {
                 </span>
               </div>
               <div className="flex-1">
-                <h3 className="font-bold text-slate-900 mb-1">Instala JobQuest</h3>
+                <h3 className="font-bold text-slate-900 mb-1">{t('installTitle')}</h3>
                 <p className="text-sm text-slate-600">
-                  Acceso rápido desde tu pantalla de inicio
+                  {t('installSubtitle')}
                 </p>
               </div>
               <button
                 onClick={handleDismissAndroid}
                 className="text-slate-400 hover:text-slate-600 transition-colors flex-shrink-0"
-                aria-label="Cerrar"
+                aria-label={t('close')}
               >
                 <span className="material-symbols-outlined text-xl">close</span>
               </button>
@@ -176,13 +178,13 @@ export default function PWAInstallPrompt() {
                 onClick={handleDismissAndroid}
                 className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors"
               >
-                Ahora no
+                {t('notNow')}
               </button>
               <button
                 onClick={handleInstallAndroid}
                 className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-primary hover:bg-pink-600 transition-colors shadow-lg shadow-primary/25"
               >
-                Instalar
+                {t('install')}
               </button>
             </div>
           </div>
@@ -200,44 +202,56 @@ export default function PWAInstallPrompt() {
                     diamond
                   </span>
                 </div>
-                <h3 className="font-bold text-slate-900">Instala JobQuest</h3>
+                <h3 className="font-bold text-slate-900">{t('installTitle')}</h3>
               </div>
               <button
                 onClick={handleDismissIOS}
                 className="text-slate-400 hover:text-slate-600 transition-colors"
-                aria-label="Cerrar"
+                aria-label={t('close')}
               >
                 <span className="material-symbols-outlined text-xl">close</span>
               </button>
             </div>
             <p className="text-sm text-slate-600 mb-4">
-              Para instalar JobQuest en tu iPhone:
+              {t('iosInstructionsTitle')}
             </p>
             <ol className="space-y-3 mb-4 text-sm text-slate-700">
               <li className="flex items-start gap-3">
                 <span className="flex size-6 items-center justify-center rounded-full bg-primary/10 text-primary font-bold flex-shrink-0">
                   1
                 </span>
-                <span>Toca el botón <span className="font-semibold">Compartir</span> en la parte inferior</span>
+                <span>
+                  {t.rich('iosStep1', {
+                    bold: (chunks) => <span className="font-semibold">{chunks}</span>
+                  })}
+                </span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="flex size-6 items-center justify-center rounded-full bg-primary/10 text-primary font-bold flex-shrink-0">
                   2
                 </span>
-                <span>Selecciona <span className="font-semibold">"Agregar a pantalla de inicio"</span></span>
+                <span>
+                  {t.rich('iosStep2', {
+                    bold: (chunks) => <span className="font-semibold">{chunks}</span>
+                  })}
+                </span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="flex size-6 items-center justify-center rounded-full bg-primary/10 text-primary font-bold flex-shrink-0">
                   3
                 </span>
-                <span>Toca <span className="font-semibold">"Agregar"</span> para confirmar</span>
+                <span>
+                  {t.rich('iosStep3', {
+                    bold: (chunks) => <span className="font-semibold">{chunks}</span>
+                  })}
+                </span>
               </li>
             </ol>
             <button
               onClick={handleDismissIOS}
               className="w-full px-4 py-3 rounded-xl text-sm font-semibold text-white bg-primary hover:bg-pink-600 transition-colors shadow-lg shadow-primary/25"
             >
-              Entendido
+              {t('gotIt')}
             </button>
           </div>
         </div>

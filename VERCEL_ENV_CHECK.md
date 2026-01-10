@@ -76,3 +76,4 @@ https://job-quest-bice.vercel.app/auth/v1/authorize... ❌
 3. **Limpia la caché del navegador** o prueba en incógnito
 4. **Verifica que `NEXT_PUBLIC_SUPABASE_URL` no tenga trailing slash**
 
+

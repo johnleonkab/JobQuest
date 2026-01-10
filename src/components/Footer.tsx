@@ -1,6 +1,9 @@
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 export default function Footer() {
+  const t = useTranslations('Footer');
+
   return (
     <footer className="border-t border-slate-100 bg-white py-12 px-4">
       <div className="mx-auto max-w-7xl flex flex-col items-center justify-between gap-6 sm:flex-row">
@@ -14,20 +17,20 @@ export default function Footer() {
         </div>
         <div className="flex flex-col items-center sm:items-start gap-2">
           <p className="text-sm text-slate-500">
-            © {new Date().getFullYear()} JobQuest Inc. Todos los derechos reservados.
+            {t('rights', { year: new Date().getFullYear() })}
           </p>
           <div className="flex gap-4 text-xs text-slate-400">
             <Link
               href="/terms"
               className="hover:text-primary transition-colors"
             >
-              Términos de Servicio
+              {t('terms')}
             </Link>
             <Link
               href="/privacy"
               className="hover:text-primary transition-colors"
             >
-              Política de Privacidad
+              {t('privacy')}
             </Link>
           </div>
         </div>

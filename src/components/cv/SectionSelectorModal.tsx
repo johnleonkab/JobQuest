@@ -8,6 +8,7 @@ import CertificationModal from "./modals/CertificationModal";
 import LanguageModal from "./modals/LanguageModal";
 import VolunteeringModal from "./modals/VolunteeringModal";
 import ProjectModal from "./modals/ProjectModal";
+import { useTranslations } from "next-intl";
 
 interface SectionSelectorModalProps {
   selectedSection: string | null;
@@ -18,43 +19,31 @@ interface SectionSelectorModalProps {
 const sectionOptions = [
   {
     id: "education",
-    name: "Estudios y Formación",
-    description: "Añade tus títulos académicos, cursos y formación complementaria.",
     icon: "school",
     color: "bg-purple-50 text-purple-500",
   },
   {
     id: "experience",
-    name: "Experiencia Laboral",
-    description: "Detalla tu trayectoria profesional, prácticas y puestos anteriores.",
     icon: "work",
     color: "bg-blue-50 text-blue-500",
   },
   {
     id: "certification",
-    name: "Certificaciones",
-    description: "Muestra tus licencias, diplomas y acreditaciones oficiales.",
     icon: "verified",
     color: "bg-green-50 text-green-600",
   },
   {
     id: "language",
-    name: "Idiomas",
-    description: "Indica los idiomas que dominas y tu nivel de competencia en cada uno.",
     icon: "translate",
     color: "bg-orange-50 text-orange-500",
   },
   {
     id: "volunteering",
-    name: "Voluntariados",
-    description: "Añade experiencias de voluntariado, causas benéficas y trabajo social.",
     icon: "volunteer_activism",
     color: "bg-rose-50 text-rose-500",
   },
   {
     id: "project",
-    name: "Proyectos Personales",
-    description: "Portafolio, trabajos freelance, blogs y otros logros extracurriculares.",
     icon: "rocket_launch",
     color: "bg-indigo-50 text-indigo-500",
   },
@@ -65,6 +54,8 @@ export default function SectionSelectorModal({
   onClose,
   onSectionAdded,
 }: SectionSelectorModalProps) {
+  const tSelector = useTranslations("CVBuilder.sectionSelector");
+  const tSections = useTranslations("CVBuilder.sections");
   const [showForm, setShowForm] = useState(false);
   const [currentSection, setCurrentSection] = useState<CVSectionType | null>(
     selectedSection as CVSectionType | null
@@ -130,9 +121,9 @@ export default function SectionSelectorModal({
       <div className="relative w-full max-w-3xl bg-white rounded-3xl shadow-2xl ring-1 ring-black/5 flex flex-col max-h-[90vh] overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         <div className="flex items-center justify-between px-8 py-6 border-b border-gray-200 bg-background-light/50">
           <div>
-            <h2 className="text-xl font-bold text-slate-900">Añadir nueva sección</h2>
+            <h2 className="text-xl font-bold text-slate-900">{tSelector('title')}</h2>
             <p className="text-sm text-gray-500 mt-1">
-              Selecciona el tipo de contenido para agregar a tu perfil profesional.
+              {tSelector('subtitle')}
             </p>
           </div>
           <button
@@ -159,10 +150,10 @@ export default function SectionSelectorModal({
                 </div>
                 <div>
                   <h3 className="font-bold text-slate-900 group-hover:text-primary transition-colors">
-                    {option.name}
+                    {tSections(`${option.id}.title`)}
                   </h3>
                   <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                    {option.description}
+                    {tSections(`${option.id}.description`)}
                   </p>
                 </div>
               </button>
@@ -174,11 +165,12 @@ export default function SectionSelectorModal({
             onClick={onClose}
             className="px-6 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100 transition-colors"
           >
-            Cancelar
+            {tSelector('cancel')}
           </button>
         </div>
       </div>
     </div>
   );
 }
+
 

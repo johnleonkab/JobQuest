@@ -50,3 +50,4 @@ CREATE TRIGGER update_ai_insights_updated_at
   FOR EACH ROW
   EXECUTE FUNCTION update_ai_insights_updated_at();
 
+

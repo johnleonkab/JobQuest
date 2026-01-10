@@ -1,0 +1,897 @@
+{
+    "Metadata": {
+        "title": {
+            "default": "JobQuest - Your Gamified Job Search",
+            "template": "%s | JobQuest"
+        },
+        "description": "Turn your job search into an epic adventure. Organize your applications, earn points for every interview, and level up until you land your dream job.",
+        "keywords": "job search, CV, resume, gamification, career, work"
+    },
+    "Common": {
+        "loading": "Loading...",
+        "error": "Error",
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "edit": "Edit",
+        "back": "Back",
+        "today": "Today",
+        "viewAll": "View All ->",
+        "viewDetails": "View Details ->"
+    },
+    "Navigation": {
+        "dashboard": "Dashboard",
+        "profile": "Profile",
+        "cvBuilder": "CV Builder",
+        "jobOffers": "Job Offers",
+        "gamification": "Achievements",
+        "help": "Help",
+        "privacy": "Privacy",
+        "login": "Login",
+        "logout": "Sign Out",
+        "features": "Features",
+        "howToPlay": "How to Play",
+        "pricing": "Pricing"
+    },
+    "Hero": {
+        "newSeason": "New Season Available",
+        "titlePrefix": "Turn your job search into an ",
+        "titleHighlight": "epic adventure",
+        "subtitle": "Stop sending CVs into the void. Organize your applications, earn points for every interview, and level up until you land your dream job.",
+        "startAdventure": "Start Adventure for Free",
+        "watchDemo": "Watch Demo",
+        "joinPlayers": "Join +10,000 players hired at:",
+        "createCharacter": "Create your character",
+        "loginTitle": "Login",
+        "registerSubtitle": "Start your journey at level 1 today.",
+        "loginSubtitle": "Continue your epic adventure.",
+        "continueGoogle": "Continue with Google",
+        "alreadyAccount": "Already have an account?",
+        "noAccount": "Don't have an account?",
+        "register": "Sign up",
+        "login": "Log in",
+        "email": "Email",
+        "password": "Password",
+        "fullName": "Full Name",
+        "createAccountBtn": "Create account",
+        "loginBtn": "Log in",
+        "terms": "By continuing, you agree to our",
+        "termsLink": "Terms of Service",
+        "privacyLink": "Privacy Policy"
+    },
+    "Features": {
+        "xpTitle": "XP for Progress",
+        "xpDesc": "Visualize your progress with real metrics.",
+        "achievementsTitle": "Unlockable Achievements",
+        "achievementsDesc": "Earn badges for consistency and success.",
+        "communityTitle": "Active Community",
+        "communityDesc": "Share missions with other candidates."
+    },
+    "DashboardPreview": {
+        "title": "Your Career Dashboard",
+        "subtitle": "Everything you need to dominate the job market in one screen, designed to be intuitive and enjoyable.",
+        "kanbanTitle": "Kanban Tracking",
+        "kanbanDesc": "Drag and drop your applications from 'Applied' to 'Offer Accepted'.",
+        "todo": "To Do",
+        "interview": "Interview",
+        "offer": "Offer",
+        "dailyMissionsTitle": "Daily Missions",
+        "dailyMissionsActive": "Active",
+        "dailyMissionsDesc": "\"Send 3 CVs today\"",
+        "dailyMissionsProgress": "2/3 Completed",
+        "statsTitle": "Statistics",
+        "statsInterviews": "Interviews",
+        "statsResponse": "Response"
+    },
+    "CookieConsent": {
+        "title": "Cookie Usage",
+        "description": "We use cookies to improve your experience, keep your session active, and protect your security. By continuing, you agree to our use of cookies.",
+        "moreInfo": "More information",
+        "reject": "Reject",
+        "accept": "Accept"
+    },
+    "Dashboard": {
+        "title": "Dashboard",
+        "subtitle": "Summary of your progress and activities",
+        "levelAndPoints": "Level and Points",
+        "level": "Level",
+        "xpForLevel": "{xp} XP for level {level}",
+        "recentBadges": "Recent Badges",
+        "noBadges": "You haven't earned any badges yet",
+        "closestBadges": "Next Badges",
+        "noClosestBadges": "No upcoming badges",
+        "interviewsThisWeek": "Interviews This Week",
+        "noInterviews": "No interviews scheduled this week",
+        "notAppliedOffers": "Jobs Not Applied",
+        "noNotApplied": "No pending job offers to apply",
+        "contactsToReview": "Contacts to Review",
+        "noContacts": "No contacts to review",
+        "recentNotes": "Recent Notes",
+        "noNotes": "No recent notes",
+        "kanban": {
+            "todo": "To Do",
+            "inProgress": "In Progress",
+            "done": "Done",
+            "saved": "Interested",
+            "applied": "Applied",
+            "contacted": "Contacted",
+            "interview": "Interview",
+            "offer": "Offer",
+            "rejected": "Rejected",
+            "accepted": "Accepted",
+            "archived": "Archived",
+            "edit": "Edit",
+            "delete": "Delete",
+            "today": "Today",
+            "yesterday": "Yesterday",
+            "daysAgo": "{days}d ago"
+        },
+        "errorLoading": "Error loading dashboard data",
+        "status": {
+            "saved": "Saved",
+            "contacted": "Contacted",
+            "applied": "Applied",
+            "interview": "Interview",
+            "offer": "Offer",
+            "rejected": "Rejected",
+            "accepted": "Accepted"
+        }
+    },
+    "Footer": {
+        "rights": "© {year} JobQuest Inc. All rights reserved.",
+        "terms": "Terms of Service",
+        "privacy": "Privacy Policy"
+    },
+    "JobOpenings": {
+        "title": "Job Openings",
+        "subtitle": "Track your applications and level up.",
+        "newOffer": "New Offer",
+        "stats": {
+            "active": "Active Offers",
+            "interviews": "Interviews",
+            "thisWeek": "This week",
+            "responseRate": "Response Rate",
+            "weeklyStreak": "Weekly Streak",
+            "days": "Days",
+            "onFire": "On Fire"
+        },
+        "searchPlaceholder": "Search by company, role or keyword...",
+        "filters": "Filters",
+        "kanban": "Board",
+        "list": "List",
+        "actions": {
+            "errorFetch": "Error loading offers",
+            "interviewScheduled": "Interview scheduled successfully",
+            "contactAdded": "Contact added successfully",
+            "offerDeleted": "Offer deleted successfully",
+            "errorDelete": "Error deleting offer",
+            "offerUpdated": "Offer updated successfully",
+            "errorUpdate": "Error updating offer"
+        },
+        "filterModal": {
+            "title": "Filters",
+            "status": "Status",
+            "jobType": "Job Type",
+            "salary": "Salary Range",
+            "min": "Minimum",
+            "max": "Maximum",
+            "noLimit": "No limit",
+            "additional": "Additional Filters",
+            "withNotes": "Only with notes",
+            "withCV": "Only with custom CV",
+            "clear": "Clear",
+            "cancel": "Cancel",
+            "apply": "Apply Filters"
+        },
+        "jobTypes": {
+            "full-time": "Full Time",
+            "part-time": "Part Time",
+            "contract": "Contract",
+            "internship": "Internship"
+        },
+        "listView": {
+            "company": "Company / Position",
+            "status": "Status",
+            "type": "Type",
+            "salary": "Salary",
+            "date": "Date",
+            "actions": "Actions",
+            "empty": "No offers to show",
+            "emptyDesc": "Try adjusting filters or creating a new offer",
+            "confirmDelete": "Are you sure you want to delete this offer?",
+            "salaryFrom": "From",
+            "salaryTo": "Up to"
+        },
+        "toast": {
+            "success": "Success",
+            "error": "Error",
+            "info": "Info",
+            "warning": "Warning",
+            "deleteConfirm": "Are you sure you want to delete this job offer?"
+        },
+        "modal": {
+            "editTitle": "Edit Offer",
+            "newTitle": "New Offer",
+            "editSubtitle": "Modify offer details",
+            "newSubtitle": "Add offer details",
+            "company": "Company",
+            "extracting": "Extracting logo...",
+            "position": "Position",
+            "website": "Company Website (Optional)",
+            "websiteHelp": "Used to improve logo search if name is not enough",
+            "description": "Job description",
+            "salaryMin": "Min Salary (k)",
+            "salaryMax": "Max Salary (k)",
+            "jobType": "Job Type",
+            "select": "Select...",
+            "tags": "Tags",
+            "tagsPlaceholder": "Type and press Enter...",
+            "notes": "Notes",
+            "notesPlaceholder": "Additional notes about this offer...",
+            "cancel": "Cancel",
+            "save": "Save",
+            "saving": "Saving...",
+            "update": "Update",
+            "create": "Create Offer",
+            "enterCompany": "Enter company name first",
+            "logoExtracted": "Logo extracted successfully",
+            "logoNotFound": "Could not find company logo",
+            "errorLogo": "Error extracting logo"
+        }
+    },
+    "CVBuilder": {
+        "title": "My Professional Profile",
+        "subtitle": "Manage your experience and skills to stand out.",
+        "aiReview": "AI Review",
+        "addSection": "Add Section",
+        "common": {
+            "present": "Present",
+            "edit": "Edit",
+            "issuedOn": "Issued on",
+            "noExpire": "Does not expire",
+            "viewCredential": "View credential",
+            "viewCertificate": "View certificate",
+            "viewProject": "View project"
+        },
+        "sectionSelector": {
+            "title": "Add new section",
+            "subtitle": "Select the content type to add to your professional profile.",
+            "cancel": "Cancel"
+        },
+        "actions": {
+            "retry": "Retry"
+        },
+        "profile": {
+            "title": "My Profile",
+            "subtitle": "Manage your personal information",
+            "firstName": "First Name *",
+            "lastName": "Last Name *",
+            "headline": "Headline",
+            "headlinePlaceholder": "Ex: Full Stack Developer",
+            "linkedinUrl": "LinkedIn URL",
+            "linkedinPlaceholder": "https://linkedin.com/in/your-profile",
+            "gender": "Gender",
+            "birthDate": "Birth Date",
+            "select": "Select...",
+            "male": "Male",
+            "female": "Female",
+            "other": "Other",
+            "preferNotToSay": "Prefer not to say",
+            "changePhoto": "Change photo",
+            "deletePhoto": "Remove photo",
+            "saveBtn": "Save Changes",
+            "saving": "Saving...",
+            "loading": "Loading...",
+            "success": "Profile updated successfully",
+            "error": "Error updating profile"
+        },
+        "onboarding": {
+            "title": "Complete your profile",
+            "subtitle": "We need some basic data to customize your experience.",
+            "continue": "Continue",
+            "headlineOptional": "Headline (Optional)",
+            "updateError": "Error updating profile. Please try again."
+        },
+        "help": {
+            "title": "Help Center",
+            "subtitle": "Find answers to your questions and learn how to use JobQuest",
+            "searchPlaceholder": "Search in help center...",
+            "quickLinks": {
+                "cvBuilder": {
+                    "title": "CV Builder",
+                    "description": "Create your CV"
+                },
+                "jobOpenings": {
+                    "title": "Job Openings",
+                    "description": "Manage offers"
+                },
+                "gamification": {
+                    "title": "Gamification",
+                    "description": "See achievements"
+                },
+                "privacy": {
+                    "title": "Privacy",
+                    "description": "Manage data"
+                }
+            },
+            "faqTitle": "Frequently Asked Questions",
+            "noResults": "No questions found matching your search.",
+            "contactTitle": "Can't find what you're looking for?",
+            "contactSubtitle": "If you have more questions or need additional help, don't hesitate to contact us.",
+            "links": {
+                "privacy": "View Privacy Policy",
+                "terms": "View Terms of Service"
+            },
+            "categories": {
+                "all": "All",
+                "empezando": "Getting Started",
+                "cv-builder": "CV Builder",
+                "job-offers": "Job Offers",
+                "gamificacion": "Gamification",
+                "ai-features": "AI Features",
+                "troubleshooting": "Troubleshooting"
+            },
+            "faqs": {
+                "account-create": {
+                    "q": "How do I create my account?",
+                    "a": "You can create your account using your email and password, or log in with Google. Simply go to the home page and complete the registration form."
+                },
+                "profile-complete": {
+                    "q": "How do I complete my profile?",
+                    "a": "After registering, you will see an onboarding modal where you can complete your basic information (name, surname, gender, date of birth). You can also edit your profile from the Profile page at any time."
+                },
+                "password-change": {
+                    "q": "How do I change my password?",
+                    "a": "Currently, you can change your password from your Google account if you used OAuth, or by contacting support if you used email/password. We are working on a feature to change password directly from the app."
+                },
+                "cv-create": {
+                    "q": "How do I create my CV?",
+                    "a": "Go to 'My Professional Profile' in the sidebar. There you can add sections like Work Experience, Education, Certifications, Languages, Projects, and Volunteering. Each section has a '+' button to add new items."
+                },
+                "cv-export": {
+                    "q": "How do I export my CV?",
+                    "a": "When you are in the Job Offers section, you can select specific sections of your CV for each offer. Then, in the offer detail view, you will find a button to 'View Personalized CV' that allows you to download a PDF."
+                },
+                "cv-ai": {
+                    "q": "Can I use AI to improve my CV?",
+                    "a": "Yes! In each CV section (Experience, Education, etc.), when editing, you will see an 'Improve with AI' button that will help you improve descriptions, fix errors, and add relevant tags."
+                },
+                "ai-insights": {
+                    "q": "How do I use AI Insights?",
+                    "a": "On the CV Builder page, you will find an 'AI Analysis' button that analyzes your complete CV and gives you personalized recommendations. You can also chat with the AI assistant to ask specific questions about your CV."
+                },
+                "job-add": {
+                    "q": "How do I add a job offer?",
+                    "a": "Go to 'Job Openings' in the sidebar and click the '+' button in any Kanban column, or 'Add Offer' in the list view. Fill out the form with the offer details."
+                },
+                "job-status": {
+                    "q": "How do I change the status of an offer?",
+                    "a": "You can drag and drop offers between columns in the Kanban, or click on an offer to open it and change the status from the dropdown menu."
+                },
+                "interview-schedule": {
+                    "q": "How do I schedule an interview?",
+                    "a": "When you change an offer status to 'Interview', a modal will automatically open where you can schedule the interview with date, time, type, and location. You can also add interviews from the offer detail view."
+                },
+                "contact-add": {
+                    "q": "How do I add a contact?",
+                    "a": "When you change an offer status to 'Contacted', a modal will open to add contact information (name, email, role, contact channels). You can also manage contacts from the offer detail view."
+                },
+                "job-filter": {
+                    "q": "How do I filter my offers?",
+                    "a": "In the Job Openings view, you will find filters at the top to filter by status, job type, and salary range. You can also search by company name or position."
+                },
+                "xp-works": {
+                    "q": "How do points (XP) work?",
+                    "a": "You earn experience points (XP) by completing actions on the platform: adding sections to your CV, updating your profile, adding offers, scheduling interviews, etc. Each action has a different XP value."
+                },
+                "level-up": {
+                    "q": "How do I level up?",
+                    "a": "As you earn XP, you will level up automatically. Each level requires more XP than the previous one. You can see your progress in the Dashboard or on the sidebar."
+                },
+                "badges-what": {
+                    "q": "What are badges?",
+                    "a": "Badges are special achievements you unlock by completing certain actions or reaching milestones. For example, 'First CV' when completing your first section, or 'Expert Interviewer' when scheduling 10 interviews."
+                },
+                "badges-view": {
+                    "q": "Where do I see my badges?",
+                    "a": "You can view all your badges on the 'Achievements' page in the sidebar. There you will see the badges you have unlocked and the ones you can still get."
+                },
+                "ai-insights-what": {
+                    "q": "What is AI Insights?",
+                    "a": "AI Insights is a comprehensive analysis of your CV that uses artificial intelligence to give you personalized recommendations on how to improve your CV, which sections to strengthen, and what skills to highlight."
+                },
+                "ai-recommender": {
+                    "q": "How do I use AI Recommender?",
+                    "a": "In each CV section (Experience, Education, etc.), when editing, you will see an 'Improve with AI' button. This assistant will improve your descriptions, correct errors, and suggest improvements."
+                },
+                "login-issue": {
+                    "q": "I can't log in",
+                    "a": "Check that you are using the correct email. If you used Google OAuth, make sure you use the same Google account. If the problem persists, contact support."
+                },
+                "save-issue": {
+                    "q": "My changes are not saved",
+                    "a": "Make sure to click 'Save' after making changes. If the problem persists, check your internet connection and reload the page. If it still doesn't work, contact support."
+                },
+                "account-delete": {
+                    "q": "How do I delete my account?",
+                    "a": "Go to 'Privacy' in the sidebar, and then to the 'Delete Account' section. Read the warnings carefully and type 'DELETE' to confirm. This action is permanent and irreversible."
+                },
+                "data-export": {
+                    "q": "How do I export my data?",
+                    "a": "Go to 'Privacy' in the sidebar. There you will find buttons to export all your data in JSON or CSV format. This includes your profile, full CV, offers, interviews, and more."
+                },
+                "contact-support": {
+                    "q": "How do I contact support?",
+                    "a": "You can contact us via the support email found on the Privacy or Terms of Service page. You can also use the feedback form on this help page."
+                }
+            }
+        },
+        "privacySettings": {
+            "title": "Privacy Settings",
+            "subtitle": "Manage your personal data and privacy according to GDPR",
+            "exportData": {
+                "title": "Export your Data",
+                "description": "You can download all your personal data stored in JobQuest. The data includes your profile, complete CV, job offers, interviews, contacts, gamification data, and AI analysis.",
+                "jsonBtn": "Export as JSON",
+                "csvBtn": "Export as CSV",
+                "exporting": "Exporting...",
+                "note": "The JSON file contains all your data in a structured format. The CSV file contains a simplified version of tabular data.",
+                "success": "Data exported successfully in {format} format",
+                "error": "Error exporting data. Please try again."
+            },
+            "deleteAccount": {
+                "title": "Delete Account",
+                "description": "You can permanently delete your account and all associated data. This action cannot be undone.",
+                "warningTitle": "⚠️ Warning: This action is permanent",
+                "warningList": {
+                    "profile": "Your profile and all personal information will be deleted",
+                    "cv": "Your complete CV (experience, education, etc.) will be deleted",
+                    "offers": "All your job offers and applications will be deleted",
+                    "interviews": "All your scheduled interviews will be deleted",
+                    "contacts": "All your contacts and notes will be deleted",
+                    "gamification": "Your gamification data (XP, badges, etc.) will be deleted",
+                    "ai": "Your saved AI analyses will be deleted",
+                    "files": "All uploaded files (photos, images) will be deleted",
+                    "irreversible": "You will not be able to recover this information afterwards"
+                },
+                "deleteBtn": "Delete my Account",
+                "modalTitle": "Confirm Account Deletion",
+                "modalDescription": "This action will permanently delete your account and all your data. This action <strong>CANNOT be undone</strong>.",
+                "modalConfirm": "To confirm, type <strong>\"ELIMINAR\"</strong> in the field below:",
+                "placeholder": "Type ELIMINAR to confirm",
+                "cancel": "Cancel",
+                "confirmBtn": "Permanently Delete",
+                "deleting": "Deleting...",
+                "errorMatch": "You must type \"ELIMINAR\" to confirm",
+                "success": "Account deleted successfully. You will be redirected...",
+                "error": "Error deleting account. Please try again."
+            },
+            "legalLinks": {
+                "text": "For more information, consult our",
+                "privacy": "Privacy Policy",
+                "terms": "Terms of Service"
+            }
+        },
+        "privacyPolicy": {
+            "title": "Privacy Policy",
+            "lastUpdated": "Last updated: {date}",
+            "sections": [
+                {
+                    "title": "1. Information We Collect",
+                    "content": "We collect information you provide directly to us when you use JobQuest, including:",
+                    "list": [
+                        "Account information (name, email, profile picture)",
+                        "CV data (experience, education, certifications, etc.)",
+                        "Information about job offers you manage",
+                        "Gamification data (XP, levels, badges)"
+                    ]
+                },
+                {
+                    "title": "2. How We Use Your Information",
+                    "content": "We use the collected information to:",
+                    "list": [
+                        "Provide and improve our services",
+                        "Personalize your experience on the platform",
+                        "Process your requests and manage your account",
+                        "Send service-related notifications",
+                        "Analyze platform usage for improvements"
+                    ]
+                },
+                {
+                    "title": "3. Sharing Information",
+                    "content": "We do not sell, rent, or share your personal information with third parties, except in the following circumstances:",
+                    "list": [
+                        "With service providers who help us operate (Supabase, Vercel)",
+                        "When required by law or to protect our rights",
+                        "With your explicit consent"
+                    ]
+                },
+                {
+                    "title": "4. Data Security",
+                    "content": "We implement technical and organizational security measures to protect your personal information, including:",
+                    "list": [
+                        "Data encryption in transit (HTTPS)",
+                        "Secure authentication via OAuth",
+                        "Row Level Security (RLS) in the database",
+                        "Input validation and sanitization"
+                    ]
+                },
+                {
+                    "title": "5. Your Rights (GDPR)",
+                    "content": "You have the right to:",
+                    "list": [
+                        "Access your personal data",
+                        "Rectify inaccurate data",
+                        "Request deletion of your data",
+                        "Object to the processing of your data",
+                        "Export your data in a structured format"
+                    ],
+                    "footer": "To exercise these rights, you can contact us through the platform or delete your account from the profile settings."
+                },
+                {
+                    "title": "6. Cookies and Similar Technologies",
+                    "content": "We use cookies and similar technologies to:",
+                    "list": [
+                        "Keep your session active",
+                        "Remember your preferences",
+                        "Protect against CSRF attacks"
+                    ],
+                    "footer": "You can manage cookie preferences from your browser settings."
+                },
+                {
+                    "title": "7. Data Retention",
+                    "content": "We retain your personal information while your account is active or as needed to provide our services. You can request deletion of your account at any time."
+                },
+                {
+                    "title": "8. Changes to this Policy",
+                    "content": "We may update this Privacy Policy occasionally. We will notify you of significant changes through a notification on the platform or by email."
+                },
+                {
+                    "title": "9. Contact",
+                    "content": "If you have questions about this Privacy Policy, you can contact us through the platform."
+                }
+            ]
+        },
+        "terms": {
+            "title": "Terms of Service",
+            "lastUpdated": "Last updated: {date}",
+            "sections": [
+                {
+                    "title": "1. Acceptance of Terms",
+                    "content": "By accessing and using JobQuest, you agree to comply with these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you should not use our service."
+                },
+                {
+                    "title": "2. Service Description",
+                    "content": "JobQuest is a web platform that helps users manage their job search through CV building tools, job offer tracking, and gamification elements."
+                },
+                {
+                    "title": "3. User Account",
+                    "content": "To use JobQuest, you must create an account using Google authentication. You are responsible for maintaining the confidentiality of your account and for all activities that occur under your account."
+                },
+                {
+                    "title": "4. Acceptable Use",
+                    "content": "You agree to use JobQuest only for lawful purposes and in a way that does not infringe on the rights of third parties. You must not:",
+                    "list": [
+                        "Attempt to access other users' accounts",
+                        "Use the service for illegal activities",
+                        "Interfere with the operation of the service",
+                        "Attempt to access restricted areas of the system"
+                    ]
+                },
+                {
+                    "title": "5. Intellectual Property",
+                    "content": "All content on JobQuest, including but not limited to text, graphics, logos, icons, images, and software, is the property of JobQuest and is protected by intellectual property laws."
+                },
+                {
+                    "title": "6. Privacy",
+                    "content": "Your privacy is important to us. Please review our <link>Privacy Policy</link> to understand how we collect, use, and protect your information."
+                },
+                {
+                    "title": "7. Limitation of Liability",
+                    "content": "JobQuest is provided \"as is\" without guarantees of any kind. We do not guarantee that the service will be error-free, uninterrupted, or defect-free. We will not be liable for any indirect, incidental, or consequential damages."
+                },
+                {
+                    "title": "8. Modifications to the Service",
+                    "content": "We reserve the right to modify, suspend, or discontinue any aspect of the service at any time without prior notice."
+                },
+                {
+                    "title": "9. Contact",
+                    "content": "If you have questions about these Terms of Service, you can contact us through the platform."
+                }
+            ]
+        },
+        "sections": {
+            "experience": {
+                "title": "Work Experience",
+                "description": "Detail your career path, internships, and previous positions.",
+                "empty": "No work experience added. Click + to add one."
+            },
+            "education": {
+                "title": "Education",
+                "description": "Add your academic degrees, courses, and complementary training.",
+                "empty": "No education added. Click + to add one."
+            },
+            "certifications": {
+                "title": "Certifications",
+                "description": "Showcase your licenses, diplomas, and official accreditations.",
+                "empty": "No certifications added. Click + to add one."
+            },
+            "languages": {
+                "title": "Languages",
+                "description": "Indicate the languages you speak and your proficiency level.",
+                "empty": "No languages added. Click + to add one."
+            },
+            "projects": {
+                "title": "Projects",
+                "description": "Portfolio, freelance work, blogs, and other extracurricular achievements.",
+                "empty": "No projects added. Click + to add one."
+            },
+            "volunteering": {
+                "title": "Volunteering",
+                "description": "Add volunteering experiences, charitable causes, and social work.",
+                "empty": "No volunteering added. Click + to add one."
+            }
+        },
+        "aiInsights": {
+            "title": "AI Profile Analysis",
+            "poweredBy": "Powered by JobQuest AI",
+            "analyzing": "Analyzing your profile...",
+            "analyzingDesc": "This may take a few seconds",
+            "error": "Could not generate analysis",
+            "errorDesc": "Please check that GEMINI_API_KEY is configured correctly in your .env.local file",
+            "retry": "Try again",
+            "initialReport": "Initial Report",
+            "savedAnalysis": "Saved analysis",
+            "chatTitle": "Chat with Assistant",
+            "chatPlaceholder": "Ask a question about your profile...",
+            "disclaimer": "AI may make mistakes. Verify important information.",
+            "errorChat": "Error processing your question. Please try again.",
+            "errorGen": "Error generating analysis. Please try again."
+        },
+        "forms": {
+            "common": {
+                "startDate": "Start Date",
+                "endDate": "End Date",
+                "current": "Current",
+                "description": "Description",
+                "skills": "Skills / Tags",
+                "skillsHint": "Add keywords that highlight your competencies.",
+                "skillsPlaceholder": "Type and press Enter...",
+                "cancel": "Cancel",
+                "save": "Save",
+                "saving": "Saving...",
+                "required": "*",
+                "ongoing": "Ongoing"
+            },
+            "experience": {
+                "titleNew": "Add Work Experience",
+                "titleEdit": "Edit Work Experience",
+                "subtitle": "Add your professional experience",
+                "company": "Company Name",
+                "position": "Position",
+                "currentJob": "Current Job",
+                "placeholderCompany": "Ex. Tech Solutions Inc.",
+                "placeholderPosition": "Ex. Senior Product Designer",
+                "placeholderDescription": "Describe your responsibilities, main achievements and tools used...",
+                "saveBtn": "Save Experience",
+                "toastSuccessUpdate": "Experience updated successfully",
+                "toastSuccessAdd": "Experience added successfully",
+                "toastErrorSave": "Error saving experience",
+                "toastErrorAI": "Error improving with AI. Try again."
+            },
+            "education": {
+                "titleNew": "Add Education",
+                "titleEdit": "Edit Education",
+                "subtitle": "Add or edit your academic background",
+                "institution": "Institution / Organization",
+                "title": "Degree or Certificate",
+                "ongoing": "Ongoing",
+                "notes": "Additional Notes",
+                "placeholderInstitution": "Ex. Polytechnic University",
+                "placeholderTitle": "Ex. Bachelor in Multimedia Design",
+                "saveBtn": "Save Education",
+                "improvedNotes": "Improved notes:",
+                "toastSuccessUpdate": "Education updated successfully",
+                "toastSuccessAdd": "Education added successfully",
+                "toastErrorSave": "Error saving education",
+                "toastErrorAI": "Error improving with AI. Try again."
+            },
+            "certification": {
+                "titleNew": "Add Certification",
+                "titleEdit": "Edit Certification",
+                "subtitle": "Add or edit your certification",
+                "issuer": "Issuing Organization",
+                "name": "Certification Name",
+                "saveBtn": "Save Certification",
+                "toastSuccessUpdate": "Certification updated successfully",
+                "toastSuccessAdd": "Certification added successfully",
+                "toastErrorSave": "Error saving certification",
+                "toastErrorAI": "Error improving with AI. Try again."
+            },
+            "language": {
+                "titleNew": "Add Language",
+                "titleEdit": "Edit Language",
+                "subtitle": "Add or edit a language",
+                "language": "Language",
+                "level": "Level",
+                "certification": "Certification (optional)",
+                "noCertification": "No certification",
+                "placeholderLanguage": "Ex. English, Spanish, French...",
+                "placeholderLevel": "Ex. Native, C1, B2, Intermediate...",
+                "saveBtn": "Save Language",
+                "toastSuccessUpdate": "Language updated successfully",
+                "toastSuccessAdd": "Language added successfully",
+                "toastErrorSave": "Error saving language"
+            },
+            "project": {
+                "titleNew": "Add Personal Project",
+                "titleEdit": "Edit Personal Project",
+                "subtitle": "Add or edit your personal project",
+                "name": "Name",
+                "links": "Links",
+                "linksPlaceholder": "Type a URL and press Enter...",
+                "saveBtn": "Save Project",
+                "toastSuccessUpdate": "Project updated successfully",
+                "toastSuccessAdd": "Project added successfully",
+                "toastErrorSave": "Error saving project",
+                "toastErrorAI": "Error improving with AI. Try again."
+            },
+            "volunteering": {
+                "titleNew": "Add Volunteering",
+                "titleEdit": "Edit Volunteering",
+                "subtitle": "Add or edit your volunteering experience",
+                "organization": "Organization",
+                "title": "Role / Title",
+                "saveBtn": "Save Volunteering",
+                "toastSuccessUpdate": "Volunteering updated successfully",
+                "toastSuccessAdd": "Volunteering added successfully",
+                "toastErrorSave": "Error saving volunteering",
+                "toastErrorAI": "Error improving with AI. Try again."
+            },
+            "ai": {
+                "improve": "Improve with AI",
+                "improving": "Improving...",
+                "suggestionsTitle": "AI Suggestions",
+                "improvedDesc": "Improved Description:",
+                "suggestedTags": "Suggested Tags:",
+                "accept": "Accept Changes",
+                "reject": "Reject",
+                "toastErrorDesc": "Write a description first to improve it with AI",
+                "toastSuccess": "Improvements generated with AI. Review and accept or reject changes.",
+                "toastApply": "Improvements applied successfully",
+                "toastFail": "Could not generate improvements. Try again."
+            }
+        }
+    },
+    "interviews": {
+        "title": "Schedule Interview",
+        "month": "Month",
+        "week": "Week",
+        "time": "Time",
+        "form": {
+            "title": "Title *",
+            "titlePlaceholder": "Ex. Senior UX Designer Google Interview",
+            "type": "Interview Type",
+            "types": {
+                "phone": "Phone",
+                "video": "Video Call",
+                "inPerson": "In Person",
+                "other": "Other"
+            },
+            "location": "Location / Link",
+            "locationPlaceholder": "Ex. Zoom, Google Meet, Office...",
+            "notes": "Notes",
+            "notesPlaceholder": "Additional notes...",
+            "skip": "Skip",
+            "schedule": "Schedule Interview",
+            "saving": "Saving..."
+        },
+        "toasts": {
+            "titleRequired": "Title is required",
+            "success": "Interview scheduled successfully",
+            "error": "Error scheduling interview"
+        }
+    },
+    "gamification": {
+        "errorLoading": "Error loading progress",
+        "tabs": {
+            "levels": "Career Levels",
+            "badges": "Achievements & Badges"
+        },
+        "levels": {
+            "title": "Career Levels",
+            "subtitle": "Unlock benefits by advancing your job search.",
+            "totalXP": "Total XP"
+        },
+        "badges": {
+            "title": "Achievements & Badges",
+            "subtitle": "Collect badges by completing missions and improving your profile.",
+            "earned": "Earned",
+            "locked": "Locked"
+        },
+        "sidebar": {
+            "level": "Level {level}",
+            "levelTooltip": "Level {level} - {xp} XP",
+            "progress": "Progress: {percent}% to Level {nextLevel}. Need {needed} XP more.",
+            "maxLevel": "You have reached the maximum level! {xp} total XP."
+        },
+        "card": {
+            "currentLevel": "Current Level",
+            "maxLevel": "Max Level",
+            "targetXP": "{xp} XP Goal",
+            "unlocked": "Unlocked",
+            "locked": "Locked",
+            "earned": "Earned",
+            "progress": "Progress"
+        },
+        "notifications": {
+            "badgeEarned": "New Achievement",
+            "badgeUnlocked": "You've unlocked the badge",
+            "viewBadges": "View my badges",
+            "congrats": "Congratulations!",
+            "levelUp": "Level Up",
+            "levelReached": "You have reached",
+            "dedication": "Your dedication is paying off.",
+            "totalXP": "Total XP",
+            "viewDetails": "View details",
+            "close": "Close"
+        }
+    },
+    "PWA": {
+        "installTitle": "Install JobQuest",
+        "installSubtitle": "Quick access from your home screen",
+        "notNow": "Not now",
+        "install": "Install",
+        "iosInstructionsTitle": "To install JobQuest on your iPhone:",
+        "iosStep1": "Tap the <bold>Share</bold> button at the bottom",
+        "iosStep2": "Select <bold>\"Add to Home Screen\"</bold>",
+        "iosStep3": "Tap <bold>\"Add\"</bold> to confirm",
+        "gotIt": "Got it",
+        "installing": "Installing JobQuest...",
+        "success": "JobQuest installed successfully!",
+        "close": "Close"
+    },
+    "contacts": {
+        "titleAdd": "Add Contact Person",
+        "titleEdit": "Edit Contact",
+        "labels": {
+            "name": "Name *",
+            "email": "Email",
+            "role": "Role",
+            "channels": "Contact Channels",
+            "notes": "Notes",
+            "addChannel": "Add Channel",
+            "noChannels": "No contact channels added"
+        },
+        "placeholders": {
+            "name": "Ex. John Doe",
+            "email": "example@company.com",
+            "role": "Ex. Recruiter, HR Manager...",
+            "notes": "Additional notes about this contact...",
+            "channelValue": "Channel value"
+        },
+        "channelTypes": {
+            "email": "Email",
+            "linkedin": "LinkedIn",
+            "phone": "Phone",
+            "whatsapp": "WhatsApp",
+            "other": "Other"
+        },
+        "buttons": {
+            "cancel": "Cancel",
+            "save": "Add Contact",
+            "update": "Update",
+            "saving": "Saving..."
+        },
+        "toasts": {
+            "nameRequired": "Name is required",
+            "successAdd": "Contact added successfully",
+            "successUpdate": "Contact updated successfully",
+            "errorSave": "Error saving contact"
+        }
+    },
+    "mobile": {
+        "openMenu": "Open menu",
+        "closeMenu": "Close menu"
+    }
+}

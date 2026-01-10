@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getBadge } from "@/config/gamification/badges";
+import { useTranslations } from "next-intl";
 
 interface BadgeEarnedNotificationProps {
   badgeId: string;
@@ -18,6 +19,7 @@ export default function BadgeEarnedNotification({
   const [isVisible, setIsVisible] = useState(false);
   const router = useRouter();
   const badge = getBadge(badgeId);
+  const t = useTranslations('gamification.notifications');
 
   useEffect(() => {
     // Trigger animation on mount
@@ -33,9 +35,8 @@ export default function BadgeEarnedNotification({
 
   return (
     <div
-      className={`fixed bottom-6 right-6 z-[9998] w-full max-w-[420px] transition-all duration-500 transform translate-y-0 opacity-100 hover:-translate-y-1 ${
-        isVisible ? "" : "hidden"
-      }`}
+      className={`fixed bottom-6 right-6 z-[9998] w-full max-w-[420px] transition-all duration-500 transform translate-y-0 opacity-100 hover:-translate-y-1 ${isVisible ? "" : "hidden"
+        }`}
     >
       <div className="relative flex flex-col bg-white dark:bg-[#2d1b22] rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] overflow-hidden border border-primary/20 dark:border-gray-700">
         {/* Progress / Status Bar at top */}
@@ -53,7 +54,7 @@ export default function BadgeEarnedNotification({
               >
                 star
               </span>
-              Nuevo Logro
+              {t('badgeEarned')}
             </div>
             <button
               onClick={onClose}
@@ -90,7 +91,7 @@ export default function BadgeEarnedNotification({
             {/* Text Content */}
             <div className="flex flex-col gap-1">
               <h3 className="text-lg font-bold text-slate-900 dark:text-white leading-tight">
-                ¡Has desbloqueado el badge{" "}
+                {t('badgeUnlocked')}{" "}
                 <span className="text-primary">{badge.name}</span>!
               </h3>
               <p className="text-sm text-gray-600 dark:text-gray-300 leading-normal">
@@ -111,7 +112,7 @@ export default function BadgeEarnedNotification({
               onClick={handleViewBadges}
               className="group flex items-center gap-2 bg-primary hover:bg-pink-600 text-white text-sm font-medium px-4 py-2 rounded-xl transition-all shadow-md shadow-primary/30 ml-auto"
             >
-              Ver mis badges
+              {t('viewBadges')}
               <span className="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1">
                 arrow_forward
               </span>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { CVCertification } from "@/types/cv";
 import CertificationModal from "./modals/CertificationModal";
+import { useTranslations } from "next-intl";
 
 interface CertificationsSectionProps {
   certifications: CVCertification[];
@@ -15,6 +16,8 @@ export default function CertificationsSection({
   onAdd,
   onUpdate,
 }: CertificationsSectionProps) {
+  const t = useTranslations('CVBuilder.sections.certifications');
+  const tCommon = useTranslations('CVBuilder.common');
   const [editingId, setEditingId] = useState<string | null>(null);
 
   // Asegurar que certifications sea siempre un array
@@ -28,7 +31,7 @@ export default function CertificationsSection({
             <div className="size-10 rounded-xl bg-green-50 flex items-center justify-center text-green-600">
               <span className="material-symbols-outlined">verified</span>
             </div>
-            <h3 className="text-lg font-bold text-slate-900">Certificaciones</h3>
+            <h3 className="text-lg font-bold text-slate-900">{t('title')}</h3>
           </div>
           <button
             onClick={onAdd}
@@ -40,7 +43,7 @@ export default function CertificationsSection({
         <ul className="space-y-3">
           {safeCertifications.length === 0 ? (
             <li className="text-sm text-gray-400 text-center py-4">
-              No hay certificaciones. Haz clic en el botón + para agregar una.
+              {t('empty')}
             </li>
           ) : (
             safeCertifications.map((cert) => (
@@ -58,7 +61,7 @@ export default function CertificationsSection({
                   onClick={() => setEditingId(cert.id)}
                   className="text-xs text-primary hover:underline"
                 >
-                  Editar
+                  {tCommon('edit')}
                 </button>
               </li>
             ))

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getLevelByOrder } from "@/config/gamification/levels";
+import { useTranslations } from "next-intl";
 
 interface LevelUpNotificationProps {
   newLevel: number;
@@ -20,6 +21,8 @@ export default function LevelUpNotification({
   const [isVisible, setIsVisible] = useState(false);
   const router = useRouter();
   const level = getLevelByOrder(newLevel);
+  const t = useTranslations('gamification.notifications');
+  const tSidebar = useTranslations('gamification.sidebar');
 
   useEffect(() => {
     // Trigger animation on mount
@@ -35,9 +38,8 @@ export default function LevelUpNotification({
 
   return (
     <div
-      className={`fixed top-24 right-4 z-[9998] w-full max-w-[380px] sm:right-8 animate-[slideIn_0.5s_ease-out_forwards] ${
-        isVisible ? "" : "hidden"
-      }`}
+      className={`fixed top-24 right-4 z-[9998] w-full max-w-[380px] sm:right-8 animate-[slideIn_0.5s_ease-out_forwards] ${isVisible ? "" : "hidden"
+        }`}
     >
       <div className="relative overflow-hidden rounded-2xl bg-white p-6 shadow-[0_10px_40px_-5px_rgba(240,66,124,0.25)] ring-1 ring-black/5 dark:bg-[#2d151d] dark:ring-white/10">
         {/* Confetti / Decoration Layer */}
@@ -67,10 +69,10 @@ export default function LevelUpNotification({
               </div>
               <div className="flex flex-col">
                 <h4 className="text-lg font-bold leading-tight text-slate-900 dark:text-white">
-                  ¡Felicidades!
+                  {t('congrats')}
                 </h4>
                 <p className="text-xs font-medium uppercase tracking-wider text-primary">
-                  Subiste de nivel
+                  {t('levelUp')}
                 </p>
               </div>
             </div>
@@ -85,18 +87,18 @@ export default function LevelUpNotification({
           {/* Body */}
           <div className="rounded-xl bg-background-light p-4 dark:bg-black/20">
             <p className="mb-3 text-sm text-slate-900 dark:text-gray-200">
-              Has alcanzado el{" "}
+              {t('levelReached')}{" "}
               <span className="font-bold text-primary">
-                Nivel {level.order}: {level.name}
+                {tSidebar('level', { level: level.order })}: {level.name}
               </span>
-              . Tu dedicación está dando frutos.
+              . {t('dedication')}
             </p>
 
             {/* Progress Section */}
             <div className="flex flex-col gap-1.5">
               <div className="flex items-center justify-between text-xs font-medium">
                 <span className="text-slate-900 dark:text-white">
-                  {currentXp.toLocaleString()} XP Totales
+                  {currentXp.toLocaleString()} {t('totalXP')}
                 </span>
                 <span className="text-primary">+{xpGained} XP</span>
               </div>
@@ -115,14 +117,14 @@ export default function LevelUpNotification({
               onClick={handleViewDetails}
               className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-primary/25 transition-transform hover:scale-[1.02] active:scale-[0.98]"
             >
-              <span>Ver detalles</span>
+              <span>{t('viewDetails')}</span>
               <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
             </button>
             <button
               onClick={onClose}
               className="flex items-center justify-center rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 transition-colors hover:bg-gray-50 dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
             >
-              Cerrar
+              {t('close')}
             </button>
           </div>
         </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 interface OnboardingData {
   firstName: string;
@@ -21,6 +22,7 @@ export default function OnboardingModal() {
     birthDate: "",
     headline: "",
   });
+  const t = useTranslations('CVBuilder');
 
   useEffect(() => {
     async function checkOnboarding() {
@@ -71,7 +73,7 @@ export default function OnboardingModal() {
       } else {
         const errorData = await response.json().catch(() => ({}));
         console.error("Error updating profile:", errorData.error || "Unknown error");
-        alert("Error al actualizar el perfil. Por favor, intenta de nuevo.");
+        alert(t('onboarding.updateError'));
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -86,10 +88,10 @@ export default function OnboardingModal() {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
       <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
         <h2 className="mb-4 text-2xl font-bold text-slate-900">
-          Completa tu perfil
+          {t('onboarding.title')}
         </h2>
         <p className="mb-6 text-sm text-slate-600">
-          Necesitamos algunos datos básicos para personalizar tu experiencia.
+          {t('onboarding.subtitle')}
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -98,7 +100,7 @@ export default function OnboardingModal() {
               htmlFor="firstName"
               className="block text-sm font-medium text-slate-700 mb-1"
             >
-              Nombre *
+              {t('profile.firstName')}
             </label>
             <input
               id="firstName"
@@ -117,7 +119,7 @@ export default function OnboardingModal() {
               htmlFor="lastName"
               className="block text-sm font-medium text-slate-700 mb-1"
             >
-              Apellidos *
+              {t('profile.lastName')}
             </label>
             <input
               id="lastName"
@@ -136,7 +138,7 @@ export default function OnboardingModal() {
               htmlFor="gender"
               className="block text-sm font-medium text-slate-700 mb-1"
             >
-              Género *
+              {t('profile.gender')} *
             </label>
             <select
               id="gender"
@@ -147,11 +149,11 @@ export default function OnboardingModal() {
               }
               className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
             >
-              <option value="">Selecciona...</option>
-              <option value="male">Masculino</option>
-              <option value="female">Femenino</option>
-              <option value="other">Otro</option>
-              <option value="prefer_not_to_say">Prefiero no decir</option>
+              <option value="">{t('profile.select')}</option>
+              <option value="male">{t('profile.male')}</option>
+              <option value="female">{t('profile.female')}</option>
+              <option value="other">{t('profile.other')}</option>
+              <option value="prefer_not_to_say">{t('profile.preferNotToSay')}</option>
             </select>
           </div>
 
@@ -160,7 +162,7 @@ export default function OnboardingModal() {
               htmlFor="birthDate"
               className="block text-sm font-medium text-slate-700 mb-1"
             >
-              Fecha de nacimiento *
+              {t('profile.birthDate')} *
             </label>
             <input
               id="birthDate"
@@ -179,7 +181,7 @@ export default function OnboardingModal() {
               htmlFor="headline"
               className="block text-sm font-medium text-slate-700 mb-1"
             >
-              Título (opcional)
+              {t('onboarding.headlineOptional')}
             </label>
             <input
               id="headline"
@@ -188,7 +190,7 @@ export default function OnboardingModal() {
               onChange={(e) =>
                 setFormData({ ...formData, headline: e.target.value })
               }
-              placeholder="Ej: Desarrollador Full Stack"
+              placeholder={t('profile.headlinePlaceholder')}
               className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-500 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
           </div>
@@ -199,7 +201,7 @@ export default function OnboardingModal() {
               disabled={submitting}
               className="flex-1 rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-primary-hover disabled:opacity-50"
             >
-              {submitting ? "Guardando..." : "Continuar"}
+              {submitting ? t('profile.saving') : t('onboarding.continue')}
             </button>
           </div>
         </form>

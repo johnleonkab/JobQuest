@@ -5,6 +5,7 @@ import type { CVExperience } from "@/types/cv";
 import { useToast } from "@/contexts/ToastContext";
 import { useAISectionImprover } from "@/hooks/useAISectionImprover";
 import { useGamification } from "@/hooks/useGamification";
+import { useTranslations } from "next-intl";
 
 interface ExperienceModalProps {
   experienceId?: string;
@@ -21,6 +22,9 @@ export default function ExperienceModal({
   const { showToast } = useToast();
   const { improveSection, loading: aiLoading } = useAISectionImprover();
   const { recordEvent } = useGamification();
+  const tForm = useTranslations('CVBuilder.forms.experience');
+  const tCommon = useTranslations('CVBuilder.forms.common');
+  const tAI = useTranslations('CVBuilder.forms.ai');
   const [showAISuggestions, setShowAISuggestions] = useState(false);
   const [aiSuggestions, setAISuggestions] = useState<{
     description: string;
@@ -71,18 +75,18 @@ export default function ExperienceModal({
     try {
       const url = "/api/cv/experience";
       const method = experienceId ? "PUT" : "POST";
-      
+
       // Preparar el body, asegurando que end_date sea null si is_current es true
       const body = experienceId
-        ? { 
-            id: experienceId, 
-            ...formData,
-            end_date: formData.is_current ? null : formData.end_date || null,
-          }
+        ? {
+          id: experienceId,
+          ...formData,
+          end_date: formData.is_current ? null : formData.end_date || null,
+        }
         : {
-            ...formData,
-            end_date: formData.is_current ? null : formData.end_date || null,
-          };
+          ...formData,
+          end_date: formData.is_current ? null : formData.end_date || null,
+        };
 
       const response = await fetch(url, {
         method,
@@ -98,14 +102,14 @@ export default function ExperienceModal({
       showToast({
         type: "success",
         message: experienceId
-          ? "Experiencia actualizada correctamente"
-          : "Experiencia agregada correctamente",
+          ? tForm('toastSuccessUpdate')
+          : tForm('toastSuccessAdd'),
       });
 
       onSuccess();
     } catch (error) {
       console.error("Error saving experience:", error);
-      const errorMessage = error instanceof Error ? error.message : "Error al guardar la experiencia";
+      const errorMessage = error instanceof Error ? error.message : tForm('toastErrorSave');
       showToast({
         type: "error",
         message: errorMessage,
@@ -137,7 +141,7 @@ export default function ExperienceModal({
     if (!formData.description || formData.description.trim().length === 0) {
       showToast({
         type: "error",
-        message: "Escribe una descripción primero para poder mejorarla con IA",
+        message: tAI('toastErrorDesc'),
       });
       return;
     }
@@ -163,19 +167,19 @@ export default function ExperienceModal({
         setShowAISuggestions(true);
         showToast({
           type: "success",
-          message: "Mejoras generadas con IA. Revisa y acepta o rechaza los cambios.",
+          message: tAI('toastSuccess'),
         });
       } else {
         showToast({
           type: "error",
-          message: "No se pudieron generar mejoras. Intenta de nuevo.",
+          message: tAI('toastFail'),
         });
       }
     } catch (error) {
       console.error("Error improving with AI:", error);
       showToast({
         type: "error",
-        message: "Error al mejorar con IA. Intenta de nuevo.",
+        message: tForm('toastErrorAI'),
       });
     }
   };
@@ -189,13 +193,13 @@ export default function ExperienceModal({
       });
       setShowAISuggestions(false);
       setAISuggestions(null);
-      
+
       // Record gamification event
       await recordEvent("ai.section_improved");
-      
+
       showToast({
         type: "success",
-        message: "Mejoras aplicadas correctamente",
+        message: tAI('toastApply'),
       });
     }
   };
@@ -207,7 +211,7 @@ export default function ExperienceModal({
 
   // El botón está disponible si hay datos básicos rellenos (empresa y puesto)
   // y hay alguna descripción (aunque sea corta, la IA puede mejorarla)
-  const canImproveWithAI = 
+  const canImproveWithAI =
     (formData.company_name.trim().length > 0 && formData.position.trim().length > 0) &&
     (formData.description && formData.description.trim().length > 0);
 
@@ -227,10 +231,10 @@ export default function ExperienceModal({
               </div>
               <div>
                 <h3 className="text-lg font-bold text-slate-900 leading-tight">
-                  Experiencia Laboral
+                  {experienceId ? tForm('titleEdit') : tForm('titleNew')}
                 </h3>
                 <p className="text-xs text-gray-500">
-                  {experienceId ? "Edita" : "Añade"} tu experiencia profesional
+                  {tForm('subtitle')}
                 </p>
               </div>
             </div>
@@ -248,7 +252,7 @@ export default function ExperienceModal({
                   className="block text-sm font-semibold text-gray-700 mb-1.5"
                   htmlFor="company"
                 >
-                  Nombre de la empresa *
+                  {tForm('company')} {tCommon('required')}
                 </label>
                 <input
                   id="company"
@@ -258,7 +262,7 @@ export default function ExperienceModal({
                     setFormData({ ...formData, company_name: e.target.value })
                   }
                   className="block w-full rounded-xl border-gray-200 bg-gray-50 text-gray-900 focus:border-primary focus:ring-primary shadow-sm sm:text-sm py-3 px-4 transition-all"
-                  placeholder="Ej. Tech Solutions Inc."
+                  placeholder={tForm('placeholderCompany')}
                 />
               </div>
               <div>
@@ -266,7 +270,7 @@ export default function ExperienceModal({
                   className="block text-sm font-semibold text-gray-700 mb-1.5"
                   htmlFor="position"
                 >
-                  Puesto *
+                  {tForm('position')} {tCommon('required')}
                 </label>
                 <input
                   id="position"
@@ -276,7 +280,7 @@ export default function ExperienceModal({
                     setFormData({ ...formData, position: e.target.value })
                   }
                   className="block w-full rounded-xl border-gray-200 bg-gray-50 text-gray-900 focus:border-primary focus:ring-primary shadow-sm sm:text-sm py-3 px-4 transition-all"
-                  placeholder="Ej. Senior Product Designer"
+                  placeholder={tForm('placeholderPosition')}
                 />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -285,7 +289,7 @@ export default function ExperienceModal({
                     className="block text-sm font-semibold text-gray-700 mb-1.5"
                     htmlFor="start-date"
                   >
-                    Fecha de inicio *
+                    {tCommon('startDate')} {tCommon('required')}
                   </label>
                   <input
                     id="start-date"
@@ -304,7 +308,7 @@ export default function ExperienceModal({
                       className="block text-sm font-semibold text-gray-700"
                       htmlFor="end-date"
                     >
-                      Fecha de final
+                      {tCommon('endDate')}
                     </label>
                     <div className="flex items-center gap-2">
                       <input
@@ -320,7 +324,7 @@ export default function ExperienceModal({
                         htmlFor="current-job"
                         className="text-xs text-gray-500 font-medium cursor-pointer"
                       >
-                        Ocupación actual
+                        {tForm('currentJob')}
                       </label>
                     </div>
                   </div>
@@ -342,7 +346,7 @@ export default function ExperienceModal({
                     className="block text-sm font-semibold text-gray-700"
                     htmlFor="description"
                   >
-                    Descripción
+                    {tCommon('description')}
                   </label>
                   {canImproveWithAI && (
                     <button
@@ -354,7 +358,7 @@ export default function ExperienceModal({
                       <span className="material-symbols-outlined text-[16px]">
                         {aiLoading ? "hourglass_empty" : "auto_awesome"}
                       </span>
-                      {aiLoading ? "Mejorando..." : "Mejorar con IA"}
+                      {aiLoading ? tAI('improving') : tAI('improve')}
                     </button>
                   )}
                 </div>
@@ -366,7 +370,7 @@ export default function ExperienceModal({
                           auto_awesome
                         </span>
                         <span className="text-xs font-semibold text-purple-700">
-                          Sugerencias de IA
+                          {tAI('suggestionsTitle')}
                         </span>
                       </div>
                       <button
@@ -380,7 +384,7 @@ export default function ExperienceModal({
                     <div className="space-y-2">
                       <div>
                         <p className="text-xs font-medium text-purple-700 mb-1">
-                          Descripción mejorada:
+                          {tAI('improvedDesc')}
                         </p>
                         <p className="text-xs text-gray-700 bg-white p-2 rounded border border-purple-100">
                           {aiSuggestions.description}
@@ -389,7 +393,7 @@ export default function ExperienceModal({
                       {aiSuggestions.tags.length > 0 && (
                         <div>
                           <p className="text-xs font-medium text-purple-700 mb-1">
-                            Tags sugeridos:
+                            {tAI('suggestedTags')}
                           </p>
                           <div className="flex flex-wrap gap-1.5">
                             {aiSuggestions.tags.map((tag, idx) => (
@@ -410,14 +414,14 @@ export default function ExperienceModal({
                         onClick={handleAcceptAISuggestions}
                         className="flex-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-purple-600 hover:bg-purple-700 text-white transition-colors"
                       >
-                        Aceptar cambios
+                        {tAI('accept')}
                       </button>
                       <button
                         type="button"
                         onClick={handleRejectAISuggestions}
                         className="px-3 py-1.5 rounded-lg text-xs font-semibold text-purple-600 hover:bg-purple-100 transition-colors"
                       >
-                        Rechazar
+                        {tAI('reject')}
                       </button>
                     </div>
                   </div>
@@ -429,13 +433,13 @@ export default function ExperienceModal({
                     setFormData({ ...formData, description: e.target.value })
                   }
                   className="block w-full rounded-xl border-gray-200 bg-gray-50 text-gray-900 focus:border-primary focus:ring-primary shadow-sm sm:text-sm py-3 px-4 transition-all resize-none"
-                  placeholder="Describe tus responsabilidades, logros principales y herramientas utilizadas..."
+                  placeholder={tForm('placeholderDescription')}
                   rows={3}
                 />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                  Hitos (tags)
+                  {tCommon('skills')}
                 </label>
                 <div className="w-full rounded-xl border border-gray-200 bg-gray-50 p-2 focus-within:ring-1 focus-within:ring-primary focus-within:border-primary transition-all flex flex-wrap gap-2 min-h-[50px] items-center">
                   {formData.skills.map((skill) => (
@@ -466,11 +470,11 @@ export default function ExperienceModal({
                       }
                     }}
                     className="flex-1 bg-transparent border-none p-1 focus:ring-0 text-sm placeholder-gray-400 text-gray-900 min-w-[120px]"
-                    placeholder="Escribe y presiona Enter..."
+                    placeholder={tCommon('skillsPlaceholder')}
                   />
                 </div>
                 <p className="mt-1.5 text-xs text-gray-400">
-                  Añade palabras clave que destaquen tus competencias.
+                  {tCommon('skillsHint')}
                 </p>
               </div>
             </div>
@@ -480,14 +484,14 @@ export default function ExperienceModal({
                 onClick={onClose}
                 className="w-full sm:w-auto px-5 py-3 sm:py-2.5 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-200 transition-colors min-h-[44px]"
               >
-                Cancelar
+                {tCommon('cancel')}
               </button>
               <button
                 type="submit"
                 disabled={loading}
                 className="w-full sm:w-auto px-6 py-3 sm:py-2.5 rounded-xl text-sm font-semibold text-white bg-primary hover:bg-pink-600 shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all transform hover:-translate-y-0.5 disabled:opacity-50 min-h-[44px]"
               >
-                {loading ? "Guardando..." : "Guardar Experiencia"}
+                {loading ? tCommon('saving') : tForm('saveBtn')}
               </button>
             </div>
           </form>

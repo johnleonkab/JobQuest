@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import type { JobOffer, JobOfferStatus } from "@/types/job-offers";
+import { useTranslations } from "next-intl";
 
 interface JobOffersListViewProps {
   offers: JobOffer[];
@@ -10,15 +11,6 @@ interface JobOffersListViewProps {
   onView: (offer: JobOffer) => void;
 }
 
-const STATUS_LABELS: Record<JobOfferStatus, string> = {
-  saved: "Guardada",
-  contacted: "Contactada",
-  applied: "Aplicada",
-  interview: "Entrevista",
-  offer: "Oferta",
-  rejected: "Descartada",
-  accepted: "Conseguida",
-};
 
 const STATUS_COLORS: Record<JobOfferStatus, string> = {
   saved: "bg-slate-400",
@@ -36,6 +28,9 @@ export default function JobOffersListView({
   onDelete,
   onView,
 }: JobOffersListViewProps) {
+  const tStatus = useTranslations('Dashboard.status');
+  const tJobTypes = useTranslations('JobOpenings.jobTypes');
+  const tList = useTranslations('JobOpenings.listView');
 
   // Simple date formatter
   const formatDate = (dateString?: string) => {
@@ -56,10 +51,10 @@ export default function JobOffersListView({
       return `€${offer.salary_range_min.toLocaleString()} - €${offer.salary_range_max.toLocaleString()}`;
     }
     if (offer.salary_range_min) {
-      return `Desde €${offer.salary_range_min.toLocaleString()}`;
+      return `${tList('salaryFrom')} €${offer.salary_range_min.toLocaleString()}`;
     }
     if (offer.salary_range_max) {
-      return `Hasta €${offer.salary_range_max.toLocaleString()}`;
+      return `${tList('salaryTo')} €${offer.salary_range_max.toLocaleString()}`;
     }
     return "—";
   };
@@ -70,8 +65,8 @@ export default function JobOffersListView({
         <span className="material-symbols-outlined text-6xl text-gray-300 mb-4">
           work_off
         </span>
-        <p className="text-gray-500 text-lg font-medium">No hay ofertas para mostrar</p>
-        <p className="text-gray-400 text-sm mt-2">Intenta ajustar los filtros o crear una nueva oferta</p>
+        <p className="text-gray-500 text-lg font-medium">{tList('empty')}</p>
+        <p className="text-gray-400 text-sm mt-2">{tList('emptyDesc')}</p>
       </div>
     );
   }
@@ -83,22 +78,22 @@ export default function JobOffersListView({
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
               <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                Empresa / Puesto
+                {tList('company')}
               </th>
               <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                Estado
+                {tList('status')}
               </th>
               <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                Tipo
+                {tList('type')}
               </th>
               <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                Salario
+                {tList('salary')}
               </th>
               <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                Fecha
+                {tList('date')}
               </th>
               <th className="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                Acciones
+                {tList('actions')}
               </th>
             </tr>
           </thead>
@@ -141,19 +136,11 @@ export default function JobOffersListView({
                   <span
                     className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold text-white ${STATUS_COLORS[offer.status]}`}
                   >
-                    {STATUS_LABELS[offer.status]}
+                    {tStatus(offer.status)}
                   </span>
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-600">
-                  {offer.job_type
-                    ? offer.job_type === "full-time"
-                      ? "Tiempo Completo"
-                      : offer.job_type === "part-time"
-                      ? "Medio Tiempo"
-                      : offer.job_type === "contract"
-                      ? "Contrato"
-                      : "Prácticas"
-                    : "—"}
+                  {offer.job_type ? tJobTypes(offer.job_type) : "—"}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-600">{formatSalary(offer)}</td>
                 <td className="px-6 py-4 text-sm text-gray-600">
@@ -174,7 +161,7 @@ export default function JobOffersListView({
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        if (confirm("¿Estás seguro de que quieres eliminar esta oferta?")) {
+                        if (confirm(tList('confirmDelete'))) {
                           onDelete(offer.id);
                         }
                       }}

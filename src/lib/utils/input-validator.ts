@@ -55,3 +55,4 @@ export function truncateString(value: string, maxLength: number): string {
   return value.substring(0, maxLength - 3) + '...';
 }
 
+

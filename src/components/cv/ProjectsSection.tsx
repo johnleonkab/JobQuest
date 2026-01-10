@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { CVProject } from "@/types/cv";
 import ProjectModal from "./modals/ProjectModal";
+import { useTranslations } from "next-intl";
 
 interface ProjectsSectionProps {
   projects: CVProject[];
@@ -15,6 +16,8 @@ export default function ProjectsSection({
   onAdd,
   onUpdate,
 }: ProjectsSectionProps) {
+  const t = useTranslations('CVBuilder.sections.projects');
+  const tCommon = useTranslations('CVBuilder.common');
   const [editingId, setEditingId] = useState<string | null>(null);
 
   // Asegurar que projects sea siempre un array
@@ -28,7 +31,7 @@ export default function ProjectsSection({
             <div className="size-10 rounded-xl bg-pink-50 flex items-center justify-center text-pink-500">
               <span className="material-symbols-outlined">rocket_launch</span>
             </div>
-            <h3 className="text-lg font-bold text-slate-900">Proyectos Personales</h3>
+            <h3 className="text-lg font-bold text-slate-900">{t('title')}</h3>
           </div>
           <button
             onClick={onAdd}
@@ -40,7 +43,7 @@ export default function ProjectsSection({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {safeProjects.length === 0 ? (
             <p className="text-sm text-gray-400 text-center py-4 col-span-2">
-              No hay proyectos. Haz clic en el botón + para agregar uno.
+              {t('empty')}
             </p>
           ) : (
             safeProjects.map((project) => (
@@ -73,7 +76,7 @@ export default function ProjectsSection({
                         rel="noopener noreferrer"
                         className="px-2 py-0.5 bg-white rounded text-[10px] font-medium text-gray-600 border border-gray-100 hover:border-primary/30 transition-colors"
                       >
-                        Ver proyecto
+                        {tCommon('viewProject')}
                       </a>
                     ))}
                   </div>
@@ -82,7 +85,7 @@ export default function ProjectsSection({
                   onClick={() => setEditingId(project.id)}
                   className="mt-2 text-xs text-primary hover:underline"
                 >
-                  Editar
+                  {tCommon('edit')}
                 </button>
               </div>
             ))

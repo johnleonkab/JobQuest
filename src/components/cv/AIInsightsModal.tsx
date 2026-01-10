@@ -5,6 +5,7 @@ import DOMPurify from "dompurify";
 import { useAIInsights } from "@/hooks/useAIInsights";
 import { useToast } from "@/contexts/ToastContext";
 import { useGamification } from "@/hooks/useGamification";
+import { useTranslations } from "next-intl";
 import type { CVData } from "@/types/cv";
 
 interface AIInsightsModalProps {
@@ -39,6 +40,7 @@ export default function AIInsightsModal({
   const { generateInsights } = useAIInsights();
   const { showToast } = useToast();
   const { recordEvent } = useGamification();
+  const t = useTranslations('CVBuilder.aiInsights');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
@@ -73,7 +75,7 @@ export default function AIInsightsModal({
       // Verificar si hay un análisis guardado
       const cvDataJson = encodeURIComponent(JSON.stringify(cvData));
       const response = await fetch(`/api/ai/insights/get?cvData=${cvDataJson}`);
-      
+
       if (!response.ok) {
         // Si hay error, generar nuevo análisis
         await generateInitialReport();
@@ -112,22 +114,22 @@ export default function AIInsightsModal({
       });
 
       setReport(response.text);
-      
+
       // Guardar el análisis en la base de datos
       await saveAnalysis(response.text);
-      
+
       // Record gamification event (only for new analysis, not saved ones)
       await recordEvent("ai.insights_generated");
-      
+
       // No agregar el reporte inicial a los mensajes del chat
       // Solo se mostrará en la sección de "Reporte Inicial"
       setChatMessages([]);
     } catch (error) {
       console.error("Error generating report:", error);
-      const errorMessage = error instanceof Error 
-        ? error.message 
-        : "Error al generar el análisis. Por favor, intenta de nuevo.";
-      
+      const errorMessage = error instanceof Error
+        ? error.message
+        : t('errorGen');
+
       showToast({
         type: "error",
         message: errorMessage,
@@ -162,7 +164,7 @@ export default function AIInsightsModal({
 
     const userMessage = chatInput.trim();
     setChatInput("");
-    
+
     // Agregar mensaje del usuario
     const newMessages: Message[] = [
       ...chatMessages,
@@ -186,10 +188,9 @@ export default function AIInsightsModal({
         { role: "assistant", content: response.text },
       ]);
     } catch (error) {
-      console.error("Error in chat:", error);
       showToast({
         type: "error",
-        message: "Error al procesar tu pregunta. Por favor, intenta de nuevo.",
+        message: t('errorChat'),
       });
       // Remover el mensaje del usuario si falla
       setChatMessages(chatMessages);
@@ -219,10 +220,10 @@ export default function AIInsightsModal({
               </div>
               <div>
                 <h3 className="text-lg leading-6 font-bold text-gray-900 dark:text-white">
-                  Análisis de Perfil con IA
+                  {t('title')}
                 </h3>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  Powered by JobQuest AI
+                  {t('poweredBy')}
                 </p>
               </div>
             </div>
@@ -245,10 +246,10 @@ export default function AIInsightsModal({
                   <span className="material-symbols-outlined">auto_awesome</span>
                 </div>
                 <p className="text-gray-600 dark:text-gray-400">
-                  Analizando tu perfil...
+                  {t('analyzing')}
                 </p>
                 <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
-                  Esto puede tomar unos segundos
+                  {t('analyzingDesc')}
                 </p>
               </div>
             ) : !report && !loading ? (
@@ -257,16 +258,16 @@ export default function AIInsightsModal({
                   <span className="material-symbols-outlined">error</span>
                 </div>
                 <p className="text-gray-600 dark:text-gray-400 font-medium mb-2">
-                  No se pudo generar el análisis
+                  {t('error')}
                 </p>
                 <p className="text-sm text-gray-500 dark:text-gray-500 text-center max-w-md">
-                  Por favor, verifica que la variable de entorno GEMINI_API_KEY esté configurada correctamente en tu archivo .env.local
+                  {t('errorDesc')}
                 </p>
                 <button
                   onClick={generateInitialReport}
                   className="mt-4 px-4 py-2 bg-primary text-white rounded-lg hover:bg-pink-600 transition-colors"
                 >
-                  Intentar de nuevo
+                  {t('retry')}
                 </button>
               </div>
             ) : (
@@ -280,13 +281,13 @@ export default function AIInsightsModal({
                           analytics
                         </span>
                         <h4 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">
-                          Reporte Inicial
+                          {t('initialReport')}
                         </h4>
                       </div>
                       {isUsingSavedAnalysis && (
                         <span className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
                           <span className="material-symbols-outlined text-sm">history</span>
-                          Análisis guardado
+                          {t('savedAnalysis')}
                         </span>
                       )}
                     </div>
@@ -309,7 +310,7 @@ export default function AIInsightsModal({
                         forum
                       </span>
                       <h4 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">
-                        Chat con Asistente
+                        {t('chatTitle')}
                       </h4>
                     </div>
 
@@ -318,11 +319,10 @@ export default function AIInsightsModal({
                       {chatMessages.map((message, index) => (
                         <div
                           key={index}
-                          className={`flex ${
-                            message.role === "user"
-                              ? "justify-end"
-                              : "justify-start gap-3"
-                          }`}
+                          className={`flex ${message.role === "user"
+                            ? "justify-end"
+                            : "justify-start gap-3"
+                            }`}
                         >
                           {message.role === "assistant" && (
                             <div className="size-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex-shrink-0 flex items-center justify-center text-white text-xs font-bold shadow-sm">
@@ -330,11 +330,10 @@ export default function AIInsightsModal({
                             </div>
                           )}
                           <div
-                            className={`max-w-[85%] rounded-2xl py-3 px-4 text-sm shadow-sm ${
-                              message.role === "user"
-                                ? "bg-primary text-white rounded-tr-sm"
-                                : "bg-white dark:bg-[#2d1a22] border border-gray-100 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-tl-sm"
-                            }`}
+                            className={`max-w-[85%] rounded-2xl py-3 px-4 text-sm shadow-sm ${message.role === "user"
+                              ? "bg-primary text-white rounded-tr-sm"
+                              : "bg-white dark:bg-[#2d1a22] border border-gray-100 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-tl-sm"
+                              }`}
                           >
                             {message.role === "assistant" ? (
                               <div
@@ -386,7 +385,7 @@ export default function AIInsightsModal({
                     type="text"
                     value={chatInput}
                     onChange={(e) => setChatInput(e.target.value)}
-                    placeholder="Haz una pregunta sobre tu perfil..."
+                    placeholder={t('chatPlaceholder')}
                     className="w-full pl-4 pr-12 py-3 bg-gray-50 dark:bg-[#1a0c10] border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all text-sm text-gray-700 dark:text-white placeholder-gray-400"
                     disabled={chatLoading}
                   />
@@ -402,7 +401,7 @@ export default function AIInsightsModal({
                 </button>
               </form>
               <p className="text-[10px] text-center text-gray-400 mt-2">
-                La IA puede cometer errores. Verifica la información importante.
+                {t('disclaimer')}
               </p>
             </div>
           )}

@@ -1,11 +1,12 @@
 "use client";
 
-import Link from "next/link";
+import { Link, usePathname } from "@/i18n/routing";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { signOut } from "@/lib/auth/actions";
 import { useEffect, useState } from "react";
 import Tooltip from "@/components/Tooltip";
+import { useTranslations } from 'next-intl';
+import LanguageSwitcher from './LanguageSwitcher';
 
 interface UserProfile {
   id: string;
@@ -29,6 +30,8 @@ interface GamificationData {
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const t = useTranslations('Navigation');
+  const tGamification = useTranslations('gamification.sidebar');
   const [user, setUser] = useState<UserProfile | null>(null);
   const [gamification, setGamification] = useState<GamificationData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -49,20 +52,20 @@ export default function Sidebar() {
         const gamificationData = await gamificationResponse.json();
         setGamification(gamificationData);
       }
-      } catch (error) {
-        const { logger } = await import("@/lib/utils/logger");
-        logger.error("Error fetching sidebar data", error);
-        
-        // Track error
-        if (typeof window !== "undefined") {
-          import("@/lib/error-tracking").then(({ errorTracker }) => {
-            errorTracker.captureException(
-              error instanceof Error ? error : new Error(String(error)),
-              { component: "Sidebar" }
-            );
-          });
-        }
-      } finally {
+    } catch (error) {
+      const { logger } = await import("@/lib/utils/logger");
+      logger.error("Error fetching sidebar data", error);
+
+      // Track error
+      if (typeof window !== "undefined") {
+        import("@/lib/error-tracking").then(({ errorTracker }) => {
+          errorTracker.captureException(
+            error instanceof Error ? error : new Error(String(error)),
+            { component: "Sidebar" }
+          );
+        });
+      }
+    } finally {
       setLoading(false);
     }
   };
@@ -87,12 +90,12 @@ export default function Sidebar() {
   };
 
   const navItems = [
-    { href: "/dashboard", label: "Inicio", icon: "home" },
-    { href: "/job-openings", label: "Job Openings", icon: "work" },
-    { href: "/cv-builder", label: "Mi Perfil Profesional", icon: "description" },
-    { href: "/gamification", label: "Logros", icon: "emoji_events" },
-    { href: "/help", label: "Ayuda", icon: "help" },
-    { href: "/privacy-settings", label: "Privacidad", icon: "privacy_tip" },
+    { href: "/dashboard", label: t('dashboard'), icon: "home" },
+    { href: "/job-openings", label: t('jobOffers'), icon: "work" },
+    { href: "/cv-builder", label: t('cvBuilder'), icon: "description" },
+    { href: "/gamification", label: t('gamification'), icon: "emoji_events" },
+    { href: "/help", label: t('help'), icon: "help" },
+    { href: "/privacy-settings", label: t('privacy'), icon: "privacy_tip" },
   ];
 
 
@@ -144,7 +147,7 @@ export default function Sidebar() {
               )}
               {gamification?.level && (
                 <Tooltip
-                  content={`Nivel ${gamification.level.order} - ${gamification.xp.toLocaleString()} XP`}
+                  content={tGamification('levelTooltip', { level: gamification.level.order, xp: gamification.xp.toLocaleString() })}
                   position="right"
                 >
                   <div className="absolute -bottom-1 -right-1 flex size-6 items-center justify-center rounded-full bg-primary text-xs font-bold text-white cursor-help">
@@ -176,14 +179,18 @@ export default function Sidebar() {
             <Tooltip
               content={
                 gamification.nextLevel
-                  ? `Progreso: ${gamification.progress.toFixed(0)}% hacia el Nivel ${gamification.level.order + 1}. Necesitas ${(gamification.nextLevel.requiredXp - gamification.xp).toLocaleString()} XP más.`
-                  : `¡Has alcanzado el nivel máximo! ${gamification.xp.toLocaleString()} XP totales.`
+                  ? tGamification('progress', {
+                    percent: gamification.progress.toFixed(0),
+                    nextLevel: gamification.level.order + 1,
+                    needed: (gamification.nextLevel.requiredXp - gamification.xp).toLocaleString()
+                  })
+                  : tGamification('maxLevel', { xp: gamification.xp.toLocaleString() })
               }
               position="top"
             >
               <div className="mb-2 flex items-center justify-between text-xs">
                 <span className="font-medium text-slate-600">
-                  Nivel {gamification.level.order}
+                  {tGamification('level', { level: gamification.level.order })}
                 </span>
                 <span className="text-slate-500">
                   {gamification.xp.toLocaleString()}{" "}
@@ -216,11 +223,10 @@ export default function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 min-h-[44px] ${
-                isActive
-                  ? "bg-primary/10 text-primary"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900 active:bg-slate-100"
-              }`}
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 min-h-[44px] ${isActive
+                ? "bg-primary/10 text-primary"
+                : "text-slate-600 hover:bg-slate-50 hover:text-slate-900 active:bg-slate-100"
+                }`}
               aria-current={isActive ? "page" : undefined}
               aria-label={item.label}
             >
@@ -235,13 +241,16 @@ export default function Sidebar() {
 
       {/* Sign Out */}
       <div className="border-t border-border-light p-4">
+        <div className="mb-4 flex justify-center">
+          <LanguageSwitcher />
+        </div>
         <button
           onClick={handleSignOut}
           className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 active:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 min-h-[44px]"
-          aria-label="Cerrar sesión"
+          aria-label={t('logout')}
         >
           <span className="material-symbols-outlined text-xl" aria-hidden="true">logout</span>
-          <span>Cerrar Sesión</span>
+          <span>{t('logout')}</span>
         </button>
       </div>
     </aside>

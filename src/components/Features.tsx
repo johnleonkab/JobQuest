@@ -1,4 +1,8 @@
+import { useTranslations } from 'next-intl';
+
 export default function Features() {
+  const t = useTranslations('Features');
+
   return (
     <section
       id="features"
@@ -11,9 +15,9 @@ export default function Features() {
               <span className="material-symbols-outlined">monitoring</span>
             </div>
             <div>
-              <h3 className="font-bold text-slate-900">XP por Progreso</h3>
+              <h3 className="font-bold text-slate-900">{t('xpTitle')}</h3>
               <p className="text-sm text-slate-500">
-                Visualiza tu avance con métricas reales.
+                {t('xpDesc')}
               </p>
             </div>
           </div>
@@ -25,10 +29,10 @@ export default function Features() {
             </div>
             <div>
               <h3 className="font-bold text-slate-900">
-                Logros Desbloqueables
+                {t('achievementsTitle')}
               </h3>
               <p className="text-sm text-slate-500">
-                Gana medallas por consistencia y éxito.
+                {t('achievementsDesc')}
               </p>
             </div>
           </div>
@@ -37,9 +41,9 @@ export default function Features() {
               <span className="material-symbols-outlined">group_add</span>
             </div>
             <div>
-              <h3 className="font-bold text-slate-900">Comunidad Activa</h3>
+              <h3 className="font-bold text-slate-900">{t('communityTitle')}</h3>
               <p className="text-sm text-slate-500">
-                Comparte misiones con otros candidatos.
+                {t('communityDesc')}
               </p>
             </div>
           </div>
@@ -48,4 +52,5 @@ export default function Features() {
     </section>
   );
 }
+
 

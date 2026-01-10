@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 export default function CookieConsent() {
+  const t = useTranslations('CookieConsent');
   const [showBanner, setShowBanner] = useState(false);
 
   useEffect(() => {
@@ -30,18 +33,16 @@ export default function CookieConsent() {
       <div className="mx-auto max-w-7xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex-1">
           <h3 className="text-sm font-semibold text-slate-900 mb-1">
-            Uso de Cookies
+            {t('title')}
           </h3>
           <p className="text-sm text-slate-600">
-            Utilizamos cookies para mejorar tu experiencia, mantener tu sesión
-            activa y proteger tu seguridad. Al continuar, aceptas nuestro uso
-            de cookies.{" "}
-            <a
+            {t('description')}{" "}
+            <Link
               href="/privacy"
               className="text-primary hover:underline font-medium"
             >
-              Más información
-            </a>
+              {t('moreInfo')}
+            </Link>
           </p>
         </div>
         <div className="flex gap-3">
@@ -49,17 +50,18 @@ export default function CookieConsent() {
             onClick={handleReject}
             className="px-4 py-2 text-sm font-medium text-slate-700 hover:text-slate-900 transition-colors"
           >
-            Rechazar
+            {t('reject')}
           </button>
           <button
             onClick={handleAccept}
             className="px-4 py-2 text-sm font-semibold text-white bg-primary rounded-lg hover:bg-primary-hover transition-colors"
           >
-            Aceptar
+            {t('accept')}
           </button>
         </div>
       </div>
     </div>
   );
 }
+
 

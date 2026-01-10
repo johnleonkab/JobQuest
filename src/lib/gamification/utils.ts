@@ -55,3 +55,4 @@ export function getXpForEvent(eventId: string): number {
   return event?.xpReward || 0;
 }
 
+

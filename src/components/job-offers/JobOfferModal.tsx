@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import type { JobOffer, JobOfferStatus, JobType } from "@/types/job-offers";
 import { useToast } from "@/contexts/ToastContext";
+import { useTranslations } from "next-intl";
 
 interface JobOfferModalProps {
   isOpen: boolean;
@@ -20,6 +21,10 @@ export default function JobOfferModal({
   offer,
 }: JobOfferModalProps) {
   const { showToast } = useToast();
+  const t = useTranslations('JobOpenings.modal');
+  const tStatus = useTranslations('Dashboard.status');
+  const tJobTypes = useTranslations('JobOpenings.jobTypes');
+  const tActions = useTranslations('JobOpenings.actions');
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     company_name: "",
@@ -96,14 +101,14 @@ export default function JobOfferModal({
       await onSave(dataToSave);
       showToast({
         type: "success",
-        message: offer ? "Oferta actualizada correctamente" : "Oferta creada correctamente",
+        message: offer ? tActions('offerUpdated') : t('create'), // NOTE: Original text was "Oferta creada correctamente"
       });
       onClose();
     } catch (error) {
       console.error("Error saving job offer:", error);
       showToast({
         type: "error",
-        message: "Error al guardar la oferta",
+        message: offer ? tActions('errorUpdate') : tActions('errorFetch'), // Using existing keys or generic error
       });
     } finally {
       setLoading(false);
@@ -132,7 +137,7 @@ export default function JobOfferModal({
       if (showNotification) {
         showToast({
           type: "error",
-          message: "Ingresa el nombre de la empresa primero",
+          message: t('enterCompany'),
         });
       }
       return;
@@ -166,14 +171,14 @@ export default function JobOfferModal({
         if (showNotification) {
           showToast({
             type: "success",
-            message: "Logo extraído correctamente",
+            message: t('logoExtracted'),
           });
         }
       } else {
         if (showNotification) {
           showToast({
             type: "error",
-            message: "No se pudo encontrar el logo de la empresa",
+            message: t('logoNotFound'),
           });
         }
       }
@@ -182,7 +187,7 @@ export default function JobOfferModal({
       if (showNotification) {
         showToast({
           type: "error",
-          message: "Error al extraer el logo",
+          message: t('errorLogo'),
         });
       }
     } finally {
@@ -199,8 +204,8 @@ export default function JobOfferModal({
 
   const handleCompanyWebsiteBlur = async () => {
     // Auto-extract logo when user leaves the website field (if name exists but no logo)
-    if (formData.company_website.trim() && formData.company_name.trim() && 
-        (!formData.company_logo_url || !formData.company_logo_url.startsWith('http'))) {
+    if (formData.company_website.trim() && formData.company_name.trim() &&
+      (!formData.company_logo_url || !formData.company_logo_url.startsWith('http'))) {
       await handleExtractLogo(false); // Don't show notification for auto-extraction
     }
   };
@@ -220,10 +225,10 @@ export default function JobOfferModal({
               </div>
               <div>
                 <h3 className="text-lg font-bold text-slate-900 leading-tight">
-                  {offer ? "Editar Oferta" : "Nueva Oferta"}
+                  {offer ? t('editTitle') : t('newTitle')}
                 </h3>
                 <p className="text-xs text-gray-500">
-                  {offer ? "Modifica" : "Añade"} los detalles de la oferta
+                  {offer ? t('editSubtitle') : t('newSubtitle')}
                 </p>
               </div>
             </div>
@@ -239,10 +244,10 @@ export default function JobOfferModal({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                    Empresa *
+                    {t('company')} *
                     {extractingLogo && (
                       <span className="ml-2 text-xs text-primary font-normal">
-                        (Extrayendo logo...)
+                        ({t('extracting')})
                       </span>
                     )}
                   </label>
@@ -260,7 +265,7 @@ export default function JobOfferModal({
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                    Puesto *
+                    {t('position')} *
                   </label>
                   <input
                     required
@@ -275,7 +280,7 @@ export default function JobOfferModal({
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                  Web de la Empresa (Opcional)
+                  {t('website')}
                 </label>
                 <input
                   type="url"
@@ -289,12 +294,12 @@ export default function JobOfferModal({
                   disabled={extractingLogo}
                 />
                 <p className="mt-1.5 text-xs text-gray-500">
-                  Se usará para mejorar la búsqueda del logo si el nombre no es suficiente
+                  {t('websiteHelp')}
                 </p>
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                  Descripción del trabajo
+                  {t('description')}
                 </label>
                 <textarea
                   value={formData.job_description}
@@ -303,13 +308,13 @@ export default function JobOfferModal({
                   }
                   className="block w-full rounded-xl border-gray-200 bg-gray-50 text-gray-900 focus:border-primary focus:ring-primary shadow-sm sm:text-sm py-3 px-4 transition-all resize-none"
                   rows={4}
-                  placeholder="Descripción de la oferta..."
+                  placeholder={t('description') + "..."}
                 />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                    Salario Mín (k)
+                    {t('salaryMin')}
                   </label>
                   <input
                     type="number"
@@ -323,7 +328,7 @@ export default function JobOfferModal({
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                    Salario Máx (k)
+                    {t('salaryMax')}
                   </label>
                   <input
                     type="number"
@@ -337,7 +342,7 @@ export default function JobOfferModal({
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                    Tipo de trabajo
+                    {t('jobType')}
                   </label>
                   <select
                     value={formData.job_type}
@@ -346,17 +351,17 @@ export default function JobOfferModal({
                     }
                     className="block w-full rounded-xl border-gray-200 bg-gray-50 text-gray-900 focus:border-primary focus:ring-primary shadow-sm sm:text-sm py-3 px-4 transition-all"
                   >
-                    <option value="">Seleccionar...</option>
-                    <option value="full-time">Tiempo completo</option>
-                    <option value="part-time">Tiempo parcial</option>
-                    <option value="contract">Contrato</option>
-                    <option value="internship">Prácticas</option>
+                    <option value="">{t('select')}</option>
+                    <option value="full-time">{tJobTypes('full-time')}</option>
+                    <option value="part-time">{tJobTypes('part-time')}</option>
+                    <option value="contract">{tJobTypes('contract')}</option>
+                    <option value="internship">{tJobTypes('internship')}</option>
                   </select>
                 </div>
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                  Tags
+                  {t('tags')}
                 </label>
                 <div className="w-full rounded-xl border border-gray-200 bg-gray-50 p-2 focus-within:ring-1 focus-within:ring-primary focus-within:border-primary transition-all flex flex-wrap gap-2 min-h-[50px] items-center">
                   {formData.tags.map((tag) => (
@@ -387,13 +392,13 @@ export default function JobOfferModal({
                       }
                     }}
                     className="flex-1 bg-transparent border-none p-1 focus:ring-0 text-sm placeholder-gray-400 text-gray-900 min-w-[120px]"
-                    placeholder="Escribe y presiona Enter..."
+                    placeholder={t('tagsPlaceholder')}
                   />
                 </div>
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                  Notas
+                  {t('notes')}
                 </label>
                 <textarea
                   value={formData.notes}
@@ -402,7 +407,7 @@ export default function JobOfferModal({
                   }
                   className="block w-full rounded-xl border-gray-200 bg-gray-50 text-gray-900 focus:border-primary focus:ring-primary shadow-sm sm:text-sm py-3 px-4 transition-all resize-none"
                   rows={3}
-                  placeholder="Notas adicionales sobre esta oferta..."
+                  placeholder={t('notesPlaceholder')}
                 />
               </div>
             </div>
@@ -412,14 +417,14 @@ export default function JobOfferModal({
                 onClick={onClose}
                 className="px-5 py-2.5 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-200 transition-colors"
               >
-                Cancelar
+                {t('cancel')}
               </button>
               <button
                 type="submit"
                 disabled={loading}
                 className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white bg-primary hover:bg-pink-600 shadow-lg shadow-primary/25 transition-all disabled:opacity-50"
               >
-                {loading ? "Guardando..." : offer ? "Actualizar" : "Crear Oferta"}
+                {loading ? t('saving') : offer ? t('update') : t('create')}
               </button>
             </div>
           </form>

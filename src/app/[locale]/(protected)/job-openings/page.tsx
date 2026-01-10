@@ -11,6 +11,7 @@ import InterviewCalendarModal from "@/components/interviews/InterviewCalendarMod
 import ContactModal from "@/components/contacts/ContactModal";
 import { useToast } from "@/contexts/ToastContext";
 import { useGamification } from "@/hooks/useGamification";
+import { useTranslations } from "next-intl";
 import type { InterviewFormData } from "@/types/interviews";
 import type { ContactFormData } from "@/types/contacts";
 import { KanbanSkeleton } from "@/components/LoadingSkeleton";
@@ -46,6 +47,7 @@ export default function JobOpeningsPage() {
   });
   const { showToast } = useToast();
   const { recordEvent } = useGamification();
+  const t = useTranslations('JobOpenings');
 
   useEffect(() => {
     fetchOffers();
@@ -75,7 +77,7 @@ export default function JobOpeningsPage() {
       console.error("Error fetching offers:", error);
       showToast({
         type: "error",
-        message: "Error al cargar las ofertas",
+        message: t('actions.errorFetch'),
       });
     } finally {
       setLoading(false);
@@ -107,15 +109,15 @@ export default function JobOpeningsPage() {
       // This is needed when editing an existing offer
       let statusChangedToInterview = false;
       let statusChangedToContacted = false;
-      
+
       if (offerData.id && offerData.status) {
         const previousOffer = offers.find((o) => o.id === offerData.id);
         if (previousOffer) {
-          statusChangedToInterview = 
-            previousOffer.status !== "interview" && 
+          statusChangedToInterview =
+            previousOffer.status !== "interview" &&
             offerData.status === "interview";
-          statusChangedToContacted = 
-            previousOffer.status !== "contacted" && 
+          statusChangedToContacted =
+            previousOffer.status !== "contacted" &&
             offerData.status === "contacted";
         }
       }
@@ -166,13 +168,13 @@ export default function JobOpeningsPage() {
       // Check if status changed to "interview" or "contacted" BEFORE updating
       // We need to check this before fetchOffers() updates the state
       const previousOffer = offers.find((o) => o.id === offer.id);
-      const statusChangedToInterview = 
-        previousOffer && 
-        previousOffer.status !== "interview" && 
+      const statusChangedToInterview =
+        previousOffer &&
+        previousOffer.status !== "interview" &&
         offer.status === "interview";
-      const statusChangedToContacted = 
-        previousOffer && 
-        previousOffer.status !== "contacted" && 
+      const statusChangedToContacted =
+        previousOffer &&
+        previousOffer.status !== "contacted" &&
         offer.status === "contacted";
 
       const response = await fetch("/api/job-offers", {
@@ -233,7 +235,7 @@ export default function JobOpeningsPage() {
 
       showToast({
         type: "success",
-        message: "Entrevista programada correctamente",
+        message: t('actions.interviewScheduled'),
       });
 
       setShowInterviewModal(false);
@@ -265,7 +267,7 @@ export default function JobOpeningsPage() {
 
       showToast({
         type: "success",
-        message: "Contacto añadido correctamente",
+        message: t('actions.contactAdded'),
       });
 
       setShowContactModal(false);
@@ -286,7 +288,7 @@ export default function JobOpeningsPage() {
 
       showToast({
         type: "success",
-        message: "Oferta eliminada correctamente",
+        message: t('actions.offerDeleted'),
       });
 
       await fetchOffers();
@@ -295,7 +297,7 @@ export default function JobOpeningsPage() {
       console.error("Error deleting offer:", error);
       showToast({
         type: "error",
-        message: "Error al eliminar la oferta",
+        message: t('actions.errorDelete'),
       });
     }
   };
@@ -416,10 +418,10 @@ export default function JobOpeningsPage() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-gray-900 tracking-tight mb-2">
-              Gestión de Ofertas
+              {t('title')}
             </h1>
             <p className="text-gray-500 text-sm sm:text-base">
-              Rastrea tus postulaciones y sube de nivel.
+              {t('subtitle')}
             </p>
           </div>
           <button
@@ -429,7 +431,7 @@ export default function JobOpeningsPage() {
             <span className="material-symbols-outlined text-xl group-hover:scale-110 transition-transform">
               add
             </span>
-            <span className="text-sm sm:text-base">Nueva Oferta</span>
+            <span className="text-sm sm:text-base">{t('newOffer')}</span>
           </button>
         </div>
 
@@ -439,7 +441,7 @@ export default function JobOpeningsPage() {
             <div className="absolute right-0 top-0 p-4 opacity-[0.05] group-hover:opacity-10 transition-opacity">
               <span className="material-symbols-outlined text-6xl text-gray-900">work</span>
             </div>
-            <p className="text-gray-500 text-sm font-medium mb-1">Ofertas Activas</p>
+            <p className="text-gray-500 text-sm font-medium mb-1">{t('stats.active')}</p>
             <div className="flex items-end gap-2">
               <span className="text-3xl font-bold text-gray-900">{stats.active}</span>
             </div>
@@ -448,11 +450,11 @@ export default function JobOpeningsPage() {
             <div className="absolute right-0 top-0 p-4 opacity-[0.05] group-hover:opacity-10 transition-opacity">
               <span className="material-symbols-outlined text-6xl text-gray-900">forum</span>
             </div>
-            <p className="text-gray-500 text-sm font-medium mb-1">Entrevistas</p>
+            <p className="text-gray-500 text-sm font-medium mb-1">{t('stats.interviews')}</p>
             <div className="flex items-end gap-2">
               <span className="text-3xl font-bold text-gray-900">{stats.interviews}</span>
               <span className="text-primary text-sm font-bold mb-1.5 bg-purple-50 px-1.5 py-0.5 rounded">
-                Esta semana
+                {t('stats.thisWeek')}
               </span>
             </div>
           </div>
@@ -460,7 +462,7 @@ export default function JobOpeningsPage() {
             <div className="absolute right-0 top-0 p-4 opacity-[0.05] group-hover:opacity-10 transition-opacity">
               <span className="material-symbols-outlined text-6xl text-gray-900">check_circle</span>
             </div>
-            <p className="text-gray-500 text-sm font-medium mb-1">Tasa de Respuesta</p>
+            <p className="text-gray-500 text-sm font-medium mb-1">{t('stats.responseRate')}</p>
             <div className="flex items-end gap-2">
               <span className="text-3xl font-bold text-gray-900">{stats.responseRate}%</span>
             </div>
@@ -469,11 +471,11 @@ export default function JobOpeningsPage() {
             <div className="absolute right-0 top-0 p-4 opacity-[0.05] group-hover:opacity-10 transition-opacity">
               <span className="material-symbols-outlined text-6xl text-gray-900">local_fire_department</span>
             </div>
-            <p className="text-gray-500 text-sm font-medium mb-1">Racha Semanal</p>
+            <p className="text-gray-500 text-sm font-medium mb-1">{t('stats.weeklyStreak')}</p>
             <div className="flex items-end gap-2">
-              <span className="text-3xl font-bold text-gray-900">{stats.weeklyStreak} Días</span>
+              <span className="text-3xl font-bold text-gray-900">{stats.weeklyStreak} {t('stats.days')}</span>
               <span className="text-orange-500 text-sm font-bold mb-1.5 flex items-center bg-orange-50 px-1.5 py-0.5 rounded">
-                🔥 On Fire
+                🔥 {t('stats.onFire')}
               </span>
             </div>
           </div>
@@ -490,20 +492,19 @@ export default function JobOpeningsPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="block w-full pl-10 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl leading-5 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm"
-              placeholder="Buscar por empresa, puesto o palabra clave..."
+              placeholder={t('searchPlaceholder')}
             />
           </div>
           <div className="flex items-center gap-2 w-full lg:w-auto overflow-x-auto pb-1 lg:pb-0">
             <button
               onClick={() => setShowFilters(true)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
-                activeFiltersCount > 0
-                  ? "bg-primary text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              }`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${activeFiltersCount > 0
+                ? "bg-primary text-white"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
             >
               <span className="material-symbols-outlined text-lg">filter_list</span>
-              Filtros
+              {t('filters')}
               {activeFiltersCount > 0 && (
                 <span className="bg-white/20 text-xs px-1.5 py-0.5 rounded-full">
                   {activeFiltersCount}
@@ -513,25 +514,23 @@ export default function JobOpeningsPage() {
             <div className="h-6 w-px bg-gray-200 mx-1" />
             <button
               onClick={() => setViewMode("kanban")}
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors whitespace-nowrap font-medium ${
-                viewMode === "kanban"
-                  ? "bg-purple-50 border border-primary/20 text-primary"
-                  : "bg-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-              }`}
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors whitespace-nowrap font-medium ${viewMode === "kanban"
+                ? "bg-purple-50 border border-primary/20 text-primary"
+                : "bg-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+                }`}
             >
               <span className="material-symbols-outlined text-lg">view_kanban</span>
-              Tablero
+              {t('kanban')}
             </button>
             <button
               onClick={() => setViewMode("list")}
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors whitespace-nowrap font-medium ${
-                viewMode === "list"
-                  ? "bg-purple-50 border border-primary/20 text-primary"
-                  : "bg-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-              }`}
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors whitespace-nowrap font-medium ${viewMode === "list"
+                ? "bg-purple-50 border border-primary/20 text-primary"
+                : "bg-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+                }`}
             >
               <span className="material-symbols-outlined text-lg">table_rows</span>
-              Lista
+              {t('list')}
             </button>
           </div>
         </div>

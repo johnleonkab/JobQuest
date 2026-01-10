@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { CVLanguage, CVCertification } from "@/types/cv";
 import LanguageModal from "./modals/LanguageModal";
+import { useTranslations } from "next-intl";
 
 interface LanguagesSectionProps {
   languages: CVLanguage[];
@@ -17,6 +18,8 @@ export default function LanguagesSection({
   onAdd,
   onUpdate,
 }: LanguagesSectionProps) {
+  const t = useTranslations('CVBuilder.sections.languages');
+  const tCommon = useTranslations('CVBuilder.common');
   const [editingId, setEditingId] = useState<string | null>(null);
 
   // Asegurar que languages sea siempre un array
@@ -43,7 +46,7 @@ export default function LanguagesSection({
             <div className="size-10 rounded-xl bg-orange-50 flex items-center justify-center text-orange-500">
               <span className="material-symbols-outlined">translate</span>
             </div>
-            <h3 className="text-lg font-bold text-slate-900">Idiomas</h3>
+            <h3 className="text-lg font-bold text-slate-900">{t('title')}</h3>
           </div>
           <button
             onClick={onAdd}
@@ -55,7 +58,7 @@ export default function LanguagesSection({
         <div className="space-y-4">
           {safeLanguages.length === 0 ? (
             <p className="text-sm text-gray-400 text-center py-4">
-              No hay idiomas. Haz clic en el botón + para agregar uno.
+              {t('empty')}
             </p>
           ) : (
             safeLanguages.map((lang) => {
@@ -76,7 +79,7 @@ export default function LanguagesSection({
                     onClick={() => setEditingId(lang.id)}
                     className="mt-1 text-xs text-primary hover:underline"
                   >
-                    Editar
+                    {tCommon('edit')}
                   </button>
                 </div>
               );

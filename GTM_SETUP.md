@@ -153,3 +153,4 @@ Para verificar que GTM está funcionando:
 - ✅ Permisos granulares por usuario
 - ✅ Variables y triggers reutilizables
 
+

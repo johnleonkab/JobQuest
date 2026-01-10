@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import type { CVLanguage, CVCertification } from "@/types/cv";
 import { useToast } from "@/contexts/ToastContext";
+import { useTranslations } from "next-intl";
 
 interface LanguageModalProps {
   languageId?: string;
@@ -19,6 +20,8 @@ export default function LanguageModal({
 }: LanguageModalProps) {
   const [loading, setLoading] = useState(false);
   const { showToast } = useToast();
+  const tForm = useTranslations('CVBuilder.forms.language');
+  const tCommon = useTranslations('CVBuilder.forms.common');
   const [formData, setFormData] = useState({
     language: "",
     level: "",
@@ -55,16 +58,16 @@ export default function LanguageModal({
     try {
       const body = languageId
         ? {
-            id: languageId,
-            language: formData.language,
-            level: formData.level,
-            certification_id: formData.certification_id || null,
-          }
+          id: languageId,
+          language: formData.language,
+          level: formData.level,
+          certification_id: formData.certification_id || null,
+        }
         : {
-            language: formData.language,
-            level: formData.level,
-            certification_id: formData.certification_id || null,
-          };
+          language: formData.language,
+          level: formData.level,
+          certification_id: formData.certification_id || null,
+        };
 
       const response = await fetch("/api/cv/languages", {
         method: languageId ? "PUT" : "POST",
@@ -77,8 +80,8 @@ export default function LanguageModal({
       showToast({
         type: "success",
         message: languageId
-          ? "Idioma actualizado correctamente"
-          : "Idioma agregado correctamente",
+          ? tForm('toastSuccessUpdate')
+          : tForm('toastSuccessAdd'),
       });
 
       onSuccess();
@@ -86,7 +89,7 @@ export default function LanguageModal({
       console.error("Error saving language:", error);
       showToast({
         type: "error",
-        message: "Error al guardar el idioma",
+        message: tForm('toastErrorSave'),
       });
     } finally {
       setLoading(false);
@@ -104,9 +107,9 @@ export default function LanguageModal({
                 <span className="material-symbols-outlined text-[22px]">translate</span>
               </div>
               <div>
-                <h3 className="text-lg font-bold text-slate-900 leading-tight">Idioma</h3>
+                <h3 className="text-lg font-bold text-slate-900 leading-tight">{languageId ? tForm('titleEdit') : tForm('titleNew')}</h3>
                 <p className="text-xs text-gray-500">
-                  {languageId ? "Edita" : "Añade"} un idioma
+                  {tForm('subtitle')}
                 </p>
               </div>
             </div>
@@ -121,7 +124,7 @@ export default function LanguageModal({
             <div className="space-y-5">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                  Idioma *
+                  {tForm('language')} {tCommon('required')}
                 </label>
                 <input
                   required
@@ -130,12 +133,12 @@ export default function LanguageModal({
                     setFormData({ ...formData, language: e.target.value })
                   }
                   className="block w-full rounded-xl border-gray-200 bg-gray-50 text-gray-900 focus:border-primary focus:ring-primary shadow-sm sm:text-sm py-3 px-4 transition-all"
-                  placeholder="Ej. Inglés, Español, Francés..."
+                  placeholder={tForm('placeholderLanguage')}
                 />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                  Nivel *
+                  {tForm('level')} {tCommon('required')}
                 </label>
                 <input
                   required
@@ -144,12 +147,12 @@ export default function LanguageModal({
                     setFormData({ ...formData, level: e.target.value })
                   }
                   className="block w-full rounded-xl border-gray-200 bg-gray-50 text-gray-900 focus:border-primary focus:ring-primary shadow-sm sm:text-sm py-3 px-4 transition-all"
-                  placeholder="Ej. Nativo, C1, B2, Intermedio..."
+                  placeholder={tForm('placeholderLevel')}
                 />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                  Certificación (opcional)
+                  {tForm('certification')}
                 </label>
                 <select
                   value={formData.certification_id}
@@ -158,7 +161,7 @@ export default function LanguageModal({
                   }
                   className="block w-full rounded-xl border-gray-200 bg-gray-50 text-gray-900 focus:border-primary focus:ring-primary shadow-sm sm:text-sm py-3 px-4 transition-all"
                 >
-                  <option value="">Sin certificación</option>
+                  <option value="">{tForm('noCertification')}</option>
                   {certifications.map((cert) => (
                     <option key={cert.id} value={cert.id}>
                       {cert.name}
@@ -174,7 +177,7 @@ export default function LanguageModal({
               onClick={onClose}
               className="px-5 py-2.5 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-200 transition-colors"
             >
-              Cancelar
+              {tCommon('cancel')}
             </button>
             <button
               type="submit"
@@ -182,7 +185,7 @@ export default function LanguageModal({
               disabled={loading}
               className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white bg-primary hover:bg-pink-600 shadow-lg shadow-primary/25 transition-all disabled:opacity-50"
             >
-              {loading ? "Guardando..." : "Guardar Idioma"}
+              {loading ? tCommon('saving') : tForm('saveBtn')}
             </button>
           </div>
         </div>

@@ -94,3 +94,4 @@ Los iconos requeridos son:
 - Los iconos son críticos para que la PWA funcione correctamente
 - El prompt solo aparece en mobile (< 1024px)
 
+

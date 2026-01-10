@@ -5,6 +5,7 @@ import Image from "next/image";
 import type { JobOffer } from "@/types/job-offers";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useTranslations, useLocale } from "next-intl";
 
 interface JobOfferCardProps {
   offer: JobOffer;
@@ -19,6 +20,9 @@ export default function JobOfferCard({
   onDelete,
   onView,
 }: JobOfferCardProps) {
+  const t = useTranslations('kanban');
+  const tToast = useTranslations('toast');
+  const locale = useLocale();
   const [showMenu, setShowMenu] = useState(false);
   const {
     attributes,
@@ -42,10 +46,10 @@ export default function JobOfferCard({
     const diffTime = Math.abs(now.getTime() - date.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    if (diffDays === 0) return "Hoy";
-    if (diffDays === 1) return "Ayer";
-    if (diffDays < 7) return `${diffDays}d ago`;
-    return date.toLocaleDateString("es-ES", { day: "numeric", month: "short" });
+    if (diffDays === 0) return t('today');
+    if (diffDays === 1) return t('yesterday');
+    if (diffDays < 7) return t('daysAgo', { days: diffDays });
+    return date.toLocaleDateString(locale, { day: "numeric", month: "short" });
   };
 
   const getStatusColor = (status: string) => {
@@ -73,7 +77,7 @@ export default function JobOfferCard({
     switch (status) {
       case "interview":
         return offer.interview_date && new Date(offer.interview_date).toDateString() === new Date().toDateString()
-          ? { text: "Hoy", bg: "bg-amber-50", border: "border-amber-100", textColor: "text-amber-600" }
+          ? { text: t('today'), bg: "bg-amber-50", border: "border-amber-100", textColor: "text-amber-600" }
           : null;
       case "offer":
         return { text: "🎉", bg: "", border: "", textColor: "" };
@@ -96,9 +100,8 @@ export default function JobOfferCard({
       {...attributes}
       {...listeners}
       onClick={() => onView && onView(offer)}
-      className={`bg-white p-4 rounded-xl border border-gray-200 hover:border-primary/40 cursor-pointer group transition-all duration-200 ease-in-out hover:translate-y-[-2px] shadow-sm hover:shadow-md fade-in ${
-        offer.status === "offer" ? "bg-gradient-to-br from-white to-emerald-50/50 border-emerald-300/30" : ""
-      }`}
+      className={`bg-white p-4 rounded-xl border border-gray-200 hover:border-primary/40 cursor-pointer group transition-all duration-200 ease-in-out hover:translate-y-[-2px] shadow-sm hover:shadow-md fade-in ${offer.status === "offer" ? "bg-gradient-to-br from-white to-emerald-50/50 border-emerald-300/30" : ""
+        }`}
     >
       <div className="flex justify-between items-start mb-3">
         <div className="bg-gray-50 p-1.5 rounded-lg size-10 flex items-center justify-center border border-gray-100">
@@ -149,19 +152,19 @@ export default function JobOfferCard({
                   }}
                   className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-t-lg"
                 >
-                  Editar
+                  {t('edit')}
                 </button>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    if (confirm("¿Estás seguro de eliminar esta oferta?")) {
+                    if (confirm(tToast('deleteConfirm'))) {
                       onDelete(offer.id);
                     }
                     setShowMenu(false);
                   }}
                   className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-b-lg"
                 >
-                  Eliminar
+                  {t('delete')}
                 </button>
               </div>
             )}
@@ -183,11 +186,10 @@ export default function JobOfferCard({
         ))}
         {salaryRange && (
           <span
-            className={`px-2 py-1 rounded-md text-xs font-bold border ${
-              offer.status === "offer"
-                ? "bg-emerald-100 text-emerald-600 border-emerald-200"
-                : "bg-gray-50 text-gray-500 border-gray-200/50"
-            }`}
+            className={`px-2 py-1 rounded-md text-xs font-bold border ${offer.status === "offer"
+              ? "bg-emerald-100 text-emerald-600 border-emerald-200"
+              : "bg-gray-50 text-gray-500 border-gray-200/50"
+              }`}
           >
             {salaryRange}
           </span>

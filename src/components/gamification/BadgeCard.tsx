@@ -1,5 +1,6 @@
 import { Badge } from '@/config/gamification/badges';
 import { getBadgeProgressDetails } from '@/config/gamification/badges';
+import { useTranslations, useLocale } from 'next-intl';
 
 interface BadgeCardProps {
   badge: Badge;
@@ -16,6 +17,8 @@ export default function BadgeCard({
   progress,
   eventCounts,
 }: BadgeCardProps) {
+  const t = useTranslations('gamification.card');
+  const locale = useLocale();
   const progressDetails = getBadgeProgressDetails(badge, eventCounts);
 
   if (isEarned) {
@@ -39,7 +42,7 @@ export default function BadgeCard({
             </span>
           </div>
           <span className="text-[10px] font-bold px-2 py-0.5 bg-green-100 text-green-700 rounded-full uppercase tracking-wider">
-            Obtenido
+            {t('earned')}
           </span>
         </div>
         <h3 className="text-base font-bold text-slate-900 mb-1 relative z-10">
@@ -50,7 +53,7 @@ export default function BadgeCard({
         </p>
         {earnedAt && (
           <div className="text-[10px] text-gray-400 relative z-10">
-            {new Date(earnedAt).toLocaleDateString('es-ES', {
+            {new Date(earnedAt).toLocaleDateString(locale, {
               day: 'numeric',
               month: 'short',
               year: 'numeric',
@@ -69,7 +72,7 @@ export default function BadgeCard({
           <span className="material-symbols-outlined text-xl">{badge.icon}</span>
         </div>
         <span className="text-[10px] font-bold px-2 py-0.5 bg-gray-200 text-gray-500 rounded-full uppercase tracking-wider">
-          Bloqueado
+          {t('locked')}
         </span>
       </div>
       <h3 className="text-base font-bold text-gray-700 mb-1">{badge.name}</h3>
@@ -78,7 +81,7 @@ export default function BadgeCard({
       </p>
       <div className="space-y-2">
         <div className="text-[10px] font-medium text-gray-500 uppercase tracking-wide mb-1">
-          Progreso
+          {t('progress')}
         </div>
         {progressDetails.map((detail, index) => (
           <div key={index} className="space-y-1">
@@ -98,4 +101,5 @@ export default function BadgeCard({
     </div>
   );
 }
+
 

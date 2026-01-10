@@ -1,15 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Link, useRouter } from "@/i18n/routing";
 import { signInWithGoogle, signUpWithEmail, signInWithEmail } from "@/lib/auth/actions";
 import { analytics } from "@/lib/analytics";
+import { useTranslations } from "next-intl";
 
 type AuthMode = "register" | "login";
 
 export default function Hero() {
   const router = useRouter();
+  const t = useTranslations('Hero');
   const [mode, setMode] = useState<AuthMode>("register");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -29,13 +30,13 @@ export default function Hero() {
     } catch (error) {
       const { logger } = await import("@/lib/utils/logger");
       logger.error("Error signing in", error);
-      
+
       setError(
         error instanceof Error
           ? error.message
           : "Error al iniciar sesión con Google"
       );
-      
+
       // Track error
       if (typeof window !== "undefined") {
         import("@/lib/error-tracking").then(({ errorTracker }) => {
@@ -59,7 +60,7 @@ export default function Hero() {
     try {
       if (mode === "register") {
         const result = await signUpWithEmail(formData.email, formData.password, formData.fullName);
-        
+
         // Check if email confirmation is required
         if (result.user && !result.session) {
           // Email confirmation required
@@ -78,7 +79,7 @@ export default function Hero() {
         } else {
           setSuccess("¡Registro exitoso! Revisa tu email para confirmar tu cuenta.");
         }
-        
+
         analytics.signUp();
         // Reset form
         setFormData({ email: "", password: "", fullName: "" });
@@ -93,7 +94,7 @@ export default function Hero() {
       const errorMessage =
         error?.message || `Error al ${mode === "register" ? "registrarse" : "iniciar sesión"}`;
       setError(errorMessage);
-      
+
       // Track error
       if (typeof window !== "undefined") {
         import("@/lib/error-tracking").then(({ errorTracker }) => {
@@ -123,19 +124,17 @@ export default function Hero() {
             <span className="material-symbols-outlined text-[16px]">
               verified
             </span>
-            <span>Nueva Temporada Disponible</span>
+            <span>{t('newSeason')}</span>
           </div>
           <h1 className="text-4xl font-black leading-tight tracking-tight sm:text-5xl lg:text-6xl text-slate-900">
-            Convierte tu búsqueda de empleo en una{" "}
+            {t('titlePrefix')}
             <span className="bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
-              aventura épica
+              {t('titleHighlight')}
             </span>
             .
           </h1>
           <p className="mx-auto lg:mx-0 max-w-xl text-lg text-slate-600">
-            Deja de enviar CVs al vacío. Organiza tus postulaciones, gana
-            puntos por cada entrevista y sube de nivel hasta conseguir el
-            trabajo de tus sueños.
+            {t('subtitle')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mt-4">
             <Link
@@ -144,19 +143,19 @@ export default function Hero() {
               aria-label="Empezar aventura gratis - Registrarse"
             >
               <span className="material-symbols-outlined" aria-hidden="true">rocket_launch</span>
-              Empezar Aventura Gratis
+              {t('startAdventure')}
             </Link>
             <button
               className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-8 text-base font-medium text-slate-700 transition-all hover:bg-slate-50 hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
               aria-label="Ver demo de la aplicación"
             >
               <span className="material-symbols-outlined" aria-hidden="true">play_circle</span>
-              Ver Demo
+              {t('watchDemo')}
             </button>
           </div>
           <div className="mt-8 flex flex-col items-center lg:items-start gap-3">
             <p className="text-sm font-medium text-slate-500">
-              Únete a +10,000 jugadores contratados en:
+              {t('joinPlayers')}
             </p>
             <div className="flex gap-6 opacity-50 grayscale transition-all hover:grayscale-0 hover:opacity-80">
               <span className="text-lg font-bold tracking-tighter text-slate-800">
@@ -179,12 +178,12 @@ export default function Hero() {
           <div className="relative overflow-hidden rounded-2xl border border-white/50 bg-white/80 backdrop-blur-xl p-8 shadow-soft">
             <div className="mb-8 text-center">
               <h2 className="text-2xl font-bold text-slate-900">
-                {mode === "register" ? "Crea tu personaje" : "Inicia sesión"}
+                {mode === "register" ? t('createCharacter') : t('loginTitle')}
               </h2>
               <p className="text-sm text-slate-500 mt-2">
                 {mode === "register"
-                  ? "Comienza tu viaje en nivel 1 hoy mismo."
-                  : "Continúa tu aventura épica."}
+                  ? t('registerSubtitle')
+                  : t('loginSubtitle')}
               </p>
             </div>
 
@@ -209,7 +208,7 @@ export default function Hero() {
                   htmlFor="email"
                   className="text-sm font-medium text-slate-700"
                 >
-                  Email
+                  {t('email')}
                 </label>
                 <input
                   id="email"
@@ -232,7 +231,7 @@ export default function Hero() {
                     htmlFor="fullName"
                     className="text-sm font-medium text-slate-700"
                   >
-                    Nombre completo
+                    {t('fullName')}
                   </label>
                   <input
                     id="fullName"
@@ -255,7 +254,7 @@ export default function Hero() {
                   htmlFor="password"
                   className="text-sm font-medium text-slate-700"
                 >
-                  Contraseña
+                  {t('password')}
                 </label>
                 <input
                   id="password"
@@ -286,8 +285,8 @@ export default function Hero() {
                 {loading
                   ? "Cargando..."
                   : mode === "register"
-                  ? "Crear cuenta"
-                  : "Iniciar sesión"}
+                    ? t('createAccountBtn')
+                    : t('loginBtn')}
               </button>
 
               {/* Divider */}
@@ -313,7 +312,7 @@ export default function Hero() {
                 >
                   <path d="M21.35 11.1h-9.17v2.73h6.51c-.33 3.81-3.5 5.44-6.5 5.44C8.36 19.27 5 16.25 5 12c0-4.1 3.2-7.27 7.2-7.27c3.09 0 4.9 1.97 4.9 1.97L19 4.72S16.56 2 12.1 2C6.42 2 2.03 6.8 2.03 12c0 5.05 4.13 10 10.22 10c5.35 0 9.25-3.67 9.25-9.09c0-1.15-.15-1.81-.15-1.81Z" />
                 </svg>
-                Continuar con Google
+                {t('continueGoogle')}
               </button>
 
               {/* Toggle Mode */}
@@ -326,16 +325,16 @@ export default function Hero() {
                 >
                   {mode === "register" ? (
                     <>
-                      ¿Ya tienes cuenta?{" "}
+                      {t('alreadyAccount')}{" "}
                       <span className="font-semibold text-primary">
-                        Inicia sesión
+                        {t('login')}
                       </span>
                     </>
                   ) : (
                     <>
-                      ¿No tienes cuenta?{" "}
+                      {t('noAccount')}{" "}
                       <span className="font-semibold text-primary">
-                        Regístrate
+                        {t('register')}
                       </span>
                     </>
                   )}
@@ -345,19 +344,20 @@ export default function Hero() {
               {/* Terms */}
               <div className="px-2">
                 <p className="text-xs text-center text-slate-500 leading-relaxed">
-                  Al continuar, aceptas nuestros{" "}
+                  {t('terms')}{" "}
+                  {/* Warning: Complex nesting for terms text might need Rich Text features of next-intl or just split strings. I split widely. */}
                   <Link
                     href="/terms"
                     className="font-medium text-primary hover:underline"
                   >
-                    Términos de Servicio
+                    {t('termsLink')}
                   </Link>{" "}
-                  y la{" "}
+                  &{" "}
                   <Link
                     href="/privacy"
                     className="font-medium text-primary hover:underline"
                   >
-                    Política de Privacidad
+                    {t('privacyLink')}
                   </Link>
                   .
                 </p>
@@ -369,4 +369,3 @@ export default function Hero() {
     </section>
   );
 }
-

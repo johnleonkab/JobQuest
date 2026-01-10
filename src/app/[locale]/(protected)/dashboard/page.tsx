@@ -7,6 +7,7 @@ import type { Interview } from "@/types/interviews";
 import type { JobOfferContact } from "@/types/contacts";
 import type { Badge } from "@/config/gamification/badges";
 import { useToast } from "@/contexts/ToastContext";
+import { useTranslations } from "next-intl";
 
 interface DashboardData {
   gamification: {
@@ -38,6 +39,8 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { showToast } = useToast();
+  const t = useTranslations('Dashboard');
+  const tCommon = useTranslations('Common');
 
   useEffect(() => {
     fetchDashboardData();
@@ -53,7 +56,7 @@ export default function DashboardPage() {
       console.error("Error fetching dashboard data:", error);
       showToast({
         type: "error",
-        message: "Error al cargar los datos del dashboard",
+        message: t('errorLoading'),
       });
     } finally {
       setLoading(false);
@@ -72,16 +75,7 @@ export default function DashboardPage() {
   };
 
   const getStatusLabel = (status: string) => {
-    const labels: Record<string, string> = {
-      saved: "Guardada",
-      contacted: "Contactada",
-      applied: "Aplicada",
-      interview: "Entrevista",
-      offer: "Oferta",
-      rejected: "Descartada",
-      accepted: "Conseguida",
-    };
-    return labels[status] || status;
+    return t(`status.${status}`);
   };
 
   const getStatusColor = (status: string) => {
@@ -140,7 +134,7 @@ export default function DashboardPage() {
     return (
       <div className="flex-1 overflow-y-auto p-8">
         <div className="text-center">
-          <p className="text-gray-500">Error al cargar los datos del dashboard</p>
+          <p className="text-gray-500">{t('errorLoading')}</p>
         </div>
       </div>
     );
@@ -152,22 +146,22 @@ export default function DashboardPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tight mb-2">
-            Dashboard
+            {t('title')}
           </h1>
           <p className="text-gray-500 text-base">
-            Resumen de tu progreso y actividades
+            {t('subtitle')}
           </p>
         </div>
 
         {/* Level and XP Section */}
         <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-gray-900">Nivel y Puntos</h2>
+            <h2 className="text-xl font-bold text-gray-900">{t('levelAndPoints')}</h2>
             <button
               onClick={() => router.push("/gamification")}
               className="text-sm text-primary hover:text-primary/80 font-medium"
             >
-              Ver detalles →
+              {tCommon('viewDetails')}
             </button>
           </div>
           <div className="space-y-4">
@@ -176,7 +170,7 @@ export default function DashboardPage() {
                 <div className="text-4xl font-black text-primary mb-1">
                   {data.gamification.level}
                 </div>
-                <div className="text-xs text-gray-500 font-medium">Nivel</div>
+                <div className="text-xs text-gray-500 font-medium">{t('level')}</div>
               </div>
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-2">
@@ -185,7 +179,10 @@ export default function DashboardPage() {
                   </span>
                   {data.gamification.nextLevel && (
                     <span className="text-xs text-gray-500">
-                      {data.gamification.nextLevel.xpRequired.toLocaleString()} XP para nivel {data.gamification.nextLevel.order}
+                      {t('xpForLevel', {
+                        xp: data.gamification.nextLevel.xpRequired.toLocaleString(),
+                        level: data.gamification.nextLevel.order
+                      })}
                     </span>
                   )}
                 </div>
@@ -204,16 +201,16 @@ export default function DashboardPage() {
           {/* Recent Badges */}
           <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-gray-900">Últimos Badges</h2>
+              <h2 className="text-xl font-bold text-gray-900">{t('recentBadges')}</h2>
               <button
                 onClick={() => router.push("/gamification")}
                 className="text-sm text-primary hover:text-primary/80 font-medium"
               >
-                Ver todos →
+                {tCommon('viewAll')}
               </button>
             </div>
             {data.recentBadges.length === 0 ? (
-              <p className="text-gray-400 text-sm italic">Aún no has conseguido badges</p>
+              <p className="text-gray-400 text-sm italic">{t('noBadges')}</p>
             ) : (
               <div className="space-y-3">
                 {data.recentBadges.map((badge) => (
@@ -239,16 +236,16 @@ export default function DashboardPage() {
           {/* Closest Badges */}
           <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-gray-900">Próximos Badges</h2>
+              <h2 className="text-xl font-bold text-gray-900">{t('closestBadges')}</h2>
               <button
                 onClick={() => router.push("/gamification")}
                 className="text-sm text-primary hover:text-primary/80 font-medium"
               >
-                Ver todos →
+                {tCommon('viewAll')}
               </button>
             </div>
             {data.closestBadges.length === 0 ? (
-              <p className="text-gray-400 text-sm italic">No hay badges cercanos</p>
+              <p className="text-gray-400 text-sm italic">{t('noClosestBadges')}</p>
             ) : (
               <div className="space-y-3">
                 {data.closestBadges.map((badge) => (
@@ -293,16 +290,16 @@ export default function DashboardPage() {
         {/* Interviews This Week */}
         <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-gray-900">Entrevistas Esta Semana</h2>
+            <h2 className="text-xl font-bold text-gray-900">{t('interviewsThisWeek')}</h2>
             <button
               onClick={() => router.push("/job-openings")}
               className="text-sm text-primary hover:text-primary/80 font-medium"
             >
-              Ver todas →
+              {tCommon('viewAll')}
             </button>
           </div>
           {data.interviewsThisWeek.length === 0 ? (
-            <p className="text-gray-400 text-sm italic">No hay entrevistas programadas esta semana</p>
+            <p className="text-gray-400 text-sm italic">{t('noInterviews')}</p>
           ) : (
             <div className="space-y-3">
               {data.interviewsThisWeek.map((interview) => {
@@ -311,11 +308,10 @@ export default function DashboardPage() {
                 return (
                   <div
                     key={interview.id}
-                    className={`p-4 rounded-xl border ${
-                      isToday
-                        ? "bg-amber-50 border-amber-200"
-                        : "bg-white border-gray-200"
-                    }`}
+                    className={`p-4 rounded-xl border ${isToday
+                      ? "bg-amber-50 border-amber-200"
+                      : "bg-white border-gray-200"
+                      }`}
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex-1">
@@ -340,7 +336,7 @@ export default function DashboardPage() {
                       </div>
                       {isToday && (
                         <span className="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-medium">
-                          Hoy
+                          {tCommon('today')}
                         </span>
                       )}
                     </div>
@@ -354,30 +350,30 @@ export default function DashboardPage() {
         {/* Not Applied Offers */}
         <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-gray-900">Trabajos Sin Aplicar</h2>
+            <h2 className="text-xl font-bold text-gray-900">{t('notAppliedOffers')}</h2>
             <button
               onClick={() => router.push("/job-openings")}
               className="text-sm text-primary hover:text-primary/80 font-medium"
             >
-              Ver todas →
+              {tCommon('viewAll')}
             </button>
           </div>
           {data.notAppliedOffers.length === 0 ? (
-            <p className="text-gray-400 text-sm italic">No hay ofertas pendientes de aplicar</p>
+            <p className="text-gray-400 text-sm italic">{t('noNotApplied')}</p>
           ) : (
             <div className="space-y-3">
               {data.notAppliedOffers.slice(0, 5).map((offer) => (
-                  <div
-                    key={offer.id}
-                    className="p-4 rounded-xl border bg-white border-gray-200 hover:border-primary/30 transition-colors cursor-pointer"
-                    onClick={() => {
-                      router.push(`/job-openings`);
-                      // Small delay to ensure navigation happens, then trigger view
-                      setTimeout(() => {
-                        window.dispatchEvent(new CustomEvent('viewJobOffer', { detail: { offerId: offer.id } }));
-                      }, 100);
-                    }}
-                  >
+                <div
+                  key={offer.id}
+                  className="p-4 rounded-xl border bg-white border-gray-200 hover:border-primary/30 transition-colors cursor-pointer"
+                  onClick={() => {
+                    router.push(`/job-openings`);
+                    // Small delay to ensure navigation happens, then trigger view
+                    setTimeout(() => {
+                      window.dispatchEvent(new CustomEvent('viewJobOffer', { detail: { offerId: offer.id } }));
+                    }, 100);
+                  }}
+                >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1">
                       <h3 className="font-semibold text-gray-900 mb-1">{offer.position}</h3>
@@ -398,16 +394,16 @@ export default function DashboardPage() {
           {/* Contacts to Review */}
           <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-gray-900">Contactos a Revisar</h2>
+              <h2 className="text-xl font-bold text-gray-900">{t('contactsToReview')}</h2>
               <button
                 onClick={() => router.push("/job-openings")}
                 className="text-sm text-primary hover:text-primary/80 font-medium"
               >
-                Ver todos →
+                {tCommon('viewAll')}
               </button>
             </div>
             {data.contactsToReview.length === 0 ? (
-              <p className="text-gray-400 text-sm italic">No hay contactos para revisar</p>
+              <p className="text-gray-400 text-sm italic">{t('noContacts')}</p>
             ) : (
               <div className="space-y-3">
                 {data.contactsToReview.slice(0, 5).map((contact) => (
@@ -449,16 +445,16 @@ export default function DashboardPage() {
           {/* Recent Notes */}
           <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-gray-900">Notas Recientes</h2>
+              <h2 className="text-xl font-bold text-gray-900">{t('recentNotes')}</h2>
               <button
                 onClick={() => router.push("/job-openings")}
                 className="text-sm text-primary hover:text-primary/80 font-medium"
               >
-                Ver todas →
+                {tCommon('viewAll')}
               </button>
             </div>
             {data.recentNotes.length === 0 ? (
-              <p className="text-gray-400 text-sm italic">No hay notas recientes</p>
+              <p className="text-gray-400 text-sm italic">{t('noNotes')}</p>
             ) : (
               <div className="space-y-3">
                 {data.recentNotes.map((note) => {

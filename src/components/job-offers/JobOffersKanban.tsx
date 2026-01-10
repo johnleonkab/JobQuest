@@ -15,6 +15,7 @@ import type { JobOffer, JobOfferStatus } from "@/types/job-offers";
 import KanbanColumn from "./KanbanColumn";
 import JobOfferCard from "./JobOfferCard";
 import { useToast } from "@/contexts/ToastContext";
+import { useTranslations } from "next-intl";
 
 interface JobOffersKanbanProps {
   offers: JobOffer[];
@@ -24,16 +25,6 @@ interface JobOffersKanbanProps {
   onDelete: (id: string) => void;
   onView?: (offer: JobOffer) => void;
 }
-
-const COLUMNS = [
-  { id: "saved", title: "Guardado", status: "saved" as JobOfferStatus, color: "bg-slate-400" },
-  { id: "applied", title: "Aplicadas", status: "applied" as JobOfferStatus, color: "bg-primary" },
-  { id: "contacted", title: "Contactadas", status: "contacted" as JobOfferStatus, color: "bg-primary" },
-  { id: "interview", title: "Entrevista", status: "interview" as JobOfferStatus, color: "bg-amber-500" },
-  { id: "offer", title: "Oferta", status: "offer" as JobOfferStatus, color: "bg-emerald-500" },
-  { id: "rejected", title: "Descartada", status: "rejected" as JobOfferStatus, color: "bg-red-500" },
-  { id: "accepted", title: "Conseguida", status: "accepted" as JobOfferStatus, color: "bg-emerald-600" },
-];
 
 export default function JobOffersKanban({
   offers,
@@ -46,6 +37,18 @@ export default function JobOffersKanban({
   const [activeId, setActiveId] = useState<string | null>(null);
   const [localOffers, setLocalOffers] = useState<JobOffer[]>(offers);
   const { showToast } = useToast();
+  const t = useTranslations('JobOpenings');
+  const tStatus = useTranslations('Dashboard.status');
+
+  const COLUMNS = [
+    { id: "saved", title: tStatus("saved"), status: "saved" as JobOfferStatus, color: "bg-slate-400" },
+    { id: "applied", title: tStatus("applied"), status: "applied" as JobOfferStatus, color: "bg-primary" },
+    { id: "contacted", title: tStatus("contacted"), status: "contacted" as JobOfferStatus, color: "bg-primary" },
+    { id: "interview", title: tStatus("interview"), status: "interview" as JobOfferStatus, color: "bg-amber-500" },
+    { id: "offer", title: tStatus("offer"), status: "offer" as JobOfferStatus, color: "bg-emerald-500" },
+    { id: "rejected", title: tStatus("rejected"), status: "rejected" as JobOfferStatus, color: "bg-red-500" },
+    { id: "accepted", title: tStatus("accepted"), status: "accepted" as JobOfferStatus, color: "bg-emerald-600" },
+  ];
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -89,13 +92,13 @@ export default function JobOffersKanban({
         await onUpdate(updatedOffer);
         showToast({
           type: "success",
-          message: "Oferta actualizada correctamente",
+          message: t('actions.offerUpdated'),
         });
       } catch (error) {
         console.error("Error updating offer:", error);
         showToast({
           type: "error",
-          message: "Error al actualizar la oferta",
+          message: t('actions.errorUpdate'),
         });
         // Revert on error
         setLocalOffers(offers);

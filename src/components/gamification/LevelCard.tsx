@@ -1,4 +1,5 @@
 import { Level, getNextLevel } from '@/config/gamification/levels';
+import { useTranslations } from 'next-intl';
 
 interface LevelCardProps {
   level: Level;
@@ -13,6 +14,7 @@ export default function LevelCard({
   isUnlocked,
   currentXp,
 }: LevelCardProps) {
+  const t = useTranslations('gamification.card');
   const nextLevel = getNextLevel(currentXp);
   const progress = isCurrent && nextLevel
     ? Math.min(((currentXp - level.requiredXp) / (nextLevel.requiredXp - level.requiredXp)) * 100, 100)
@@ -32,7 +34,7 @@ export default function LevelCard({
             </span>
           </div>
           <span className="text-[10px] font-bold px-2 py-1 bg-primary text-white rounded-full uppercase tracking-wider animate-pulse shadow-sm">
-            Nivel Actual
+            {t('currentLevel')}
           </span>
         </div>
         <h3 className="text-lg font-bold text-slate-900 mb-1 relative z-10">
@@ -52,7 +54,7 @@ export default function LevelCard({
             <div className="flex justify-between items-center text-[10px] font-bold text-primary uppercase tracking-wide relative z-10">
               <span>{currentXp.toLocaleString()} XP</span>
               <span className="text-gray-300">
-                {nextLevel ? `${nextLevel.requiredXp.toLocaleString()} XP Meta` : 'Nivel Máximo'}
+                {nextLevel ? t('targetXP', { xp: nextLevel.requiredXp.toLocaleString() }) : t('maxLevel')}
               </span>
             </div>
           </>
@@ -82,7 +84,7 @@ export default function LevelCard({
             </span>
           </div>
           <span className="text-[10px] font-bold px-2 py-0.5 bg-green-100 text-green-700 rounded-full uppercase tracking-wider">
-            Desbloqueado
+            {t('unlocked')}
           </span>
         </div>
         <h3 className="text-base font-bold text-slate-900 mb-1 relative z-10">
@@ -107,7 +109,7 @@ export default function LevelCard({
           <span className="material-symbols-outlined text-xl">{level.icon}</span>
         </div>
         <span className="text-[10px] font-bold px-2 py-0.5 bg-gray-200 text-gray-500 rounded-full uppercase tracking-wider">
-          Bloqueado
+          {t('locked')}
         </span>
       </div>
       <h3 className="text-base font-bold text-gray-700 mb-1">{level.name}</h3>
